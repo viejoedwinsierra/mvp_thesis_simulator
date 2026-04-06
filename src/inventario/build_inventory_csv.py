@@ -1,4 +1,4 @@
-    from __future__ import annotations
+from __future__ import annotations
 
 import os
 import json
@@ -6,6 +6,9 @@ import hashlib
 from pathlib import Path
 from typing import Dict, Any, Optional, List
 import pandas as pd
+from tqdm import tqdm
+import time
+import logging
 
 
 def safe_read_json(json_path: Path) -> tuple[Optional[Dict[str, Any]], bool]:
@@ -64,7 +67,6 @@ def extract_hour(logical_creation_datetime: Optional[str]) -> Optional[int]:
     if not logical_creation_datetime:
         return None
     try:
-        # espera algo como 2025-01-15T08:10:11
         return int(logical_creation_datetime[11:13])
     except Exception:
         return None
@@ -75,6 +77,7 @@ def build_record(
     stem: str,
     pdf_path: Optional[Path],
     json_path: Optional[Path],
+    compute_hash: bool = False,
 ) -> Dict[str, Any]:
     pdf_exists = pdf_path is not None and pdf_path.exists()
     json_exists = json_path is not None and json_path.exists()
@@ -136,7 +139,7 @@ def build_record(
         "parent_document_instance_id": parent_document_instance_id,
         "content_hash": content_hash,
         "metadata_file_hash": metadata_file_hash,
-        "pdf_file_hash": file_hash_sha256(pdf_path) if pdf_exists else None,
+        "pdf_file_hash": file_hash_sha256(pdf_path) if (pdf_exists and compute_hash) else None,
         "content_preview_200": content_preview_200,
         "json_valid": json_valid,
         "pdf_path": str(pdf_path) if pdf_exists else None,
@@ -144,14 +147,14 @@ def build_record(
     }
 
 
-def scan_local_inventory(root_dir: str) -> pd.DataFrame:
+def scan_local_inventory(root_dir: str, compute_hash: bool = False) -> pd.DataFrame:
     root = Path(root_dir)
     if not root.exists():
         raise FileNotFoundError(f"No existe la ruta: {root_dir}")
 
     grouped: Dict[str, Dict[str, Path]] = {}
 
-    for path in root.rglob("*"):
+    for path in tqdm(root.rglob("*"), desc="Escaneando archivos"):
         if not path.is_file():
             continue
 
@@ -164,15 +167,14 @@ def scan_local_inventory(root_dir: str) -> pd.DataFrame:
         grouped[stem_key][suffix] = path
 
     records: List[Dict[str, Any]] = []
-    for stem_key, files in grouped.items():
+    for stem_key, files in tqdm(grouped.items(), desc="Construyendo registros", total=len(grouped)):
         pdf_path = files.get(".pdf")
         json_path = files.get(".json")
         stem = Path(stem_key).name
-        records.append(build_record(root, stem, pdf_path, json_path))
+        records.append(build_record(root, stem, pdf_path, json_path, compute_hash=compute_hash))
 
     df = pd.DataFrame(records)
 
-    # Normalización útil para estadística
     if not df.empty:
         df["pdf_exists"] = df["pdf_exists"].astype(int)
         df["json_exists"] = df["json_exists"].astype(int)
@@ -197,18 +199,37 @@ def main():
 
     parser = argparse.ArgumentParser(description="Inventario local de PDFs y JSON para análisis estadístico")
     parser.add_argument("--input", required=True, help="Ruta local a analizar")
-    parser.add_argument("--output-csv", required=True, help="Ruta del CSV de salida")
+    parser.add_argument("--output", required=True, help="Ruta del CSV de salida")
+    parser.add_argument("--compute-hash", action="store_true", help="Calcular hash SHA256 del PDF")
     args = parser.parse_args()
 
-    df = scan_local_inventory(args.input)
-    df.to_csv(args.output_csv, index=False, encoding="utf-8")
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s | %(levelname)s | %(message)s"
+    )
 
-    print(f"CSV generado: {args.output_csv}")
-    print(f"Total registros: {len(df)}")
+    start = time.time()
+
+    logging.info("==== INICIO PROCESO INVENTARIO ====")
+    logging.info(f"Ruta entrada: {args.input}")
+    logging.info(f"Archivo salida: {args.output}")
+    logging.info(f"Calcular hash: {args.compute_hash}")
+
+    df = scan_local_inventory(args.input, compute_hash=args.compute_hash)
+
+    df.to_csv(args.output, index=False, encoding="utf-8")
+
+    elapsed = time.time() - start
+
+    logging.info("==== FIN PROCESO ====")
+    logging.info(f"Total registros: {len(df)}")
+    logging.info(f"Tiempo total: {elapsed:.2f} segundos")
+    logging.info(f"Registros/seg: {len(df)/elapsed:.2f}")
 
     if not df.empty:
-        print("\nResumen rápido:")
+        print("\nResumen pairing_status:")
         print(df["pairing_status"].value_counts(dropna=False).to_string())
+
         if "case_type" in df.columns:
             print("\nTop case_type:")
             print(df["case_type"].value_counts(dropna=False).head(10).to_string())

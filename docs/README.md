@@ -1,18 +1,57 @@
 # Thesis MVP Simulator
 
-This repository is an MVP for thesis presentation and course approval support in probability, statistics, big data, and ML-adjacent subjects.
+This repository contains a Minimum Viable Product (MVP) designed to support thesis development in:
 
-## Goal
+- Probability and Statistics  
+- Big Data processing  
+- Data Engineering pipelines  
+- ML-adjacent modeling  
 
-Generate a daily synthetic universe of:
+---
 
-- valid unique files,
-- controlled error cases,
-- sidecar metadata,
-- a documented probabilistic hierarchy,
-- a structure ready for Git-based evolution.
+# 🎯 Objective
 
-## Repository structure
+To simulate, observe, and analyze a synthetic document ecosystem that includes:
+
+- valid unique files
+- controlled error cases
+- metadata sidecar files (JSON)
+- probabilistic hierarchy of events
+- inventory extraction and dataset generation for statistical analysis
+
+---
+
+# 🧠 Conceptual Model
+
+The system models a daily universe of documents based on:
+
+\[
+M_d = \text{maximum valid documents per day}
+\]
+
+\[
+E_d = M_d \cdot p_{error}
+\]
+
+\[
+C_d = M_d - E_d
+\]
+
+Where:
+
+- \(C_d\): valid unique documents  
+- \(E_d\): error universe  
+
+The error universe is distributed hierarchically into:
+
+- duplicity cases  
+- orphan files  
+- null metadata  
+- blob/storage errors  
+
+---
+
+# ⚙️ Repository Structure
 
 ```text
 src/
@@ -24,23 +63,18 @@ src/
     file_generator.py
     metadata_writer.py
     orchestrator.py
+
+  inventario/
+    build_inventory_csv.py   ← inventory + dataset generator
+
   run_simulation.py
+
 config/
   simulation_config.json
+
 docs/
-  README.md
   mathematical_foundation.md
   git_workflow.md
+
 tests/
 output/
-```
-
-## Execution
-
-```bash
-python src/run_simulation.py --config config/simulation_config.json
-```
-
-## MVP principle
-
-The orchestrator composes independent modules. It does not centralize all business logic in a single monolithic function.
