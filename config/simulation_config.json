@@ -1,0 +1,44 @@
+{
+  "simulation": {
+    "simulation_date": "2026-04-06",
+    "max_valid_files_per_day": 10000,
+    "global_error_percentage": 36,
+    "output_dir": "./output",
+    "generate_pdf": true,
+    "generate_json_sidecar": true,
+    "seed": 4
+  },
+  "error_families": [
+    {
+      "name": "DUPLICITY_ERRORS",
+      "weight_within_global_error": 0.40,
+      "subtypes": [
+        {"name": "DUP_SAME_CONTENT_DIFFERENT_NAME", "weight_within_family": 0.40},
+        {"name": "DUP_SAME_CONTENT_DIFFERENT_ROUTE", "weight_within_family": 0.35},
+        {"name": "DUP_SAME_CONTENT_DIFFERENT_NAME_AND_ROUTE", "weight_within_family": 0.25}
+      ]
+    },
+    {
+      "name": "ORPHAN_ERRORS",
+      "weight_within_global_error": 0.30,
+      "subtypes": [
+        {"name": "JSON_WITHOUT_PDF", "weight_within_family": 0.60},
+        {"name": "PDF_WITHOUT_JSON", "weight_within_family": 0.40}
+      ]
+    },
+    {
+      "name": "NULL_ERRORS",
+      "weight_within_global_error": 0.15,
+      "subtypes": [
+        {"name": "NULL_JSON", "weight_within_family": 1.0}
+      ]
+    },
+    {
+      "name": "BLOB_STORAGE_ERRORS",
+      "weight_within_global_error": 0.15,
+      "subtypes": [
+        {"name": "BLOB_TIMEOUT", "weight_within_family": 1.0}
+      ]
+    }
+  ]
+}
