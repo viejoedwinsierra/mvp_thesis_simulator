@@ -1,0 +1,32 @@
+{
+  "time_distribution": [
+    {
+      "name": "madrugada",
+      "start": "00:00",
+      "end": "05:59",
+      "percentage_load": 0.10,
+      "error_rate": 0.25
+    },
+    {
+      "name": "mañana",
+      "start": "06:00",
+      "end": "11:59",
+      "percentage_load": 0.20,
+      "error_rate": 0.25
+    },
+    {
+      "name": "tarde",
+      "start": "12:00",
+      "end": "17:59",
+      "percentage_load": 0.50,
+      "error_rate": 0.25
+    },
+    {
+      "name": "noche",
+      "start": "18:00",
+      "end": "23:59",
+      "percentage_load": 0.20,
+      "error_rate": 0.25
+    }
+  ]
+}

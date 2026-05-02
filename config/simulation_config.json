@@ -1,8 +1,8 @@
 {
   "simulation": {
-    "simulation_date": "2026-04-06",
+    "simulation_date": "2026-04-25",
     "max_valid_files_per_day": 10000,
-    "global_error_percentage": 36,
+    "global_error_percentage": 24,
     "output_dir": "./output",
     "generate_pdf": true,
     "generate_json_sidecar": true,

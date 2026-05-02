@@ -67,7 +67,7 @@ src/
   inventario/
     build_inventory_csv.py   ← inventory + dataset generator
 
-  run_simulation.py
+  C:\git_edwin\mvp_thesis_simulator\src\run_simulation.py
 
 config/
   simulation_config.json
