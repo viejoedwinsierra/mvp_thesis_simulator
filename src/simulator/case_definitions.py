@@ -1,112 +1,143 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import Dict
 
 
 @dataclass(frozen=True)
 class CaseDefinition:
-    """Operational description of a representable case in the simulator."""
+    """Logical case definition used to label simulated dataset rows.
+
+    This class does not define whether physical files are created.
+    Physical materialization belongs to the generator module.
+    """
 
     case_type: str
     case_group: str
 
-    pdf_should_exist: bool
-    json_should_exist: bool
-    json_should_be_valid: bool
+    error_duplicado: int
+    error_orphan: int
+    error_null: int
+    error_blob_timeout: int
 
-    # 🔥 NUEVO
-    severity: float  # impacto del error (0–1)
-    base_weight: float  # probabilidad relativa dentro del universo
+    is_duplicate: int
+    has_error: int
 
+    severity: float
+    base_weight: float
     description: str
 
 
-CASE_CATALOG = {
+CASE_CATALOG: Dict[str, CaseDefinition] = {
     "UNIQUE_VALID": CaseDefinition(
         case_type="UNIQUE_VALID",
         case_group="CORRECT",
-        pdf_should_exist=True,
-        json_should_exist=True,
-        json_should_be_valid=True,
+        error_duplicado=0,
+        error_orphan=0,
+        error_null=0,
+        error_blob_timeout=0,
+        is_duplicate=0,
+        has_error=0,
         severity=0.0,
         base_weight=1.0,
-        description="Valid unique file with matching PDF and JSON sidecar.",
+        description="Valid unique file without simulated errors.",
     ),
 
     "DUP_SAME_CONTENT_DIFFERENT_NAME": CaseDefinition(
         case_type="DUP_SAME_CONTENT_DIFFERENT_NAME",
-        case_group="ERROR",
-        pdf_should_exist=True,
-        json_should_exist=True,
-        json_should_be_valid=True,
+        case_group="DUPLICITY_ERRORS",
+        error_duplicado=1,
+        error_orphan=0,
+        error_null=0,
+        error_blob_timeout=0,
+        is_duplicate=1,
+        has_error=1,
         severity=0.3,
-        base_weight=0.8,
-        description="Duplicate content with a different file name.",
+        base_weight=0.40,
+        description="Duplicate content represented with a different file name.",
     ),
 
     "DUP_SAME_CONTENT_DIFFERENT_ROUTE": CaseDefinition(
         case_type="DUP_SAME_CONTENT_DIFFERENT_ROUTE",
-        case_group="ERROR",
-        pdf_should_exist=True,
-        json_should_exist=True,
-        json_should_be_valid=True,
+        case_group="DUPLICITY_ERRORS",
+        error_duplicado=1,
+        error_orphan=0,
+        error_null=0,
+        error_blob_timeout=0,
+        is_duplicate=1,
+        has_error=1,
         severity=0.4,
-        base_weight=0.7,
-        description="Duplicate content written to a different logical route.",
+        base_weight=0.35,
+        description="Duplicate content represented in a different logical route.",
     ),
 
     "DUP_SAME_CONTENT_DIFFERENT_NAME_AND_ROUTE": CaseDefinition(
         case_type="DUP_SAME_CONTENT_DIFFERENT_NAME_AND_ROUTE",
-        case_group="ERROR",
-        pdf_should_exist=True,
-        json_should_exist=True,
-        json_should_be_valid=True,
+        case_group="DUPLICITY_ERRORS",
+        error_duplicado=1,
+        error_orphan=0,
+        error_null=0,
+        error_blob_timeout=0,
+        is_duplicate=1,
+        has_error=1,
         severity=0.5,
-        base_weight=0.6,
-        description="Duplicate content with different name and different route.",
+        base_weight=0.25,
+        description="Duplicate content represented with different name and route.",
     ),
 
     "JSON_WITHOUT_PDF": CaseDefinition(
         case_type="JSON_WITHOUT_PDF",
-        case_group="ERROR",
-        pdf_should_exist=False,
-        json_should_exist=True,
-        json_should_be_valid=True,
+        case_group="ORPHAN_ERRORS",
+        error_duplicado=0,
+        error_orphan=1,
+        error_null=0,
+        error_blob_timeout=0,
+        is_duplicate=0,
+        has_error=1,
         severity=0.8,
-        base_weight=0.5,
-        description="JSON metadata exists without the corresponding PDF.",
+        base_weight=0.60,
+        description="Metadata record without its expected paired document.",
     ),
 
     "PDF_WITHOUT_JSON": CaseDefinition(
         case_type="PDF_WITHOUT_JSON",
-        case_group="ERROR",
-        pdf_should_exist=True,
-        json_should_exist=False,
-        json_should_be_valid=False,
+        case_group="ORPHAN_ERRORS",
+        error_duplicado=0,
+        error_orphan=1,
+        error_null=0,
+        error_blob_timeout=0,
+        is_duplicate=0,
+        has_error=1,
         severity=0.9,
-        base_weight=0.5,
-        description="PDF exists without the JSON metadata sidecar.",
+        base_weight=0.40,
+        description="Document record without its expected metadata sidecar.",
     ),
 
     "NULL_JSON": CaseDefinition(
         case_type="NULL_JSON",
-        case_group="ERROR",
-        pdf_should_exist=True,
-        json_should_exist=True,
-        json_should_be_valid=False,
+        case_group="NULL_ERRORS",
+        error_duplicado=0,
+        error_orphan=0,
+        error_null=1,
+        error_blob_timeout=0,
+        is_duplicate=0,
+        has_error=1,
         severity=0.7,
-        base_weight=0.6,
-        description="PDF exists with a null/invalid JSON sidecar.",
+        base_weight=1.0,
+        description="Record with null or invalid metadata representation.",
     ),
 
     "BLOB_TIMEOUT": CaseDefinition(
         case_type="BLOB_TIMEOUT",
-        case_group="ERROR",
-        pdf_should_exist=True,
-        json_should_exist=True,
-        json_should_be_valid=True,
+        case_group="BLOB_STORAGE_ERRORS",
+        error_duplicado=0,
+        error_orphan=0,
+        error_null=0,
+        error_blob_timeout=1,
+        is_duplicate=0,
+        has_error=1,
         severity=0.9,
-        base_weight=0.4,
-        description="Represents an upload timeout that would affect blob storage.",
+        base_weight=1.0,
+        description="Simulated operational timeout affecting storage ingestion.",
     ),
 }

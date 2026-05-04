@@ -8,14 +8,14 @@ EPSILON = 1e-12
 
 
 def normalize_weights(weights: Dict[str, float]) -> Dict[str, float]:
-    """Normalize positive weights to sum to 1.0."""
+    """Normalize non-negative weights so they sum to 1.0."""
 
     if not weights:
         return {}
 
-    for k, v in weights.items():
-        if v < 0:
-            raise ValueError(f"Weight cannot be negative: {k}={v}")
+    for key, value in weights.items():
+        if value < 0:
+            raise ValueError(f"Weight cannot be negative: {key}={value}")
 
     total = sum(weights.values())
 
@@ -26,7 +26,11 @@ def normalize_weights(weights: Dict[str, float]) -> Dict[str, float]:
 
 
 def largest_remainder_allocation(total: int, weights: Dict[str, float]) -> Dict[str, int]:
-    """Allocate an integer total using the largest remainder method."""
+    """Allocate an integer total using the largest remainder method.
+
+    This method preserves the requested total exactly while approximating
+    the target proportions defined by the input weights.
+    """
 
     if total < 0:
         raise ValueError("Total cannot be negative.")
@@ -36,8 +40,8 @@ def largest_remainder_allocation(total: int, weights: Dict[str, float]) -> Dict[
 
     normalized = normalize_weights(weights)
 
-    raw = {k: total * w for k, w in normalized.items()}
-    base = {k: math.floor(v) for k, v in raw.items()}
+    raw = {key: total * weight for key, weight in normalized.items()}
+    base = {key: math.floor(value) for key, value in raw.items()}
 
     allocated = sum(base.values())
     residual = total - allocated
@@ -46,13 +50,13 @@ def largest_remainder_allocation(total: int, weights: Dict[str, float]) -> Dict[
         return base
 
     remainders = sorted(
-        ((k, raw[k] - base[k]) for k in raw),
+        ((key, raw[key] - base[key]) for key in raw),
         key=lambda pair: pair[1],
         reverse=True,
     )
 
-    for i in range(residual):
-        key = remainders[i % len(remainders)][0]  # 🔥 protección
+    for index in range(residual):
+        key = remainders[index % len(remainders)][0]
         base[key] += 1
 
     return base

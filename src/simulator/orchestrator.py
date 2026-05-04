@@ -1,209 +1,240 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Dict, Any, List
+from typing import Any, Dict, List
+import csv
 import random
+import uuid
 
 from .allocator import largest_remainder_allocation
 from .case_definitions import CASE_CATALOG
-from .config_models import DailyUniverseConfig, ErrorFamily, TimeRangeConfig
-from .content_factory import build_payload, compute_content_hash
-from .file_generator import build_file_stem, write_pdf_placeholder
-from .summary_writer import write_summary_json
+from .config_models import DatasetSimulationConfig, TimeSlotConfig
+from .content_factory import build_logical_payload, build_content_signature
 
 
 class SimulationOrchestrator:
+    """Dataset-first simulation orchestrator.
 
-    def __init__(
-        self,
-        config: DailyUniverseConfig,
-        error_families: List[ErrorFamily],
-        time_distribution: List[TimeRangeConfig],
-    ):
+    This orchestrator does not create physical files.
+    It only generates the tabular dataset used as the source of truth.
+    """
+
+    def __init__(self, config: DatasetSimulationConfig):
         self.config = config
-        self.error_families = error_families
-        self.time_distribution = time_distribution
+        self.config.validate()
 
-        if config.seed is not None:
-            random.seed(config.seed)
-
-    def build_universe_distribution(self) -> Dict[str, Any]:
-        total_files = self.config.max_valid_files_per_day
-        global_error_count = round(
-            total_files * (self.config.global_error_percentage / 100.0)
-        )
-        unique_valid_count = total_files - global_error_count
-
-        family_allocations = largest_remainder_allocation(
-            global_error_count,
-            {
-                family.name: family.weight_within_global_error
-                for family in self.error_families
-            },
-        )
-
-        subtype_allocations: Dict[str, int] = {}
-
-        for family in self.error_families:
-            family_total = family_allocations.get(family.name, 0)
-
-            family_subtypes = largest_remainder_allocation(
-                family_total,
-                {
-                    subtype.name: subtype.weight_within_family
-                    for subtype in family.subtypes
-                },
-            )
-
-            subtype_allocations.update(family_subtypes)
-
-        return {
-            "total_files": total_files,
-            "global_error_count": global_error_count,
-            "unique_valid_count": unique_valid_count,
-            "subtype_allocations": subtype_allocations,
-        }
-
-    def build_time_distribution(self) -> Dict[str, int]:
-        return largest_remainder_allocation(
-            self.config.max_valid_files_per_day,
-            {
-                time_range.name: time_range.percentage_load
-                for time_range in self.time_distribution
-            },
-        )
+        if self.config.simulation.seed is not None:
+            random.seed(self.config.simulation.seed)
 
     def execute(self) -> Dict[str, Any]:
-        universe_distribution = self.build_universe_distribution()
-        time_allocations = self.build_time_distribution()
+        records = self.generate_records()
 
-        root = Path(self.config.output_dir) / f"simulation_date={self.config.simulation_date}"
-        files_dir = root / "files"
-        summary_dir = root / "summary"
+        output_dir = Path(self.config.simulation.output_dir) / "dataset"
+        output_dir.mkdir(parents=True, exist_ok=True)
+
+        csv_path = output_dir / "blob_inventory.csv"
+        self.write_csv(csv_path, records)
+
+        return {
+            "simulation_date": self.config.simulation.simulation_date,
+            "records_created": len(records),
+            "dataset_path": str(csv_path),
+            "case_breakdown": self.case_breakdown(records),
+            "file_type_breakdown": self.file_type_breakdown(records),
+            "storage_tier_breakdown": self.storage_tier_breakdown(records),
+        }
+
+    def generate_records(self) -> List[Dict[str, Any]]:
+        total_files = self.config.simulation.max_valid_files_per_day
+
+        weekday_allocations = largest_remainder_allocation(
+            total_files,
+            {
+                item.day: item.base_load
+                for item in self.config.weekly_time_distribution
+            },
+        )
 
         records: List[Dict[str, Any]] = []
         sequence = 1
 
-        for time_range in self.time_distribution:
-            range_name = time_range.name
-            range_count = time_allocations.get(range_name, 0)
+        for weekday_config in self.config.weekly_time_distribution:
+            day_count = weekday_allocations.get(weekday_config.day, 0)
 
-            for _ in range(range_count):
-                case_type = self._pick_case_type(time_range, universe_distribution)
-
-                record = self._materialize_case(
-                    case_type=case_type,
-                    sequence=sequence,
-                    files_dir=files_dir,
-                    time_range=time_range,
-                )
-
-                records.append(record)
-                sequence += 1
-
-        summary = {
-            "simulation_date": self.config.simulation_date,
-            "max_valid_files_per_day": self.config.max_valid_files_per_day,
-            "global_error_percentage": self.config.global_error_percentage,
-            "configured_error_count": universe_distribution["global_error_count"],
-            "configured_unique_valid_count": universe_distribution["unique_valid_count"],
-            "records_created": len(records),
-            "time_distribution": time_allocations,
-            "case_breakdown": self._case_breakdown(records),
-            "time_range_breakdown": self._time_range_breakdown(records),
-            "pdf_created_count": sum(1 for record in records if record["pdf_created"]),
-        }
-
-        write_summary_json(summary_dir / "daily_summary.json", summary)
-        return summary
-
-    def _pick_case_type(
-        self,
-        time_range: TimeRangeConfig,
-        universe_distribution: Dict[str, Any],
-    ) -> str:
-        error_rate = time_range.error_rate
-
-        if random.random() > error_rate:
-            return "UNIQUE_VALID"
-
-        subtype_allocations = universe_distribution["subtype_allocations"]
-
-        population = list(subtype_allocations.keys())
-        weights = list(subtype_allocations.values())
-
-        if not population or sum(weights) == 0:
-            return "UNIQUE_VALID"
-
-        return random.choices(population, weights=weights, k=1)[0]
-
-    def _materialize_case(
-        self,
-        case_type: str,
-        sequence: int,
-        files_dir: Path,
-        time_range: TimeRangeConfig,
-    ) -> Dict[str, Any]:
-
-        case_def = CASE_CATALOG[case_type]
-
-        payload = build_payload(
-            self.config.simulation_date,
-            sequence,
-            time_range,
-        )
-
-        content_hash = compute_content_hash(payload)
-
-        file_stem = build_file_stem(
-            payload,
-            sequence,
-            time_range,
-        )
-
-        pdf_name = f"{file_stem}.pdf"
-        pdf_path = files_dir / pdf_name
-
-        file_hash = None
-
-        if case_def.pdf_should_exist and self.config.generate_pdf:
-            file_hash = write_pdf_placeholder(
-                pdf_path,
-                payload,
-                time_range,
+            slot_allocations = largest_remainder_allocation(
+                day_count,
+                {
+                    slot.name: slot.percentage_load
+                    for slot in weekday_config.time_distribution
+                },
             )
 
+            for slot in weekday_config.time_distribution:
+                slot_count = slot_allocations.get(slot.name, 0)
+
+                for _ in range(slot_count):
+                    record = self.build_record(
+                        sequence=sequence,
+                        day_of_week=weekday_config.day,
+                        time_slot=slot,
+                    )
+                    records.append(record)
+                    sequence += 1
+
+        return records
+
+    def build_record(
+        self,
+        sequence: int,
+        day_of_week: str,
+        time_slot: TimeSlotConfig,
+    ) -> Dict[str, Any]:
+        file_type = self.pick_weighted(self.config.file_types.distribution)
+        size_mb = self.generate_size_mb(file_type)
+        storage_tier = self.pick_weighted(self.config.storage_tier.distribution)
+
+        days_stored = random.randint(
+            self.config.lifecycle.days_stored.min,
+            self.config.lifecycle.days_stored.max,
+        )
+
+        days_since_last_access = random.randint(0, days_stored)
+
+        read_level = self.pick_weighted(
+            self.config.lifecycle.read_level_distribution
+        )
+        modify_level = self.pick_weighted(
+            self.config.lifecycle.modify_level_distribution
+        )
+
+        movement_storage = self.bernoulli(
+            self.config.lifecycle.movement_storage_probability
+        )
+
+        transfer_duration_sec = random.uniform(
+            self.config.transfer.duration_seconds.min,
+            self.config.transfer.duration_seconds.max,
+        )
+
+        transfer_speed_mbps = (size_mb * 8) / transfer_duration_sec
+
+        case_type = self.pick_case_type(time_slot)
+        case_def = CASE_CATALOG[case_type]
+
+        payload = build_logical_payload(
+            simulation_date=self.config.simulation.simulation_date,
+            sequence=sequence,
+            file_type=file_type,
+            time_slot=time_slot,
+        )
+
+        signature = build_content_signature(
+            payload=payload,
+            head_length=self.config.hash.hash_head_length,
+            tail_length=self.config.hash.hash_tail_length,
+        )
+
+        rate = self.config.storage_tier.cost_per_mb_per_month[storage_tier]
+        storage_cost = size_mb * rate * (days_stored / 30)
+
         return {
+            "file_id": str(uuid.uuid4()),
             "sequence": sequence,
-            "case_type": case_type,
+            "case_type": case_def.case_type,
             "case_group": case_def.case_group,
-            "time_range": time_range.name,
-            "time_start": time_range.start,
-            "time_end": time_range.end,
-            "error_rate_range": time_range.error_rate,
-            "pdf_created": pdf_path.exists(),
-            "pdf_name": pdf_name,
-            "content_hash": content_hash,
-            "file_hash": file_hash,
-            "logical_creation_datetime": payload["logical_creation_datetime"],
+            "file_type": file_type,
+            "size_mb": round(size_mb, 6),
+            "storage_tier": storage_tier,
+            "days_stored": days_stored,
+            "days_since_last_access": days_since_last_access,
+            "read_level": read_level,
+            "modify_level": modify_level,
+            "movement_storage": movement_storage,
+            "transfer_duration_sec": round(transfer_duration_sec, 6),
+            "transfer_speed_mbps": round(transfer_speed_mbps, 6),
+            "day_of_week": day_of_week,
+            "time_slot": time_slot.name,
+            "created_at": payload["logical_creation_datetime"],
+            "hash_head": signature["hash_head"],
+            "hash_tail": signature["hash_tail"],
+            "error_duplicado": case_def.error_duplicado,
+            "error_orphan": case_def.error_orphan,
+            "error_null": case_def.error_null,
+            "error_blob_timeout": case_def.error_blob_timeout,
+            "has_error": case_def.has_error,
+            "is_duplicate": case_def.is_duplicate,
+            "severity": case_def.severity,
+            "storage_cost": round(storage_cost, 10),
         }
 
+    def pick_case_type(self, time_slot: TimeSlotConfig) -> str:
+        effective_error_rate = min(
+            1.0,
+            self.config.simulation.global_error_percentage * time_slot.error_rate,
+        )
+
+        if random.random() > effective_error_rate:
+            return "UNIQUE_VALID"
+
+        family = random.choices(
+            self.config.error_families,
+            weights=[
+                item.weight_within_global_error
+                for item in self.config.error_families
+            ],
+            k=1,
+        )[0]
+
+        subtype = random.choices(
+            family.subtypes,
+            weights=[item.weight_within_family for item in family.subtypes],
+            k=1,
+        )[0]
+
+        return subtype.name
+
+    def generate_size_mb(self, file_type: str) -> float:
+        size_range = self.config.file_types.size_distribution_mb[file_type]
+        return random.uniform(size_range.min, size_range.max)
+
     @staticmethod
-    def _case_breakdown(records: List[Dict[str, Any]]) -> Dict[str, int]:
-        breakdown: Dict[str, int] = {}
+    def pick_weighted(weights: Dict[str, float]) -> str:
+        population = list(weights.keys())
+        values = list(weights.values())
+        return random.choices(population, weights=values, k=1)[0]
+
+    @staticmethod
+    def bernoulli(probability: float) -> int:
+        return int(random.random() < probability)
+
+    @staticmethod
+    def write_csv(path: Path, records: List[Dict[str, Any]]) -> None:
+        if not records:
+            raise ValueError("No records generated. CSV cannot be written.")
+
+        with path.open("w", newline="", encoding="utf-8") as file:
+            writer = csv.DictWriter(file, fieldnames=list(records[0].keys()))
+            writer.writeheader()
+            writer.writerows(records)
+
+    @staticmethod
+    def case_breakdown(records: List[Dict[str, Any]]) -> Dict[str, int]:
+        return SimulationOrchestrator.breakdown(records, "case_type")
+
+    @staticmethod
+    def file_type_breakdown(records: List[Dict[str, Any]]) -> Dict[str, int]:
+        return SimulationOrchestrator.breakdown(records, "file_type")
+
+    @staticmethod
+    def storage_tier_breakdown(records: List[Dict[str, Any]]) -> Dict[str, int]:
+        return SimulationOrchestrator.breakdown(records, "storage_tier")
+
+    @staticmethod
+    def breakdown(records: List[Dict[str, Any]], field: str) -> Dict[str, int]:
+        result: Dict[str, int] = {}
 
         for record in records:
-            case_type = record["case_type"]
-            breakdown[case_type] = breakdown.get(case_type, 0) + 1
+            value = record[field]
+            result[value] = result.get(value, 0) + 1
 
-        return dict(sorted(breakdown.items()))
-
-    @staticmethod
-    def _time_range_breakdown(records: List[Dict[str, Any]]) -> Dict[str, int]:
-        breakdown: Dict[str, int] = {}
-
-        for record in records:
-            time_range = record["time_range"]
-            breakdown[time_range] = breakdown.get(time_range, 0) + 1
-
-        return dict(sorted(breakdown.items()))
+        return dict(sorted(result.items()))

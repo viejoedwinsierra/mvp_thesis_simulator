@@ -2,42 +2,136 @@
   "simulation": {
     "simulation_date": "2026-04-25",
     "max_valid_files_per_day": 10000,
-    "global_error_percentage": 24,
+    "global_error_percentage": 0.24,
     "output_dir": "./output",
-    "generate_pdf": true,
-    "generate_json_sidecar": true,
     "seed": 4
   },
+
+  "file_types": {
+    "distribution": {
+      "json": 0.25,
+      "jpg": 0.30,
+      "pdf": 0.25,
+      "mp4": 0.20
+    },
+    "size_distribution_mb": {
+      "json": {
+        "min": 0.001,
+        "max": 0.5
+      },
+      "jpg": {
+        "min": 0.1,
+        "max": 8
+      },
+      "pdf": {
+        "min": 0.05,
+        "max": 20
+      },
+      "mp4": {
+        "min": 5,
+        "max": 500
+      }
+    }
+  },
+
+  "storage_tier": {
+    "distribution": {
+      "hot": 0.50,
+      "cool": 0.30,
+      "archive": 0.20
+    },
+    "cost_per_mb_per_month": {
+      "hot": 0.00002,
+      "cool": 0.00001,
+      "archive": 0.000002
+    }
+  },
+
+  "lifecycle": {
+    "days_stored": {
+      "min": 1,
+      "max": 180
+    },
+    "days_since_last_access": {
+      "strategy": "uniform_between_0_and_days_stored"
+    },
+    "read_level_distribution": {
+      "low": 0.50,
+      "medium": 0.30,
+      "high": 0.20
+    },
+    "modify_level_distribution": {
+      "low": 0.70,
+      "medium": 0.20,
+      "high": 0.10
+    },
+    "movement_storage_probability": 0.15
+  },
+
+  "transfer": {
+    "duration_seconds": {
+      "min": 1,
+      "max": 60
+    }
+  },
+
+  "hash": {
+    "use_full_hash": false,
+    "hash_head_length": 12,
+    "hash_tail_length": 12
+  },
+
   "error_families": [
     {
       "name": "DUPLICITY_ERRORS",
       "weight_within_global_error": 0.40,
       "subtypes": [
-        {"name": "DUP_SAME_CONTENT_DIFFERENT_NAME", "weight_within_family": 0.40},
-        {"name": "DUP_SAME_CONTENT_DIFFERENT_ROUTE", "weight_within_family": 0.35},
-        {"name": "DUP_SAME_CONTENT_DIFFERENT_NAME_AND_ROUTE", "weight_within_family": 0.25}
+        {
+          "name": "DUP_SAME_CONTENT_DIFFERENT_NAME",
+          "weight_within_family": 0.40
+        },
+        {
+          "name": "DUP_SAME_CONTENT_DIFFERENT_ROUTE",
+          "weight_within_family": 0.35
+        },
+        {
+          "name": "DUP_SAME_CONTENT_DIFFERENT_NAME_AND_ROUTE",
+          "weight_within_family": 0.25
+        }
       ]
     },
     {
       "name": "ORPHAN_ERRORS",
       "weight_within_global_error": 0.30,
       "subtypes": [
-        {"name": "JSON_WITHOUT_PDF", "weight_within_family": 0.60},
-        {"name": "PDF_WITHOUT_JSON", "weight_within_family": 0.40}
+        {
+          "name": "JSON_WITHOUT_PDF",
+          "weight_within_family": 0.60
+        },
+        {
+          "name": "PDF_WITHOUT_JSON",
+          "weight_within_family": 0.40
+        }
       ]
     },
     {
       "name": "NULL_ERRORS",
       "weight_within_global_error": 0.15,
       "subtypes": [
-        {"name": "NULL_JSON", "weight_within_family": 1.0}
+        {
+          "name": "NULL_JSON",
+          "weight_within_family": 1.0
+        }
       ]
     },
     {
       "name": "BLOB_STORAGE_ERRORS",
       "weight_within_global_error": 0.15,
       "subtypes": [
-        {"name": "BLOB_TIMEOUT", "weight_within_family": 1.0}
+        {
+          "name": "BLOB_TIMEOUT",
+          "weight_within_family": 1.0
+        }
       ]
     }
   ]

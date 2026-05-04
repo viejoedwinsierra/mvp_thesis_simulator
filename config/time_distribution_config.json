@@ -1,32 +1,74 @@
 {
-  "time_distribution": [
+  "weekly_time_distribution": [
     {
-      "name": "madrugada",
-      "start": "00:00",
-      "end": "05:59",
-      "percentage_load": 0.10,
-      "error_rate": 0.25
+      "day": "monday",
+      "base_load": 0.15,
+      "time_distribution": [
+        {"name": "madrugada", "start": "00:00", "end": "05:59", "percentage_load": 0.10, "error_rate": 0.20},
+        {"name": "mañana", "start": "06:00", "end": "11:59", "percentage_load": 0.25, "error_rate": 0.22},
+        {"name": "tarde", "start": "12:00", "end": "17:59", "percentage_load": 0.45, "error_rate": 0.25},
+        {"name": "noche", "start": "18:00", "end": "23:59", "percentage_load": 0.20, "error_rate": 0.23}
+      ]
     },
     {
-      "name": "mañana",
-      "start": "06:00",
-      "end": "11:59",
-      "percentage_load": 0.20,
-      "error_rate": 0.25
+      "day": "tuesday",
+      "base_load": 0.16,
+      "time_distribution": [
+        {"name": "madrugada", "start": "00:00", "end": "05:59", "percentage_load": 0.10, "error_rate": 0.20},
+        {"name": "mañana", "start": "06:00", "end": "11:59", "percentage_load": 0.25, "error_rate": 0.22},
+        {"name": "tarde", "start": "12:00", "end": "17:59", "percentage_load": 0.45, "error_rate": 0.25},
+        {"name": "noche", "start": "18:00", "end": "23:59", "percentage_load": 0.20, "error_rate": 0.23}
+      ]
     },
     {
-      "name": "tarde",
-      "start": "12:00",
-      "end": "17:59",
-      "percentage_load": 0.50,
-      "error_rate": 0.25
+      "day": "wednesday",
+      "base_load": 0.17,
+      "time_distribution": [
+        {"name": "madrugada", "start": "00:00", "end": "05:59", "percentage_load": 0.10, "error_rate": 0.20},
+        {"name": "mañana", "start": "06:00", "end": "11:59", "percentage_load": 0.25, "error_rate": 0.22},
+        {"name": "tarde", "start": "12:00", "end": "17:59", "percentage_load": 0.45, "error_rate": 0.26},
+        {"name": "noche", "start": "18:00", "end": "23:59", "percentage_load": 0.20, "error_rate": 0.24}
+      ]
     },
     {
-      "name": "noche",
-      "start": "18:00",
-      "end": "23:59",
-      "percentage_load": 0.20,
-      "error_rate": 0.25
+      "day": "thursday",
+      "base_load": 0.18,
+      "time_distribution": [
+        {"name": "madrugada", "start": "00:00", "end": "05:59", "percentage_load": 0.10, "error_rate": 0.21},
+        {"name": "mañana", "start": "06:00", "end": "11:59", "percentage_load": 0.25, "error_rate": 0.23},
+        {"name": "tarde", "start": "12:00", "end": "17:59", "percentage_load": 0.45, "error_rate": 0.27},
+        {"name": "noche", "start": "18:00", "end": "23:59", "percentage_load": 0.20, "error_rate": 0.25}
+      ]
+    },
+    {
+      "day": "friday",
+      "base_load": 0.19,
+      "time_distribution": [
+        {"name": "madrugada", "start": "00:00", "end": "05:59", "percentage_load": 0.08, "error_rate": 0.22},
+        {"name": "mañana", "start": "06:00", "end": "11:59", "percentage_load": 0.22, "error_rate": 0.25},
+        {"name": "tarde", "start": "12:00", "end": "17:59", "percentage_load": 0.50, "error_rate": 0.30},
+        {"name": "noche", "start": "18:00", "end": "23:59", "percentage_load": 0.20, "error_rate": 0.28}
+      ]
+    },
+    {
+      "day": "saturday",
+      "base_load": 0.10,
+      "time_distribution": [
+        {"name": "madrugada", "start": "00:00", "end": "05:59", "percentage_load": 0.15, "error_rate": 0.30},
+        {"name": "mañana", "start": "06:00", "end": "11:59", "percentage_load": 0.20, "error_rate": 0.28},
+        {"name": "tarde", "start": "12:00", "end": "17:59", "percentage_load": 0.35, "error_rate": 0.25},
+        {"name": "noche", "start": "18:00", "end": "23:59", "percentage_load": 0.30, "error_rate": 0.27}
+      ]
+    },
+    {
+      "day": "sunday",
+      "base_load": 0.05,
+      "time_distribution": [
+        {"name": "madrugada", "start": "00:00", "end": "05:59", "percentage_load": 0.20, "error_rate": 0.28},
+        {"name": "mañana", "start": "06:00", "end": "11:59", "percentage_load": 0.25, "error_rate": 0.26},
+        {"name": "tarde", "start": "12:00", "end": "17:59", "percentage_load": 0.30, "error_rate": 0.24},
+        {"name": "noche", "start": "18:00", "end": "23:59", "percentage_load": 0.25, "error_rate": 0.26}
+      ]
     }
   ]
 }

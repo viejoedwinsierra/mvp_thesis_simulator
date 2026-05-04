@@ -6,7 +6,7 @@ import hashlib
 import json
 import random
 
-from .config_models import TimeRangeConfig
+from ..simulator.config_models import TimeRangeConfig
 
 
 def build_file_stem(
