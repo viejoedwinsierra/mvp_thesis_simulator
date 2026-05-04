@@ -5,7 +5,7 @@ import hashlib
 import json
 import random
 import string
-from typing import Any, Dict
+from typing import Any, Mapping
 
 from .config_models import TimeSlotConfig
 
@@ -43,18 +43,29 @@ COMMENTS = [
 ]
 
 
-def random_nonce(length: int = 16) -> str:
+def random_nonce(
+    length: int = 16,
+    rng: random.Random | None = None,
+) -> str:
     """Generate a random alphanumeric nonce."""
 
+    if length <= 0:
+        raise ValueError("length must be greater than 0.")
+
+    rng = rng or random
     alphabet = string.ascii_letters + string.digits
-    return "".join(random.choice(alphabet) for _ in range(length))
+
+    return "".join(rng.choice(alphabet) for _ in range(length))
 
 
 def random_datetime_in_slot(
     base_date: datetime,
     time_slot: TimeSlotConfig,
+    rng: random.Random | None = None,
 ) -> datetime:
     """Generate a random datetime inside a configured time slot."""
+
+    rng = rng or random
 
     start_hour, start_minute = map(int, time_slot.start.split(":"))
     end_hour, end_minute = map(int, time_slot.end.split(":"))
@@ -76,17 +87,21 @@ def random_datetime_in_slot(
     total_seconds = int((end_dt - start_dt).total_seconds())
 
     if total_seconds < 0:
-        raise ValueError(
-            f"Invalid time slot: {time_slot.start} - {time_slot.end}"
-        )
+        raise ValueError(f"Invalid time slot: {time_slot.start} - {time_slot.end}")
 
-    return start_dt + timedelta(seconds=random.randint(0, total_seconds))
+    return start_dt + timedelta(seconds=rng.randint(0, total_seconds))
 
 
-def compute_content_hash(payload: Dict[str, Any]) -> str:
+def compute_content_hash(payload: Mapping[str, Any]) -> str:
     """Compute a deterministic SHA-256 hash from a canonical payload."""
 
-    canonical = json.dumps(payload, sort_keys=True, ensure_ascii=False)
+    canonical = json.dumps(
+        payload,
+        sort_keys=True,
+        ensure_ascii=False,
+        separators=(",", ":"),
+    )
+
     return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
 
 
@@ -116,45 +131,66 @@ def build_logical_payload(
     sequence: int,
     file_type: str,
     time_slot: TimeSlotConfig | None = None,
-) -> Dict[str, Any]:
+    created_at: datetime | None = None,
+    include_nonce: bool = True,
+    rng: random.Random | None = None,
+) -> dict[str, Any]:
     """Build a logical payload used only for dataset simulation.
 
-    This payload is not written to disk by the simulator. It only provides
-    deterministic content for hash generation and traceability.
+    The payload is not written to disk. It only provides deterministic
+    logical content for hashing and traceability.
     """
 
+    if sequence < 0:
+        raise ValueError("sequence cannot be negative.")
+
+    rng = rng or random
     base_dt = datetime.fromisoformat(simulation_date)
 
-    if time_slot is not None:
-        event_dt = random_datetime_in_slot(base_dt, time_slot)
+    if created_at is not None:
+        event_dt = created_at
+        time_slot_name = time_slot.name if time_slot is not None else None
+    elif time_slot is not None:
+        event_dt = random_datetime_in_slot(base_dt, time_slot, rng=rng)
         time_slot_name = time_slot.name
     else:
-        event_dt = base_dt + timedelta(minutes=random.randint(0, 1439))
+        event_dt = base_dt + timedelta(minutes=rng.randint(0, 1439))
         time_slot_name = None
 
-    return {
+    payload: dict[str, Any] = {
         "logical_content_id": f"CONTENT-{base_dt.strftime('%Y%m%d')}-{sequence:06d}",
         "file_type": file_type,
-        "document_type": random.choice(DOCUMENT_TYPES),
-        "customer_name": random.choice(CUSTOMER_NAMES),
-        "city": random.choice(CITIES),
-        "amount": round(random.uniform(50.0, 5000.0), 2),
+        "document_type": rng.choice(DOCUMENT_TYPES),
+        "customer_name": rng.choice(CUSTOMER_NAMES),
+        "city": rng.choice(CITIES),
+        "amount": round(rng.uniform(50.0, 5000.0), 2),
         "logical_creation_datetime": event_dt.isoformat(),
         "day_of_week": event_dt.strftime("%A").lower(),
         "time_slot": time_slot_name,
-        "comment": random.choice(COMMENTS),
-        "nonce": random_nonce(),
+        "comment": rng.choice(COMMENTS),
     }
+
+    if include_nonce:
+        payload["nonce"] = random_nonce(rng=rng)
+
+    return payload
 
 
 def build_content_signature(
-    payload: Dict[str, Any],
+    payload: Mapping[str, Any],
     head_length: int,
     tail_length: int,
-) -> Dict[str, str]:
+    use_full_hash: bool = True,
+) -> dict[str, str | None]:
     """Build hash-derived fields for the dataset."""
 
     content_hash = compute_content_hash(payload)
+
+    if use_full_hash:
+        full_hash: str | None = content_hash
+    else:
+        full_hash = None
+
     hash_head, hash_tail = split_hash(
         content_hash=content_hash,
         head_length=head_length,
@@ -162,7 +198,7 @@ def build_content_signature(
     )
 
     return {
-        "content_hash": content_hash,
+        "content_hash": full_hash,
         "hash_head": hash_head,
         "hash_tail": hash_tail,
     }

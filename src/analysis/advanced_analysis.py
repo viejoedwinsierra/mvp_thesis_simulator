@@ -197,40 +197,50 @@ class AdvancedAnalysis:
     # ======================================================
     # 7. MULTICOLINEALIDAD VIF
     # ======================================================
-    def calculate_vif(self):
-        X = self.numeric_df.copy()
+    def calculate_vif(self) -> None:
+        import numpy as np
+        import pandas as pd
+        from statsmodels.stats.outliers_influence import variance_inflation_factor
 
-        # Para VIF no se debe incluir la variable objetivo ni variables derivadas redundantes
-        X = X.drop(
-            columns=[
-                "storage_cost",
-                "has_error",
-                "is_duplicate",
-                "severity",
-            ],
-            errors="ignore"
+        excluded_columns = {
+            "sequence",
+            "content_hash",
+            "has_error",
+            "error_duplicado",
+            "error_orphan",
+            "error_null",
+            "error_blob_timeout",
+            "is_duplicate",
+        }
+
+        numeric_df = self.df.select_dtypes(include=["number"]).copy()
+
+        numeric_df = numeric_df.drop(
+            columns=[col for col in excluded_columns if col in numeric_df.columns],
+            errors="ignore",
         )
 
-        X = X.dropna()
-        X = X.loc[:, X.std() > 0]
+        numeric_df = numeric_df.replace([np.inf, -np.inf], np.nan)
+        numeric_df = numeric_df.dropna(axis=1, how="all")
+        numeric_df = numeric_df.dropna(axis=0)
 
-        X = sm.add_constant(X)
+        nunique = numeric_df.nunique()
+        numeric_df = numeric_df.loc[:, nunique > 1]
+
+        if numeric_df.shape[1] < 2:
+            print("\n=== VIF ===")
+            print("No hay suficientes variables numéricas válidas para calcular VIF.")
+            return
 
         vif_data = pd.DataFrame()
-        vif_data["variable"] = X.columns
-        vif_data["VIF"] = [
-            variance_inflation_factor(X.values, i)
-            for i in range(X.shape[1])
+        vif_data["variable"] = numeric_df.columns
+        vif_data["vif"] = [
+            variance_inflation_factor(numeric_df.values, i)
+            for i in range(numeric_df.shape[1])
         ]
 
-        vif_data = vif_data.sort_values("VIF", ascending=False)
-        vif_data.to_csv("output/vif_analysis_clean.csv", index=False)
-
-        print("\n=== VIF LIMPIO PARA MODELADO ===")
-        print(vif_data)
-
-        return vif_data
-
+        print("\n=== VIF ===")
+        print(vif_data.sort_values("vif", ascending=False))
     # ======================================================
     # 8. RELACIONES CON COSTO
     # ======================================================

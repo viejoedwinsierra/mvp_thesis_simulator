@@ -1,140 +1,203 @@
 from __future__ import annotations
 
+import math
 from dataclasses import dataclass
-from typing import Dict, List
+from typing import Mapping, Sequence
 
 
 EPSILON = 1e-6
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, slots=True)
 class ErrorSubtype:
-    """Specific error case inside an error family."""
-
     name: str
     weight_within_family: float
     severity: float = 1.0
-
-
-@dataclass(frozen=True)
-class ErrorFamily:
-    """Family of related error subtypes."""
-
-    name: str
-    weight_within_global_error: float
-    subtypes: List[ErrorSubtype]
     description: str | None = None
 
 
-@dataclass(frozen=True)
-class SizeRangeMB:
-    """File size range expressed in MB."""
+@dataclass(frozen=True, slots=True)
+class ErrorFamily:
+    name: str
+    weight_within_global_error: float
+    subtypes: Sequence[ErrorSubtype]
+    description: str | None = None
 
+
+@dataclass(frozen=True, slots=True)
+class LogNormalDistributionConfig:
+    distribution: str
+    mean: float
+    sigma: float
     min: float
     max: float
 
+    def validate(self, label: str) -> None:
+        if self.distribution != "lognormal":
+            raise ValueError(f"{label}.distribution must be 'lognormal'.")
 
-@dataclass(frozen=True)
+        for field_name in ("mean", "sigma", "min", "max"):
+            value = getattr(self, field_name)
+            if not math.isfinite(value):
+                raise ValueError(f"{label}.{field_name} must be finite.")
+
+        if self.sigma <= 0:
+            raise ValueError(f"{label}.sigma must be greater than 0.")
+
+        if self.min <= 0:
+            raise ValueError(f"{label}.min must be greater than 0.")
+
+        if self.max <= self.min:
+            raise ValueError(f"{label}.max must be greater than min.")
+
+
+@dataclass(frozen=True, slots=True)
 class FileTypeConfig:
-    """Distribution and size ranges by file type."""
-
-    distribution: Dict[str, float]
-    size_distribution_mb: Dict[str, SizeRangeMB]
+    distribution: Mapping[str, float]
+    size_distribution_mb: Mapping[str, LogNormalDistributionConfig]
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, slots=True)
+class StorageTierRule:
+    tier: str
+    min_days_since_last_access: int | None = None
+    max_days_since_last_access: int | None = None
+
+
+@dataclass(frozen=True, slots=True)
 class StorageTierConfig:
-    """Storage tier probabilities and cost per MB."""
+    strategy: str
+    rules: Sequence[StorageTierRule]
+    cost_per_mb_per_month: Mapping[str, float]
 
-    distribution: Dict[str, float]
-    cost_per_mb_per_month: Dict[str, float]
 
-
-@dataclass(frozen=True)
+@dataclass(frozen=True, slots=True)
 class LifecycleDaysConfig:
-    """Range for days stored."""
-
+    distribution: str
     min: int
     max: int
 
 
-@dataclass(frozen=True)
-class LifecycleConfig:
-    """Lifecycle behavior configuration."""
+@dataclass(frozen=True, slots=True)
+class BetaProfileConfig:
+    alpha: float
+    beta: float
 
+
+@dataclass(frozen=True, slots=True)
+class DaysSinceLastAccessConfig:
+    strategy: str
+    profiles: Mapping[str, BetaProfileConfig]
+    distribution_weights: Mapping[str, float]
+
+
+@dataclass(frozen=True, slots=True)
+class LifecycleConfig:
     days_stored: LifecycleDaysConfig
-    read_level_distribution: Dict[str, float]
-    modify_level_distribution: Dict[str, float]
+    days_since_last_access: DaysSinceLastAccessConfig
     movement_storage_probability: float
 
 
-@dataclass(frozen=True)
-class TransferDurationConfig:
-    """Transfer duration range in seconds."""
-
-    min: float
-    max: float
-
-
-@dataclass(frozen=True)
+@dataclass(frozen=True, slots=True)
 class TransferConfig:
-    """Transfer simulation configuration."""
+    speed_mbps: LogNormalDistributionConfig
+    duration_strategy: str
 
-    duration_seconds: TransferDurationConfig
+
+@dataclass(frozen=True, slots=True)
+class CostModelConfig:
+    storage_cost_formula: str
+    non_linear_adjustments: Mapping[str, float]
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, slots=True)
+class ErrorConditionMultiplier:
+    multiplier: float
+    threshold_mb: float | None = None
+    threshold_mbps: float | None = None
+    threshold_sec: float | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class ErrorsConfig:
+    base_error_probability: float
+    multipliers: Mapping[str, ErrorConditionMultiplier | float]
+
+
+@dataclass(frozen=True, slots=True)
 class HashConfig:
-    """Partial hash configuration."""
-
     use_full_hash: bool
     hash_head_length: int
     hash_tail_length: int
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, slots=True)
 class TimeSlotConfig:
-    """Time slot inside a weekday."""
-
     name: str
     start: str
     end: str
     percentage_load: float
-    error_rate: float
+    error_multiplier: float
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, slots=True)
 class WeekdayTimeDistribution:
-    """Traffic distribution for one weekday."""
-
     day: str
     base_load: float
-    time_distribution: List[TimeSlotConfig]
+    time_distribution: Sequence[TimeSlotConfig]
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, slots=True)
+class TimeDistributionConfig:
+    error_rate_mode: str
+    weekly_time_distribution: Sequence[WeekdayTimeDistribution]
+
+
+@dataclass(frozen=True, slots=True)
 class SimulationConfig:
-    """General simulation parameters."""
-
     simulation_date: str
     max_valid_files_per_day: int
-    global_error_percentage: float
     output_dir: str
     seed: int | None = None
 
 
-@dataclass(frozen=True)
-class DatasetSimulationConfig:
-    """Full configuration used to generate the tabular dataset."""
+@dataclass(frozen=True, slots=True)
+class ArrivalProcessConfig:
+    strategy: str = "poisson"
+    hourly_noise: float = 0.0
 
+
+@dataclass(frozen=True, slots=True)
+class CapacityConfig:
+    enabled: bool = False
+    files_per_hour: int = 0
+    duration_penalty_factor: float = 0.0
+    error_penalty_factor: float = 0.0
+
+
+@dataclass(frozen=True, slots=True)
+class OutliersConfig:
+    enabled: bool = False
+    probability: float = 0.0
+    size_multiplier_min: float = 1.0
+    size_multiplier_max: float = 1.0
+
+
+@dataclass(frozen=True, slots=True)
+class DatasetSimulationConfig:
     simulation: SimulationConfig
     file_types: FileTypeConfig
     storage_tier: StorageTierConfig
     lifecycle: LifecycleConfig
     transfer: TransferConfig
+    cost_model: CostModelConfig
+    errors: ErrorsConfig
     hash: HashConfig
-    weekly_time_distribution: List[WeekdayTimeDistribution]
-    error_families: List[ErrorFamily]
+    weekly_time_distribution: Sequence[WeekdayTimeDistribution]
+    error_families: Sequence[ErrorFamily]
+    arrival_process: ArrivalProcessConfig | None = None
+    capacity: CapacityConfig | None = None
+    outliers: OutliersConfig | None = None
 
     def validate(self) -> None:
         self._validate_simulation()
@@ -142,18 +205,16 @@ class DatasetSimulationConfig:
         self._validate_storage_tier()
         self._validate_lifecycle()
         self._validate_transfer()
+        self._validate_cost_model()
+        self._validate_errors()
         self._validate_hash()
         self._validate_weekly_time_distribution()
         self._validate_error_families()
+        self._validate_optional_monte_carlo_configs()
 
     def _validate_simulation(self) -> None:
         if self.simulation.max_valid_files_per_day <= 0:
             raise ValueError("max_valid_files_per_day must be greater than 0.")
-
-        if not 0 <= self.simulation.global_error_percentage <= 1:
-            raise ValueError(
-                "global_error_percentage must be expressed as a proportion between 0 and 1."
-            )
 
     def _validate_file_types(self) -> None:
         self._validate_weights_sum_to_one(
@@ -161,62 +222,161 @@ class DatasetSimulationConfig:
             "file_types.distribution",
         )
 
-        for file_type, size_range in self.file_types.size_distribution_mb.items():
-            if size_range.min <= 0:
-                raise ValueError(f"{file_type}.min size must be greater than 0.")
-            if size_range.max <= size_range.min:
-                raise ValueError(f"{file_type}.max size must be greater than min.")
-
         missing = set(self.file_types.distribution) - set(
             self.file_types.size_distribution_mb
         )
+
         if missing:
-            raise ValueError(f"Missing size ranges for file types: {missing}")
+            raise ValueError(f"Missing size distributions for file types: {missing}")
+
+        for file_type, distribution in self.file_types.size_distribution_mb.items():
+            distribution.validate(f"file_types.size_distribution_mb.{file_type}")
 
     def _validate_storage_tier(self) -> None:
-        self._validate_weights_sum_to_one(
-            self.storage_tier.distribution,
-            "storage_tier.distribution",
-        )
+        if self.storage_tier.strategy != "by_days_since_last_access":
+            raise ValueError(
+                "storage_tier.strategy must be 'by_days_since_last_access'."
+            )
 
-        missing = set(self.storage_tier.distribution) - set(
-            self.storage_tier.cost_per_mb_per_month
-        )
-        if missing:
-            raise ValueError(f"Missing cost configuration for tiers: {missing}")
+        if not self.storage_tier.rules:
+            raise ValueError("storage_tier.rules cannot be empty.")
+
+        tiers_from_rules = {rule.tier for rule in self.storage_tier.rules}
+        tiers_from_costs = set(self.storage_tier.cost_per_mb_per_month)
+
+        missing_costs = tiers_from_rules - tiers_from_costs
+        if missing_costs:
+            raise ValueError(f"Missing cost configuration for tiers: {missing_costs}")
 
         for tier, cost in self.storage_tier.cost_per_mb_per_month.items():
             if cost < 0:
                 raise ValueError(f"Storage cost cannot be negative: {tier}={cost}")
 
+        for rule in self.storage_tier.rules:
+            if (
+                rule.min_days_since_last_access is not None
+                and rule.min_days_since_last_access < 0
+            ):
+                raise ValueError(
+                    f"{rule.tier}.min_days_since_last_access cannot be negative."
+                )
+
+            if (
+                rule.max_days_since_last_access is not None
+                and rule.max_days_since_last_access < 0
+            ):
+                raise ValueError(
+                    f"{rule.tier}.max_days_since_last_access cannot be negative."
+                )
+
+            if (
+                rule.min_days_since_last_access is not None
+                and rule.max_days_since_last_access is not None
+                and rule.max_days_since_last_access < rule.min_days_since_last_access
+            ):
+                raise ValueError(
+                    f"{rule.tier}.max_days_since_last_access must be >= min."
+                )
+
     def _validate_lifecycle(self) -> None:
+        if self.lifecycle.days_stored.distribution != "uniform":
+            raise ValueError("lifecycle.days_stored.distribution must be 'uniform'.")
+
         if self.lifecycle.days_stored.min <= 0:
             raise ValueError("days_stored.min must be greater than 0.")
 
         if self.lifecycle.days_stored.max < self.lifecycle.days_stored.min:
             raise ValueError("days_stored.max must be >= days_stored.min.")
 
-        self._validate_weights_sum_to_one(
-            self.lifecycle.read_level_distribution,
-            "lifecycle.read_level_distribution",
-        )
+        access_cfg = self.lifecycle.days_since_last_access
+
+        if access_cfg.strategy != "beta_scaled_to_days_stored":
+            raise ValueError(
+                "days_since_last_access.strategy must be 'beta_scaled_to_days_stored'."
+            )
 
         self._validate_weights_sum_to_one(
-            self.lifecycle.modify_level_distribution,
-            "lifecycle.modify_level_distribution",
+            access_cfg.distribution_weights,
+            "lifecycle.days_since_last_access.distribution_weights",
         )
+
+        missing_profiles = set(access_cfg.distribution_weights) - set(
+            access_cfg.profiles
+        )
+
+        if missing_profiles:
+            raise ValueError(f"Missing beta profiles: {missing_profiles}")
+
+        for name, profile in access_cfg.profiles.items():
+            if profile.alpha <= 0:
+                raise ValueError(f"{name}.alpha must be greater than 0.")
+            if profile.beta <= 0:
+                raise ValueError(f"{name}.beta must be greater than 0.")
 
         if not 0 <= self.lifecycle.movement_storage_probability <= 1:
             raise ValueError("movement_storage_probability must be between 0 and 1.")
 
     def _validate_transfer(self) -> None:
-        if self.transfer.duration_seconds.min <= 0:
-            raise ValueError("transfer.duration_seconds.min must be greater than 0.")
+        self.transfer.speed_mbps.validate("transfer.speed_mbps")
 
-        if self.transfer.duration_seconds.max < self.transfer.duration_seconds.min:
+        if self.transfer.duration_strategy != "size_divided_by_speed":
             raise ValueError(
-                "transfer.duration_seconds.max must be >= transfer.duration_seconds.min."
+                "transfer.duration_strategy must be 'size_divided_by_speed'."
             )
+
+    def _validate_cost_model(self) -> None:
+        if not self.cost_model.storage_cost_formula:
+            raise ValueError("cost_model.storage_cost_formula cannot be empty.")
+
+        for key, value in self.cost_model.non_linear_adjustments.items():
+            if not math.isfinite(value):
+                raise ValueError(
+                    f"cost_model.non_linear_adjustments.{key} must be finite."
+                )
+
+    def _validate_errors(self) -> None:
+        if not 0 <= self.errors.base_error_probability <= 1:
+            raise ValueError("base_error_probability must be between 0 and 1.")
+
+        if not self.errors.multipliers:
+            raise ValueError("errors.multipliers cannot be empty.")
+
+        for name, multiplier_cfg in self.errors.multipliers.items():
+            if isinstance(multiplier_cfg, (int, float)):
+                if multiplier_cfg <= 0:
+                    raise ValueError(
+                        f"errors.multipliers.{name} must be greater than 0."
+                    )
+                continue
+
+            if multiplier_cfg.multiplier <= 0:
+                raise ValueError(
+                    f"errors.multipliers.{name}.multiplier must be greater than 0."
+                )
+
+            if (
+                multiplier_cfg.threshold_mb is not None
+                and multiplier_cfg.threshold_mb <= 0
+            ):
+                raise ValueError(
+                    f"errors.multipliers.{name}.threshold_mb must be greater than 0."
+                )
+
+            if (
+                multiplier_cfg.threshold_mbps is not None
+                and multiplier_cfg.threshold_mbps <= 0
+            ):
+                raise ValueError(
+                    f"errors.multipliers.{name}.threshold_mbps must be greater than 0."
+                )
+
+            if (
+                multiplier_cfg.threshold_sec is not None
+                and multiplier_cfg.threshold_sec <= 0
+            ):
+                raise ValueError(
+                    f"errors.multipliers.{name}.threshold_sec must be greater than 0."
+                )
 
     def _validate_hash(self) -> None:
         if self.hash.hash_head_length <= 0:
@@ -229,8 +389,27 @@ class DatasetSimulationConfig:
         if not self.weekly_time_distribution:
             raise ValueError("weekly_time_distribution cannot be empty.")
 
+        expected_days = {
+            "monday",
+            "tuesday",
+            "wednesday",
+            "thursday",
+            "friday",
+            "saturday",
+            "sunday",
+        }
+
+        actual_days = {item.day.lower() for item in self.weekly_time_distribution}
+
+        if actual_days != expected_days:
+            raise ValueError(
+                "weekly_time_distribution must contain exactly the 7 weekdays. "
+                f"Current days: {sorted(actual_days)}"
+            )
+
         weekday_weights = {
-            item.day: item.base_load for item in self.weekly_time_distribution
+            item.day: item.base_load
+            for item in self.weekly_time_distribution
         }
 
         self._validate_weights_sum_to_one(
@@ -239,6 +418,9 @@ class DatasetSimulationConfig:
         )
 
         for weekday in self.weekly_time_distribution:
+            if not weekday.time_distribution:
+                raise ValueError(f"{weekday.day}.time_distribution cannot be empty.")
+
             slot_weights = {
                 slot.name: slot.percentage_load
                 for slot in weekday.time_distribution
@@ -250,9 +432,16 @@ class DatasetSimulationConfig:
             )
 
             for slot in weekday.time_distribution:
-                if not 0 <= slot.error_rate <= 1:
+                if slot.error_multiplier <= 0:
                     raise ValueError(
-                        f"Invalid error_rate in {weekday.day}/{slot.name}: {slot.error_rate}"
+                        f"Invalid error_multiplier in {weekday.day}/{slot.name}: "
+                        f"{slot.error_multiplier}"
+                    )
+
+                if slot.error_multiplier > 5:
+                    raise ValueError(
+                        f"Suspiciously high error_multiplier in "
+                        f"{weekday.day}/{slot.name}: {slot.error_multiplier}"
                     )
 
     def _validate_error_families(self) -> None:
@@ -289,12 +478,56 @@ class DatasetSimulationConfig:
                         f"Severity must be between 0 and 1: {subtype.name}"
                     )
 
+    def _validate_optional_monte_carlo_configs(self) -> None:
+        if self.arrival_process is not None:
+            if self.arrival_process.strategy != "poisson":
+                raise ValueError("arrival_process.strategy must be 'poisson'.")
+
+            if not 0 <= self.arrival_process.hourly_noise <= 1:
+                raise ValueError("arrival_process.hourly_noise must be between 0 and 1.")
+
+        if self.capacity is not None:
+            if self.capacity.enabled:
+                if self.capacity.files_per_hour <= 0:
+                    raise ValueError(
+                        "capacity.files_per_hour must be greater than 0 when enabled."
+                    )
+
+            if self.capacity.duration_penalty_factor < 0:
+                raise ValueError(
+                    "capacity.duration_penalty_factor cannot be negative."
+                )
+
+            if self.capacity.error_penalty_factor < 0:
+                raise ValueError(
+                    "capacity.error_penalty_factor cannot be negative."
+                )
+
+        if self.outliers is not None:
+            if not 0 <= self.outliers.probability <= 1:
+                raise ValueError("outliers.probability must be between 0 and 1.")
+
+            if self.outliers.size_multiplier_min <= 0:
+                raise ValueError("outliers.size_multiplier_min must be greater than 0.")
+
+            if self.outliers.size_multiplier_max <= self.outliers.size_multiplier_min:
+                raise ValueError(
+                    "outliers.size_multiplier_max must be greater than "
+                    "outliers.size_multiplier_min."
+                )
+
     @staticmethod
-    def _validate_weights_sum_to_one(weights: Dict[str, float], label: str) -> None:
+    def _validate_weights_sum_to_one(
+        weights: Mapping[str, float],
+        label: str,
+    ) -> None:
         if not weights:
             raise ValueError(f"{label} cannot be empty.")
 
         for key, value in weights.items():
+            if not math.isfinite(value):
+                raise ValueError(f"{label} has non-finite weight: {key}={value}")
+
             if value < 0:
                 raise ValueError(f"{label} has negative weight: {key}={value}")
 
