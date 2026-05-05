@@ -7,4 +7,5 @@ output/*.png
 *.zip
 *.csv
 *.png
+*.pkloutput/models/
 *.pkl
