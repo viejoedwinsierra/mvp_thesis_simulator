@@ -1,11 +1,21 @@
 __pycache__/
 .pytest_cache/
+
+# outputs
 output/*.csv
 output/*.zip
 output/*.png
+
+# modelos (CRÍTICO)
+output/models/
+
+# archivos grandes
+*.pkl
+*.joblib
+*.pickle
+
+# generales
 *.pyc
 *.zip
 *.csv
 *.png
-*.pkloutput/models/
-*.pkl
