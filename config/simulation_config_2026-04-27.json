@@ -1,25 +1,26 @@
 {
   "simulation": {
     "simulation_date": "2026-04-27",
-    "max_valid_files_per_day": 9534,
+    "max_valid_files_per_day": 9680,
     "output_dir": "./output",
     "seed": 213447
   },
   "arrival_process": {
     "strategy": "poisson",
-    "hourly_noise": 0.1979
+    "hourly_noise": 0.1179
   },
   "capacity": {
     "enabled": true,
-    "files_per_hour": 681,
-    "duration_penalty_factor": 0.4621,
-    "error_penalty_factor": 0.8784
+    "files_per_hour": 651,
+    "duration_penalty_factor": 0.6744,
+    "error_penalty_factor": 0.3839
   },
   "outliers": {
     "enabled": true,
-    "probability": 0.00313,
-    "size_multiplier_min": 2.32,
-    "size_multiplier_max": 6.0
+    "probability": 0.01235,
+    "size_multiplier_min": 2.07,
+    "size_multiplier_max": 5.9,
+    "max_size_mb": 1200
   },
   "file_types": {
     "distribution": {
@@ -31,31 +32,31 @@
     "size_distribution_mb": {
       "json": {
         "distribution": "lognormal",
-        "mean": 0.1063,
-        "sigma": 0.7822,
+        "mean": 0.1042,
+        "sigma": 0.7537,
         "min": 0.001,
         "max": 0.5
       },
       "jpg": {
         "distribution": "lognormal",
-        "mean": 1.2812,
-        "sigma": 0.7014,
+        "mean": 1.3541,
+        "sigma": 0.6731,
         "min": 0.1,
         "max": 8
       },
       "pdf": {
         "distribution": "lognormal",
-        "mean": 2.2935,
-        "sigma": 0.9993,
+        "mean": 2.3624,
+        "sigma": 0.9435,
         "min": 0.05,
         "max": 20
       },
       "mp4": {
         "distribution": "lognormal",
         "mean": 5,
-        "sigma": 1.3641,
+        "sigma": 0.909,
         "min": 5,
-        "max": 1000
+        "max": 550
       }
     }
   },
@@ -115,10 +116,10 @@
   "transfer": {
     "speed_mbps": {
       "distribution": "lognormal",
-      "mean": 2.2657,
-      "sigma": 1.3744,
+      "mean": 2.3725,
+      "sigma": 0.7473,
       "min": 1,
-      "max": 500
+      "max": 300
     },
     "duration_strategy": "size_divided_by_speed"
   },
@@ -130,24 +131,24 @@
     }
   },
   "errors": {
-    "base_error_probability": 0.02917,
+    "base_error_probability": 0.0243,
     "multipliers": {
       "large_file": {
         "threshold_mb": 100,
-        "multiplier": 2.6106
+        "multiplier": 2.3089
       },
       "low_speed": {
         "threshold_mbps": 5,
         "multiplier": 2.3281
       },
       "long_transfer": {
-        "threshold_sec": 129.26,
-        "multiplier": 2.9763
+        "threshold_sec": 110.08,
+        "multiplier": 2.5822
       },
-      "archive_tier": 1.395,
-      "peak_hour": 1.8961,
-      "movement_storage": 1.3302,
-      "congestion": 2.4297
+      "archive_tier": 1.2219,
+      "peak_hour": 1.4205,
+      "movement_storage": 1.2034,
+      "congestion": 2.0453
     }
   },
   "hash": {
@@ -218,5 +219,10 @@
   "scenario": {
     "name": "network_degraded",
     "description": "Lower transfer speed and higher transfer variability."
+  },
+  "validation_targets": {
+    "estimated_peak_hour_load": 806.6667,
+    "expected_peak_queue_pressure": 1.2391,
+    "notes": "Use these values to compare generated hourly_arrival_count, queue_pressure and congestion_factor in descriptive analysis."
   }
 }

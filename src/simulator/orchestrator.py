@@ -8,6 +8,7 @@ import math
 import random
 import shutil
 import uuid
+import numpy as np
 
 from .case_definitions import build_case_catalog
 from .config_models import (
@@ -77,23 +78,26 @@ class SimulationOrchestrator:
         sequence = 1
 
         for slot in weekday_config.time_distribution:
-            slot_hours = self.expand_slot_hours(slot)
+            slot_hour_weights = self.expand_slot_hours(slot)
 
-            if not slot_hours:
+            if not slot_hour_weights:
                 continue
 
             expected_slot_count = total_files * slot.percentage_load
-            expected_hourly_count = expected_slot_count / len(slot_hours)
 
-            for created_hour in slot_hours:
+            for created_hour, hour_weight in slot_hour_weights:
+                expected_hourly_count = expected_slot_count * hour_weight
+
                 lambda_hour = self.apply_hourly_noise(expected_hourly_count)
                 hourly_arrival_count = self.poisson(lambda_hour)
 
-                hourly_capacity = self.get_hourly_capacity()
+                hourly_capacity = self.get_hourly_capacity(hour=created_hour)
+
                 queue_pressure = self.compute_queue_pressure(
                     hourly_arrival_count=hourly_arrival_count,
                     hourly_capacity=hourly_capacity,
                 )
+
                 congestion_factor = self.compute_congestion_factor(queue_pressure)
 
                 for _ in range(hourly_arrival_count):
@@ -108,10 +112,11 @@ class SimulationOrchestrator:
                         congestion_factor=congestion_factor,
                         queue_pressure=queue_pressure,
                     )
+
                     records.append(record)
                     sequence += 1
 
-        return records
+        return records 
 
     def resolve_weekday_config(self) -> WeekdayTimeDistribution:
         simulation_date = datetime.fromisoformat(
@@ -266,24 +271,66 @@ class SimulationOrchestrator:
             "storage_cost": round(storage_cost, 10),
         }
 
-    def expand_slot_hours(self, time_slot: TimeSlotConfig) -> list[int]:
+    def expand_slot_hours(self, time_slot: TimeSlotConfig) -> list[tuple[int, float]]:
         start_hour = int(time_slot.start.split(":")[0])
         end_hour = int(time_slot.end.split(":")[0])
 
         if end_hour >= start_hour:
-            return list(range(start_hour, end_hour + 1))
+            hours = list(range(start_hour, end_hour + 1))
+        else:
+            hours = list(range(start_hour, 24)) + list(range(0, end_hour + 1))
 
-        return list(range(start_hour, 24)) + list(range(0, end_hour + 1))
+        n = len(hours)
+
+        # 🔥 generar forma tipo campana (pico en el centro del slot)
+        weights = []
+        for i in range(n):
+            center = (n - 1) / 2
+            distance = abs(i - center)
+
+            # menos peso en extremos, más en centro
+            weight = 1 - (distance / center) if center > 0 else 1
+            weight *= self.rng.uniform(0.9, 1.1)  # ruido leve
+
+            weights.append(weight)
+
+        # normalizar
+        total = sum(weights)
+        weights = [w / total for w in weights]
+
+        return list(zip(hours, weights))
 
     def apply_hourly_noise(self, expected_hourly_count: float) -> float:
         arrival_process = getattr(self.config, "arrival_process", None)
 
         hourly_noise = 0.0
         if arrival_process is not None:
-            hourly_noise = getattr(arrival_process, "hourly_noise", 0.0)
+            hourly_noise = getattr(arrival_process, "hourly_noise", 0.10)
 
-        noise = self.rng.uniform(-hourly_noise, hourly_noise)
-        return max(expected_hourly_count * (1 + noise), 0.0)
+        # 🔥 1. Ruido base (normal, no uniforme)
+        noise = self.rng.normalvariate(0, hourly_noise / 2)
+
+        # 🔥 2. Eventos ocasionales (picos o caídas)
+        event_prob = 0.08  # 8% de horas con evento
+
+        if self.rng.random() < event_prob:
+            if self.rng.random() < 0.7:
+                # 📈 pico (más común)
+                noise += self.rng.uniform(0.15, 0.35)
+            else:
+                # 📉 caída
+                noise -= self.rng.uniform(0.10, 0.25)
+
+        # 🔥 3. Escalar ruido con volumen (más carga = más variabilidad)
+        scale_factor = min(expected_hourly_count / 1000, 2.0)
+        noise *= (1 + 0.5 * scale_factor)
+
+        # 🔒 4. Clamp para evitar extremos absurdos
+        noise = max(min(noise, 0.5), -0.4)
+
+        result = expected_hourly_count * (1 + noise)
+
+        return max(result, 0.0)
 
     def poisson(self, lambda_value: float) -> int:
         if lambda_value <= 0:
@@ -303,14 +350,6 @@ class SimulationOrchestrator:
         value = round(self.rng.gauss(lambda_value, math.sqrt(lambda_value)))
         return max(value, 0)
 
-    def get_hourly_capacity(self) -> int:
-        capacity = getattr(self.config, "capacity", None)
-
-        if capacity is None or not getattr(capacity, "enabled", False):
-            return 0
-
-        return int(getattr(capacity, "files_per_hour", 0))
-
     def compute_queue_pressure(
         self,
         hourly_arrival_count: int,
@@ -319,32 +358,84 @@ class SimulationOrchestrator:
         if hourly_capacity <= 0:
             return 0.0
 
-        return hourly_arrival_count / hourly_capacity
+        base_ratio = hourly_arrival_count / hourly_capacity
+
+        # 🔥 1. Suavizado (evita extremos lineales)
+        if base_ratio > 1:
+            # compresión leve para evitar crecimiento exagerado
+            adjusted = 1 + (base_ratio - 1) ** 0.85
+        else:
+            adjusted = base_ratio
+
+        # 🔥 2. Ruido operativo (clave para realismo)
+        noise = self.rng.uniform(0.95, 1.10)
+        adjusted *= noise
+
+        # 🔥 3. Saturación superior (sistema no crece infinito)
+        max_pressure = 3.0
+        adjusted = min(adjusted, max_pressure)
+
+        return adjusted
 
     def compute_congestion_factor(self, queue_pressure: float) -> float:
         if queue_pressure <= 1:
             return 1.0
 
-        return 1 + ((queue_pressure - 1) ** 1.5)
+        overload = queue_pressure - 1
+
+        # 🔥 1. Base no lineal más agresiva
+        base = 1 + (overload ** 1.3)
+
+        # 🔥 2. Amplificación progresiva
+        if queue_pressure > 1.5:
+            base *= random.uniform(1.2, 1.8)
+
+        if queue_pressure > 2.0:
+            base *= random.uniform(1.5, 2.5)
+
+        # 🔥 3. Variabilidad (evita dataset artificial)
+        noise = random.uniform(0.9, 1.2)
+
+        congestion_factor = base * noise
+
+        # 🔒 4. Clamp (control estadístico)
+        return min(congestion_factor, 5.0)
 
     def apply_congestion_to_duration(
         self,
         transfer_duration_sec: float,
         congestion_factor: float,
     ) -> float:
+
         capacity = getattr(self.config, "capacity", None)
 
         if capacity is None or not getattr(capacity, "enabled", False):
             return transfer_duration_sec
 
-        penalty = getattr(capacity, "duration_penalty_factor", 0.0)
+        penalty_base = getattr(capacity, "duration_penalty_factor", 0.5)
 
+        # Sin congestión real
         if congestion_factor <= 1:
             return transfer_duration_sec
 
-        return transfer_duration_sec * (
-            1 + ((congestion_factor - 1) * penalty)
-        )
+        overload = congestion_factor - 1
+
+        # 🔥 1. Penalización no lineal (clave)
+        nonlinear_penalty = 1 + (overload ** 1.5) * penalty_base
+
+        # 🔥 2. Variabilidad (muy importante)
+        noise = random.uniform(0.9, 1.3)
+
+        # 🔥 3. Penalización adicional si hay congestión severa
+        if congestion_factor > 1.5:
+            spike = random.uniform(1.2, 2.5)
+        else:
+            spike = 1.0
+
+        adjusted_duration = transfer_duration_sec * nonlinear_penalty * noise * spike
+
+        # 🔒 4. Clamp para evitar explosiones irreales
+        return min(adjusted_duration, 3600)
 
     def generate_created_at_datetime_for_hour(self, created_hour: int) -> datetime:
         base_date = datetime.fromisoformat(self.config.simulation.simulation_date)
@@ -365,17 +456,28 @@ class SimulationOrchestrator:
         if outliers is None or not getattr(outliers, "enabled", False):
             return size_mb
 
-        probability = getattr(outliers, "probability", 0.0)
+        probability = getattr(outliers, "probability", 0.05)
 
+        # 🔥 1. Menor probabilidad real de outlier
         if self.rng.random() >= probability:
             return size_mb
 
-        min_multiplier = getattr(outliers, "size_multiplier_min", 1.0)
-        max_multiplier = getattr(outliers, "size_multiplier_max", 1.0)
+        min_multiplier = getattr(outliers, "size_multiplier_min", 2.0)
+        max_multiplier = getattr(outliers, "size_multiplier_max", 10.0)
 
-        multiplier = self.rng.uniform(min_multiplier, max_multiplier)
-        return size_mb * multiplier
+        # 🔥 2. Distribución sesgada (más realista)
+        multiplier = min_multiplier + (
+            (max_multiplier - min_multiplier)
+            * (self.rng.random() ** 2.5)  # sesgo hacia valores bajos
+        )
 
+        new_size = size_mb * multiplier
+
+        # 🔒 3. Clamp (CRÍTICO)
+        max_size = getattr(outliers, "max_size_mb", 1500)
+
+        return min(new_size, max_size)
+    
     def get_scenario_name(self) -> str | None:
         scenario = getattr(self.config, "scenario", None)
 
@@ -398,16 +500,41 @@ class SimulationOrchestrator:
     def apply_scenario_to_transfer_speed(
         self,
         transfer_speed_mbps: float,
+        queue_pressure: float = 1.0,
+        congestion_factor: float = 1.0,
     ) -> float:
         scenario_name = self.get_scenario_name()
 
+        speed = transfer_speed_mbps
+
+        # Penalización por escenario
         if scenario_name == "network_degraded":
-            transfer_speed_mbps *= self.rng.uniform(0.60, 0.85)
+            speed *= self.rng.uniform(0.45, 0.75)
 
         elif scenario_name == "low_capacity":
-            transfer_speed_mbps *= self.rng.uniform(0.85, 1.00)
+            speed *= self.rng.uniform(0.70, 0.95)
 
-        return max(transfer_speed_mbps, 0.000001)
+        elif scenario_name == "large_files":
+            speed *= self.rng.uniform(0.90, 1.00)
+
+        elif scenario_name == "high_error":
+            speed *= self.rng.uniform(0.85, 1.00)
+
+        # Penalización por presión de cola
+        if queue_pressure > 1:
+            overload = queue_pressure - 1
+            pressure_penalty = 1 / (1 + min(overload * 0.35, 0.75))
+            speed *= pressure_penalty
+
+        # Penalización por congestión real
+        if congestion_factor > 1:
+            congestion_penalty = 1 / (1 + min((congestion_factor - 1) * 0.25, 0.60))
+            speed *= congestion_penalty
+
+        # Ruido operativo leve
+        speed *= self.rng.uniform(0.95, 1.05)
+
+        return max(speed, 0.5)
 
     def generate_days_stored(self) -> int:
         return self.rng.randint(
@@ -421,10 +548,28 @@ class SimulationOrchestrator:
         profile_name = self.pick_weighted(access_cfg.distribution_weights)
         profile = access_cfg.profiles[profile_name]
 
-        ratio = self.rng.betavariate(profile.alpha, profile.beta)
-        value = int(days_stored * ratio)
+        # 🔥 1. Ajuste dinámico (muy importante)
+        alpha = profile.alpha
+        beta = profile.beta
 
-        return min(value, days_stored)
+        if days_stored < 7:
+            alpha *= 1.5  # más probabilidad de acceso reciente
+        elif days_stored > 120:
+            beta *= 1.3   # más abandono
+
+        # 🔥 2. Beta distribution
+        ratio = self.rng.betavariate(alpha, beta)
+
+        value = days_stored * ratio
+
+        # 🔥 3. Evitar sesgo hacia abajo
+        value = int(round(value))
+
+        # 🔥 4. Clamp inferior y superior
+        min_days = 0
+        max_days = days_stored
+
+        return max(min(value, max_days), min_days)
 
     def resolve_storage_tier(self, days_since_last_access: int) -> str:
         for rule in self.config.storage_tier.rules:
@@ -448,11 +593,34 @@ class SimulationOrchestrator:
         self,
         size_mb: float,
         transfer_speed_mbps: float,
+        congestion_factor: float = 1.0,
     ) -> float:
+
         if transfer_speed_mbps <= 0:
             raise ValueError("transfer_speed_mbps must be greater than 0.")
 
-        return (size_mb * 8) / transfer_speed_mbps
+        # 1. Tiempo base físico (segundos)
+        base_time = (size_mb * 8) / transfer_speed_mbps
+
+        # 2. Latencia fija (red / handshake)
+        latency = random.uniform(0.05, 0.3)
+
+        # 3. Overhead proporcional (protocolos, chunks, retries leves)
+        overhead_factor = random.uniform(1.02, 1.10)
+
+        # 4. Penalización por congestión (CLAVE)
+        if congestion_factor > 1:
+            congestion_penalty = 1 + (congestion_factor - 1) * random.uniform(0.4, 0.9)
+        else:
+            congestion_penalty = 1.0
+
+        # 5. Ruido lognormal (evita colas artificiales extremas)
+        noise = np.random.lognormal(mean=0, sigma=0.25)
+
+        duration = base_time * overhead_factor * congestion_penalty * noise + latency
+
+        # 6. Clamp para evitar explosiones irreales
+        return min(duration, 3600)  # máximo 1 hora
 
     def compute_storage_cost(
         self,
@@ -604,7 +772,7 @@ class SimulationOrchestrator:
 
         return min(max(probability, 0.0), 1.0)
 
-    def apply_scenario_to_error_probability(
+    def apply_scenario_to_error_probability(    
         self,
         probability: float,
         transfer_duration_sec: float,
@@ -612,31 +780,68 @@ class SimulationOrchestrator:
     ) -> float:
         scenario_name = self.get_scenario_name()
 
+        probability = max(0.0, probability)
+
+        duration_factor = 1.0
+        pressure_factor = 1.0
+
+        # Penalización por duración por tramos
+        if transfer_duration_sec > 600:
+            duration_factor *= 1.80
+        elif transfer_duration_sec > 300:
+            duration_factor *= 1.50
+        elif transfer_duration_sec > 120:
+            duration_factor *= 1.25
+        elif transfer_duration_sec > 60:
+            duration_factor *= 1.10
+
+        # Penalización por presión de cola
+        if queue_pressure > 1:
+            overload = queue_pressure - 1
+            pressure_factor *= 1 + min(overload * 0.65, 1.25)
+
         if scenario_name == "high_error":
-            probability *= 1.35
+            probability *= 1.70
 
         elif scenario_name == "network_degraded":
-            probability *= 1.20
-
-            if transfer_duration_sec > 120:
-                probability *= 1.15
+            probability *= 1.35
+            probability *= duration_factor
 
         elif scenario_name == "low_capacity":
-            probability *= 1.15
-
-            if queue_pressure > 1:
-                probability *= 1 + min((queue_pressure - 1) * 0.35, 0.50)
+            probability *= 1.25
+            probability *= pressure_factor
 
         elif scenario_name == "large_files":
-            if transfer_duration_sec > 120:
-                probability *= 1.15
+            probability *= duration_factor
 
-        return probability
+        else:
+            # Incluso en escenario normal, duración y congestión deben influir un poco
+            probability *= 1 + min(max(queue_pressure - 1, 0) * 0.20, 0.30)
+
+            if transfer_duration_sec > 300:
+                probability *= 1.20
+
+        return min(probability, 0.65)
 
     def generate_lognormal_value(self, config: Any) -> float:
+        # 1. Generar valor base
         value = self.rng.lognormvariate(config.mean, config.sigma)
-        return min(max(value, config.min), config.max)
 
+        # 2. Soft clamp superior (MUY importante)
+        max_val = config.max
+        if value > max_val:
+            # en vez de cortar, comprime suavemente
+            excess = value - max_val
+            value = max_val + excess * 0.15  # solo deja pasar un 15%
+
+        # 3. Clamp inferior normal
+        value = max(value, config.min)
+
+        # 4. Ruido leve adicional (evita patrones)
+        value *= self.rng.uniform(0.98, 1.02)
+
+        return value
+    
     def pick_weighted(self, weights: Mapping[str, float]) -> str:
         population = list(weights.keys())
         values = list(weights.values())
@@ -649,6 +854,39 @@ class SimulationOrchestrator:
 
     def bernoulli(self, probability: float) -> int:
         return int(self.rng.random() < probability)
+
+    def get_hourly_capacity(self, hour: int | None = None) -> int:
+        capacity = getattr(self.config, "capacity", None)
+
+        if capacity is None or not getattr(capacity, "enabled", False):
+            return 0
+
+        base_capacity = getattr(capacity, "files_per_hour", 800)
+        scenario_name = self.get_scenario_name()
+
+        if scenario_name == "low_capacity":
+            base_capacity *= self.rng.uniform(0.60, 0.85)
+        elif scenario_name == "network_degraded":
+            base_capacity *= self.rng.uniform(0.75, 0.95)
+        elif scenario_name == "high_error":
+            base_capacity *= self.rng.uniform(0.85, 1.00)
+
+        if hour is not None:
+            if 0 <= hour < 6:
+                base_capacity *= self.rng.uniform(0.80, 0.95)
+            elif 6 <= hour < 12:
+                base_capacity *= self.rng.uniform(0.90, 1.05)
+            elif 12 <= hour < 18:
+                base_capacity *= self.rng.uniform(0.95, 1.10)
+            else:
+                base_capacity *= self.rng.uniform(0.85, 1.00)
+
+        base_capacity *= self.rng.uniform(0.90, 1.10)
+
+        min_cap = getattr(capacity, "min_capacity", 300)
+        max_cap = getattr(capacity, "max_capacity", 1500)
+
+        return int(max(min(base_capacity, max_cap), min_cap))
 
     @staticmethod
     def write_csv(path: Path, records: Sequence[Mapping[str, Any]]) -> None:
@@ -674,17 +912,34 @@ class SimulationOrchestrator:
 
     @staticmethod
     def error_breakdown(records: Sequence[Mapping[str, Any]]) -> dict[str, int]:
-        return {
-            "valid": sum(1 for record in records if record["has_error"] == 0),
-            "with_error": sum(1 for record in records if record["has_error"] == 1),
-            "duplicity": sum(1 for record in records if record["error_duplicado"] == 1),
-            "orphan": sum(1 for record in records if record["error_orphan"] == 1),
-            "null": sum(1 for record in records if record["error_null"] == 1),
-            "blob_timeout": sum(
-                1 for record in records if record["error_blob_timeout"] == 1
-            ),
+        total = len(records)
+
+        with_error = sum(1 for r in records if r["has_error"] == 1)
+
+        field_map = {
+            "duplicity": "error_duplicado",
+            "orphan": "error_orphan",
+            "null": "error_null",
+            "blob_timeout": "error_blob_timeout",
         }
 
+        error_counts = {k: 0 for k in field_map}
+        total_error_flags = 0
+
+        for r in records:
+            for key, field in field_map.items():
+                if r.get(field, 0) == 1:
+                    error_counts[key] += 1
+                    total_error_flags += 1
+
+        return {
+            "total_records": total,
+            "valid_records": total - with_error,
+            "records_with_error": with_error,
+            "total_error_flags": total_error_flags,
+            **error_counts,
+        }
+    
     @staticmethod
     def breakdown(
         records: Sequence[Mapping[str, Any]],
