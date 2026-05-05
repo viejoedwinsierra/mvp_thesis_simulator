@@ -7,3 +7,4 @@ output/*.png
 *.zip
 *.csv
 *.png
+*.pkl
