@@ -1,9 +1,25 @@
 {
   "simulation": {
     "simulation_date": "2026-04-20",
-    "max_valid_files_per_day": 11594,
+    "max_valid_files_per_day": 10065,
     "output_dir": "./output",
-    "seed": 587081
+    "seed": 364070
+  },
+  "arrival_process": {
+    "strategy": "poisson",
+    "hourly_noise": 0.2297
+  },
+  "capacity": {
+    "enabled": true,
+    "files_per_hour": 682,
+    "duration_penalty_factor": 0.4417,
+    "error_penalty_factor": 0.7899
+  },
+  "outliers": {
+    "enabled": true,
+    "probability": 0.00489,
+    "size_multiplier_min": 2.14,
+    "size_multiplier_max": 5.08
   },
   "file_types": {
     "distribution": {
@@ -15,31 +31,31 @@
     "size_distribution_mb": {
       "json": {
         "distribution": "lognormal",
-        "mean": 0.0992,
-        "sigma": 0.869,
+        "mean": 0.0959,
+        "sigma": 0.8983,
         "min": 0.001,
         "max": 0.5
       },
       "jpg": {
         "distribution": "lognormal",
-        "mean": 1.3561,
-        "sigma": 0.8253,
+        "mean": 1.4819,
+        "sigma": 0.6568,
         "min": 0.1,
         "max": 8
       },
       "pdf": {
         "distribution": "lognormal",
-        "mean": 2.8815,
-        "sigma": 1.0736,
+        "mean": 2.2571,
+        "sigma": 0.9274,
         "min": 0.05,
         "max": 20
       },
       "mp4": {
         "distribution": "lognormal",
-        "mean": 5.4421,
-        "sigma": 1.1644,
+        "mean": 5.0167,
+        "sigma": 1.2648,
         "min": 5,
-        "max": 500
+        "max": 1000
       }
     }
   },
@@ -99,8 +115,8 @@
   "transfer": {
     "speed_mbps": {
       "distribution": "lognormal",
-      "mean": 2.5957,
-      "sigma": 0.7089,
+      "mean": 2.2197,
+      "sigma": 1.3627,
       "min": 1,
       "max": 500
     },
@@ -114,18 +130,24 @@
     }
   },
   "errors": {
-    "base_error_probability": 0.01997,
+    "base_error_probability": 0.03026,
     "multipliers": {
       "large_file": {
         "threshold_mb": 100,
-        "multiplier": 3.1635
+        "multiplier": 2.711
       },
       "low_speed": {
         "threshold_mbps": 5,
-        "multiplier": 3.6034
+        "multiplier": 2.3868
       },
-      "archive_tier": 1.7248,
-      "peak_hour": 2.1697
+      "long_transfer": {
+        "threshold_sec": 90.96,
+        "multiplier": 2.9215
+      },
+      "archive_tier": 1.4231,
+      "peak_hour": 1.8057,
+      "movement_storage": 1.5503,
+      "congestion": 2.1129
     }
   },
   "hash": {
@@ -192,5 +214,9 @@
         ]
       }
     }
-  ]
+  ],
+  "scenario": {
+    "name": "network_degraded",
+    "description": "Lower transfer speed and higher transfer variability."
+  }
 }

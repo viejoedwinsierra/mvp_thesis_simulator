@@ -161,6 +161,8 @@ class SimulationOrchestrator:
         size_mb = self.generate_lognormal_value(
             self.config.file_types.size_distribution_mb[file_type]
         )
+
+        size_mb = self.apply_scenario_to_size(size_mb)
         size_mb = self.apply_outlier_size(size_mb)
 
         days_stored = self.generate_days_stored()
@@ -170,6 +172,10 @@ class SimulationOrchestrator:
 
         transfer_speed_mbps = self.generate_lognormal_value(
             self.config.transfer.speed_mbps
+        )
+
+        transfer_speed_mbps = self.apply_scenario_to_transfer_speed(
+            transfer_speed_mbps
         )
 
         transfer_duration_sec = self.compute_transfer_duration_sec(
@@ -370,6 +376,39 @@ class SimulationOrchestrator:
         multiplier = self.rng.uniform(min_multiplier, max_multiplier)
         return size_mb * multiplier
 
+    def get_scenario_name(self) -> str | None:
+        scenario = getattr(self.config, "scenario", None)
+
+        if scenario is None:
+            return None
+
+        return getattr(scenario, "name", None)
+
+    def apply_scenario_to_size(self, size_mb: float) -> float:
+        scenario_name = self.get_scenario_name()
+
+        if scenario_name == "large_files":
+            return size_mb * self.rng.uniform(1.10, 1.35)
+
+        if scenario_name == "high_load":
+            return size_mb * self.rng.uniform(0.95, 1.10)
+
+        return size_mb
+
+    def apply_scenario_to_transfer_speed(
+        self,
+        transfer_speed_mbps: float,
+    ) -> float:
+        scenario_name = self.get_scenario_name()
+
+        if scenario_name == "network_degraded":
+            transfer_speed_mbps *= self.rng.uniform(0.60, 0.85)
+
+        elif scenario_name == "low_capacity":
+            transfer_speed_mbps *= self.rng.uniform(0.85, 1.00)
+
+        return max(transfer_speed_mbps, 0.000001)
+
     def generate_days_stored(self) -> int:
         return self.rng.randint(
             self.config.lifecycle.days_stored.min,
@@ -557,7 +596,42 @@ class SimulationOrchestrator:
         if queue_pressure > 1.50:
             probability *= 1.25
 
+        probability = self.apply_scenario_to_error_probability(
+            probability=probability,
+            transfer_duration_sec=transfer_duration_sec,
+            queue_pressure=queue_pressure,
+        )
+
         return min(max(probability, 0.0), 1.0)
+
+    def apply_scenario_to_error_probability(
+        self,
+        probability: float,
+        transfer_duration_sec: float,
+        queue_pressure: float,
+    ) -> float:
+        scenario_name = self.get_scenario_name()
+
+        if scenario_name == "high_error":
+            probability *= 1.35
+
+        elif scenario_name == "network_degraded":
+            probability *= 1.20
+
+            if transfer_duration_sec > 120:
+                probability *= 1.15
+
+        elif scenario_name == "low_capacity":
+            probability *= 1.15
+
+            if queue_pressure > 1:
+                probability *= 1 + min((queue_pressure - 1) * 0.35, 0.50)
+
+        elif scenario_name == "large_files":
+            if transfer_duration_sec > 120:
+                probability *= 1.15
+
+        return probability
 
     def generate_lognormal_value(self, config: Any) -> float:
         value = self.rng.lognormvariate(config.mean, config.sigma)

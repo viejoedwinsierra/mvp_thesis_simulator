@@ -6,6 +6,25 @@
     "seed": 4
   },
 
+  "arrival_process": {
+    "strategy": "poisson",
+    "hourly_noise": 0.20
+  },
+
+  "capacity": {
+    "enabled": true,
+    "files_per_hour": 700,
+    "duration_penalty_factor": 0.35,
+    "error_penalty_factor": 0.75
+  },
+
+  "outliers": {
+    "enabled": true,
+    "probability": 0.005,
+    "size_multiplier_min": 2,
+    "size_multiplier_max": 5
+  },
+
   "file_types": {
     "distribution": {
       "json": 0.25,
@@ -38,9 +57,9 @@
       "mp4": {
         "distribution": "lognormal",
         "mean": 4.8,
-        "sigma": 1.0,
+        "sigma": 1.2,
         "min": 5,
-        "max": 500
+        "max": 800
       }
     }
   },
@@ -85,7 +104,7 @@
     "speed_mbps": {
       "distribution": "lognormal",
       "mean": 3.2,
-      "sigma": 0.6,
+      "sigma": 1.0,
       "min": 1,
       "max": 500
     },
@@ -111,8 +130,14 @@
         "threshold_mbps": 5,
         "multiplier": 3.0
       },
+      "long_transfer": {
+        "threshold_sec": 120,
+        "multiplier": 2.0
+      },
       "archive_tier": 1.4,
-      "peak_hour": 1.8
+      "peak_hour": 1.8,
+      "movement_storage": 1.3,
+      "congestion": 2.0
     }
   },
 

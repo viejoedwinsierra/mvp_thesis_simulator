@@ -289,6 +289,12 @@ def main() -> int:
     orchestrator = SimulationOrchestrator(config)
     summary = orchestrator.execute()
 
+    raw_config = load_json(args.config)
+    scenario = raw_config.get("scenario")
+
+    if scenario:
+        summary["scenario"] = scenario
+
     print(json.dumps(summary, indent=2, ensure_ascii=False))
     return 0
 

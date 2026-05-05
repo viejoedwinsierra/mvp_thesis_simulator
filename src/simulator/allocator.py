@@ -34,8 +34,9 @@ def largest_remainder_allocation(
 ) -> dict[str, int]:
     """Allocate an integer total using the largest remainder method.
 
-    Preserves the requested total exactly while approximating the
-    target proportions defined by the input weights.
+    Use this when the total must be preserved exactly while approximating
+    proportional weights. For Monte Carlo arrival counts, prefer stochastic
+    sampling such as Poisson instead.
     """
 
     if not isinstance(total, int):
@@ -63,6 +64,11 @@ def largest_remainder_allocation(
 
     if residual == 0:
         return base
+
+    if residual > len(base):
+        raise RuntimeError(
+            "Invalid largest remainder state: residual exceeds number of groups."
+        )
 
     remainders = sorted(
         (

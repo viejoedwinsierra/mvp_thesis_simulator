@@ -7,6 +7,15 @@ from typing import Mapping, Sequence
 
 EPSILON = 1e-6
 
+VALID_SCENARIOS = {
+    "normal",
+    "high_load",
+    "low_capacity",
+    "network_degraded",
+    "large_files",
+    "high_error",
+}
+
 
 @dataclass(frozen=True, slots=True)
 class ErrorSubtype:
@@ -49,6 +58,9 @@ class LogNormalDistributionConfig:
 
         if self.max <= self.min:
             raise ValueError(f"{label}.max must be greater than min.")
+
+        if self.mean <= 0:
+            raise ValueError(f"{label}.mean must be greater than 0.")
 
 
 @dataclass(frozen=True, slots=True)
@@ -184,6 +196,12 @@ class OutliersConfig:
 
 
 @dataclass(frozen=True, slots=True)
+class ScenarioConfig:
+    name: str
+    description: str | None = None
+
+
+@dataclass(frozen=True, slots=True)
 class DatasetSimulationConfig:
     simulation: SimulationConfig
     file_types: FileTypeConfig
@@ -198,6 +216,7 @@ class DatasetSimulationConfig:
     arrival_process: ArrivalProcessConfig | None = None
     capacity: CapacityConfig | None = None
     outliers: OutliersConfig | None = None
+    scenario: ScenarioConfig | None = None
 
     def validate(self) -> None:
         self._validate_simulation()
@@ -211,10 +230,23 @@ class DatasetSimulationConfig:
         self._validate_weekly_time_distribution()
         self._validate_error_families()
         self._validate_optional_monte_carlo_configs()
+        self._validate_scenario()
+        self._validate_system_consistency()
 
     def _validate_simulation(self) -> None:
         if self.simulation.max_valid_files_per_day <= 0:
             raise ValueError("max_valid_files_per_day must be greater than 0.")
+
+        try:
+            from datetime import date
+            date.fromisoformat(self.simulation.simulation_date)
+        except ValueError as exc:
+            raise ValueError(
+                "simulation.simulation_date must use YYYY-MM-DD format."
+            ) from exc
+
+        if not self.simulation.output_dir:
+            raise ValueError("simulation.output_dir cannot be empty.")
 
     def _validate_file_types(self) -> None:
         self._validate_weights_sum_to_one(
@@ -334,6 +366,14 @@ class DatasetSimulationConfig:
                     f"cost_model.non_linear_adjustments.{key} must be finite."
                 )
 
+            if key == "discount_factor" and not 0 < value <= 1:
+                raise ValueError("cost_model.discount_factor must be in (0, 1].")
+
+            if key.endswith("_threshold_mb") and value <= 0:
+                raise ValueError(
+                    f"cost_model.non_linear_adjustments.{key} must be greater than 0."
+                )
+
     def _validate_errors(self) -> None:
         if not 0 <= self.errors.base_error_probability <= 1:
             raise ValueError("base_error_probability must be between 0 and 1.")
@@ -347,11 +387,24 @@ class DatasetSimulationConfig:
                     raise ValueError(
                         f"errors.multipliers.{name} must be greater than 0."
                     )
+
+                if multiplier_cfg > 5:
+                    raise ValueError(
+                        f"errors.multipliers.{name} is too high (>5): "
+                        f"{multiplier_cfg}"
+                    )
+
                 continue
 
             if multiplier_cfg.multiplier <= 0:
                 raise ValueError(
                     f"errors.multipliers.{name}.multiplier must be greater than 0."
+                )
+
+            if multiplier_cfg.multiplier > 5:
+                raise ValueError(
+                    f"errors.multipliers.{name}.multiplier is too high (>5): "
+                    f"{multiplier_cfg.multiplier}"
                 )
 
             if (
@@ -384,6 +437,11 @@ class DatasetSimulationConfig:
 
         if self.hash.hash_tail_length <= 0:
             raise ValueError("hash_tail_length must be greater than 0.")
+
+        if self.hash.hash_head_length + self.hash.hash_tail_length > 64:
+            raise ValueError(
+                "hash_head_length + hash_tail_length cannot exceed SHA-256 length."
+            )
 
     def _validate_weekly_time_distribution(self) -> None:
         if not self.weekly_time_distribution:
@@ -432,6 +490,9 @@ class DatasetSimulationConfig:
             )
 
             for slot in weekday.time_distribution:
+                self._validate_time_format(slot.start, f"{weekday.day}/{slot.name}.start")
+                self._validate_time_format(slot.end, f"{weekday.day}/{slot.name}.end")
+
                 if slot.error_multiplier <= 0:
                     raise ValueError(
                         f"Invalid error_multiplier in {weekday.day}/{slot.name}: "
@@ -483,8 +544,10 @@ class DatasetSimulationConfig:
             if self.arrival_process.strategy != "poisson":
                 raise ValueError("arrival_process.strategy must be 'poisson'.")
 
-            if not 0 <= self.arrival_process.hourly_noise <= 1:
-                raise ValueError("arrival_process.hourly_noise must be between 0 and 1.")
+            if not 0 <= self.arrival_process.hourly_noise <= 0.5:
+                raise ValueError(
+                    "arrival_process.hourly_noise must be between 0 and 0.5."
+                )
 
         if self.capacity is not None:
             if self.capacity.enabled:
@@ -498,14 +561,29 @@ class DatasetSimulationConfig:
                     "capacity.duration_penalty_factor cannot be negative."
                 )
 
+            if self.capacity.duration_penalty_factor > 2:
+                raise ValueError(
+                    "capacity.duration_penalty_factor is too high (>2)."
+                )
+
             if self.capacity.error_penalty_factor < 0:
                 raise ValueError(
                     "capacity.error_penalty_factor cannot be negative."
                 )
 
+            if self.capacity.error_penalty_factor > 3:
+                raise ValueError(
+                    "capacity.error_penalty_factor is too high (>3)."
+                )
+
         if self.outliers is not None:
             if not 0 <= self.outliers.probability <= 1:
                 raise ValueError("outliers.probability must be between 0 and 1.")
+
+            if self.outliers.probability > 0.05:
+                raise ValueError(
+                    "outliers.probability is too high (>0.05) for rare events."
+                )
 
             if self.outliers.size_multiplier_min <= 0:
                 raise ValueError("outliers.size_multiplier_min must be greater than 0.")
@@ -515,6 +593,52 @@ class DatasetSimulationConfig:
                     "outliers.size_multiplier_max must be greater than "
                     "outliers.size_multiplier_min."
                 )
+
+            if self.outliers.size_multiplier_max > 15:
+                raise ValueError(
+                    "outliers.size_multiplier_max is too high (>15)."
+                )
+
+    def _validate_scenario(self) -> None:
+        if self.scenario is None:
+            return
+
+        if not self.scenario.name:
+            raise ValueError("scenario.name cannot be empty.")
+
+        if self.scenario.name not in VALID_SCENARIOS:
+            raise ValueError(
+                f"Invalid scenario.name={self.scenario.name}. "
+                f"Allowed values: {sorted(VALID_SCENARIOS)}"
+            )
+
+    def _validate_system_consistency(self) -> None:
+        if self.capacity is not None and self.capacity.enabled:
+            estimated_peak = self.simulation.max_valid_files_per_day * 0.50 / 6
+
+            if self.capacity.files_per_hour > estimated_peak * 2.5:
+                raise ValueError(
+                    "capacity.files_per_hour is too high relative to estimated "
+                    f"peak load. capacity={self.capacity.files_per_hour}, "
+                    f"estimated_peak={estimated_peak:.2f}"
+                )
+
+            if self.capacity.files_per_hour < estimated_peak * 0.35:
+                raise ValueError(
+                    "capacity.files_per_hour is too low relative to estimated "
+                    f"peak load. capacity={self.capacity.files_per_hour}, "
+                    f"estimated_peak={estimated_peak:.2f}"
+                )
+
+        if self.outliers is not None and self.outliers.enabled:
+            for file_type, dist in self.file_types.size_distribution_mb.items():
+                effective_max = dist.max * self.outliers.size_multiplier_max
+
+                if effective_max > 10000:
+                    raise ValueError(
+                        f"Outlier configuration can generate extremely large "
+                        f"{file_type} files. effective_max={effective_max}"
+                    )
 
     @staticmethod
     def _validate_weights_sum_to_one(
@@ -535,3 +659,24 @@ class DatasetSimulationConfig:
 
         if abs(total - 1.0) > EPSILON:
             raise ValueError(f"{label} must sum to 1.0. Current sum: {total}")
+
+    @staticmethod
+    def _validate_time_format(value: str, label: str) -> None:
+        parts = value.split(":")
+
+        if len(parts) != 2:
+            raise ValueError(f"{label} must use HH:MM format.")
+
+        hour, minute = parts
+
+        if not hour.isdigit() or not minute.isdigit():
+            raise ValueError(f"{label} must use numeric HH:MM format.")
+
+        hour_int = int(hour)
+        minute_int = int(minute)
+
+        if not 0 <= hour_int <= 23:
+            raise ValueError(f"{label} hour must be between 0 and 23.")
+
+        if not 0 <= minute_int <= 59:
+            raise ValueError(f"{label} minute must be between 0 and 59.")
