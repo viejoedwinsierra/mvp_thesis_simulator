@@ -21,6 +21,67 @@ The system is designed to:
 - Enable statistical analysis and machine learning workflows  
 - Materialize physical files based on the simulated dataset  
 
+┌─────────────────────────────┐
+│  1. Datos simulados / CSV    │
+│  outputs Monte Carlo         │
+└──────────────┬──────────────┘
+               │
+               ▼
+┌─────────────────────────────┐
+│  2. run_analysis.py          │
+│  Análisis de datos           │
+└──────────────┬──────────────┘
+               │
+      ┌────────┴────────┐
+      ▼                 ▼
+┌───────────────┐  ┌────────────────┐
+│ Descriptivo   │  │ Multivariado   │
+│ univariado    │  │ exploratorio   │
+└───────┬───────┘  └───────┬────────┘
+        │                  │
+        ▼                  ▼
+┌───────────────┐  ┌────────────────┐
+│ report_       │  │ report_        │
+│ descriptive   │  │ advanced       │
+│ .html         │  │ .html          │
+└───────────────┘  └────────────────┘
+        │                  │
+        └────────┬─────────┘
+                 ▼
+┌─────────────────────────────┐
+│  3. Evidencia exploratoria   │
+│  relaciones, leakage,        │
+│  outliers, transformaciones  │
+└──────────────┬──────────────┘
+               │
+               ▼
+┌─────────────────────────────┐
+│  4. run_modeling.py          │
+│  Preparación + modelos       │
+└──────────────┬──────────────┘
+               │
+      ┌────────┴─────────┐
+      ▼                  ▼
+┌────────────────┐  ┌────────────────────┐
+│ Pre-modeling   │  │ Modeling final     │
+│ datasets por   │  │ modelos            │
+│ target         │  │ estadísticos       │
+└───────┬────────┘  └────────┬───────────┘
+        │                    │
+        ▼                    ▼
+┌────────────────┐  ┌────────────────────┐
+│ report_        │  │ report_            │
+│ premodeling    │  │ modeling           │
+│ .html          │  │ .html              │
+└────────────────┘  └────────────────────┘
+        │                    │
+        ▼                    ▼
+┌────────────────────────────────────────┐
+│  5. Evidencia final                     │
+│  datasets preparados, métricas,         │
+│  coeficientes, gráficas, reportes       │
+└────────────────────────────────────────┘
+
 ---
 
 # 🧠 Conceptual Model

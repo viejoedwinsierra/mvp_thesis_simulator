@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 from pathlib import Path
 
 import pandas as pd
@@ -136,6 +137,69 @@ class AdvancedExporter:
 
         return section
 
+    @staticmethod
+    def _cleanup_advanced_html(html: str) -> str:
+        """Corrige residuos heredados del template descriptivo.
+
+        Mantiene el comportamiento del reporte, pero evita:
+        - nota inicial univariada dentro del reporte avanzado;
+        - duplicación del encabezado de gráficos;
+        - texto descriptivo/univariado dentro de la sección de gráficos avanzada.
+        """
+        html = html.replace(
+            "Fase descriptiva univariada para simulación Monte Carlo de Blob Storage.",
+            "Fase avanzada multivariada exploratoria para simulación Monte Carlo de Blob Storage.",
+        )
+
+        # Corrige la nota azul heredada del reporte descriptivo sin depender
+        # de espacios exactos o saltos de línea.
+        html = re.sub(
+            r"Este reporte es estrictamente univariado:.*?frecuencia\.",
+            (
+                "Este reporte es estrictamente multivariado exploratorio: contiene "
+                "correlaciones, relaciones con variables objetivo, redundancias, "
+                "variables derivadas, fuga de información y posibles relaciones "
+                "no lineales. No contiene modelos predictivos, regresiones, VIF, "
+                "optimización ni inferencia causal."
+            ),
+            html,
+            flags=re.DOTALL,
+        )
+
+        # plot_grid_html reutiliza el título/descripción del bloque gráfico
+        # descriptivo. Aquí se corrige solo para este reporte avanzado.
+        html = re.sub(
+            r"<h2>8\.\s*Gráficos\s+(?:univariados|multivariados exploratorios)</h2>\s*"
+            r"<p class=\"section-desc\">.*?</p>",
+            (
+                "<h2>12. Gráficos multivariados exploratorios</h2>\n"
+                "        <p class=\"section-desc\">\n"
+                "            Incluye heatmaps de correlación, scatter plots de relaciones "
+                "principales, relaciones con variables objetivo y vistas logarítmicas "
+                "cuando aplican. No incluye histogramas, distribuciones univariadas "
+                "ni boxplots descriptivos simples.\n"
+                "        </p>"
+            ),
+            html,
+            flags=re.DOTALL,
+        )
+
+        # Evita que quede un encabezado suelto antes del grid y otro dentro
+        # del grid. Si aparecen dos secciones consecutivas de gráficos, elimina
+        # la tarjeta introductoria y conserva la sección con las imágenes.
+        html = re.sub(
+            r"<section class='card'>\s*"
+            r"<h2>12\.\s*Gráficos multivariados exploratorios</h2>\s*"
+            r"<p class='section-desc'>.*?</p>\s*"
+            r"</section>\s*"
+            r"(?=\s*<section class=\"card\">\s*<h2>12\.\s*Gráficos multivariados exploratorios</h2>)",
+            "",
+            html,
+            flags=re.DOTALL,
+        )
+
+        return html
+
     def build_report(self) -> Path:
         tables = self.build_tables()
         body = ""
@@ -205,32 +269,7 @@ class AdvancedExporter:
             body,
         )
 
-        # Corrección defensiva:
-        # Si build_html_page todavía conserva el subtítulo/nota del reporte
-        # descriptivo, se reemplaza solo en este HTML avanzado.
-        html = html.replace(
-            "Fase descriptiva univariada para simulación Monte Carlo de Blob Storage.",
-            "Fase avanzada multivariada exploratoria para simulación Monte Carlo de Blob Storage.",
-        )
-
-        html = html.replace(
-            """
-            Este reporte es estrictamente univariado: no contiene correlaciones,
-            regresiones, VIF, cruces entre variables, scatter plots, heatmaps ni análisis bivariado.
-            El conteo temporal de muestras se incluye únicamente como control de frecuencia.
-            """,
-            """
-            Este reporte es estrictamente multivariado exploratorio: contiene
-            correlaciones, relaciones con objetivos, redundancias, fuga de información
-            y posibles relaciones no lineales. No contiene modelos predictivos,
-            regresiones, VIF, optimización ni inferencia causal.
-            """,
-        )
-
-        html = html.replace(
-            "Gráficos univariados",
-            "Gráficos multivariados exploratorios",
-        )
+        html = self._cleanup_advanced_html(html)
 
         self.output_path.parent.mkdir(parents=True, exist_ok=True)
         self.output_path.write_text(html, encoding="utf-8")
