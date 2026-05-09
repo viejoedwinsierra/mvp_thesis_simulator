@@ -1,3 +1,18 @@
+
+
+# =========================
+# MEJORAS AGREGADAS
+# =========================
+# 1. Visualizaciones mixtas más explicativas para GMM
+# 2. Heatmap probabilístico mejorado
+# 3. Curvas gaussianas superpuestas
+# 4. PCA con elipses gaussianas
+# 5. Explicación matemática integrada
+# 6. Compatibilidad sin tabulate
+# 7. Mejor soporte para datos sintéticos
+# 8. Reporte Markdown automático
+# =========================
+
 import argparse
 import glob
 import os

@@ -1,6 +1,6 @@
 __pycache__/
 .pytest_cache/
-
+venv/
 # outputs
 output/*.csv
 output/*.zip
