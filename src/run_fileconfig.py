@@ -19,8 +19,8 @@ BASE_CONFIG_PATH = CONFIG_DIR / "simulation_config.json"
 # ============================================================
 # CONFIGURACION DE GENERACION
 # ============================================================
-START_DATE = date(2026, 4, 1)
-DAYS_TO_GENERATE = 30
+START_DATE = date(2025, 1, 1)
+DAYS_TO_GENERATE = 90
 GLOBAL_SEED = 42
 
 
