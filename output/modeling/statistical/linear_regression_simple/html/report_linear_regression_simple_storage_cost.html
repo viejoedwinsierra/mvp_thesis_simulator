@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Reporte por técnica - linear_regression_simple</title>
+    <style>
+        :root {
+            --bg: #f3f6fa;
+            --card: #ffffff;
+            --ink: #17212b;
+            --muted: #667085;
+            --primary: #17324d;
+            --accent: #2c7be5;
+            --border: #e5edf3;
+            --good: #0f766e;
+            --warn: #b45309;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 0;
+            color: var(--ink);
+            background: var(--bg);
+        }
+
+        .page {
+            max-width: 1320px;
+            margin: 0 auto;
+            padding: 32px;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #17324d, #245a89);
+            color: white;
+            padding: 28px;
+            border-radius: 18px;
+            margin-bottom: 24px;
+            box-shadow: 0 10px 30px rgba(23,50,77,0.18);
+        }
+
+        .hero h1 {
+            margin: 0 0 8px 0;
+            font-size: 30px;
+        }
+
+        .hero p {
+            margin: 0;
+            opacity: 0.92;
+            font-size: 15px;
+        }
+
+        .card {
+            background: var(--card);
+            padding: 22px;
+            margin-bottom: 22px;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .note {
+            background: #eef6ff;
+            border-left: 6px solid var(--accent);
+            padding: 16px 18px;
+            border-radius: 12px;
+            margin-bottom: 22px;
+            line-height: 1.5;
+        }
+
+        h2 {
+            color: var(--primary);
+            margin-top: 0;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 9px;
+        }
+
+        .section-desc, .muted {
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 16px;
+            margin-bottom: 22px;
+        }
+
+        .metric-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 18px;
+            box-shadow: 0 1px 6px rgba(0,0,0,0.05);
+        }
+
+        .metric-label {
+            font-size: 13px;
+            color: var(--muted);
+            margin-bottom: 8px;
+        }
+
+        .metric-value {
+            font-size: 25px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .metric-hint {
+            font-size: 12px;
+            color: var(--muted);
+            margin-top: 8px;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table.data-table, table.dataframe {
+            border-collapse: collapse;
+            width: 100%;
+            font-size: 13px;
+        }
+
+        table.data-table th, table.dataframe th {
+            background-color: var(--primary);
+            color: white;
+            padding: 8px;
+            text-align: left;
+            position: sticky;
+            top: 0;
+        }
+
+        table.data-table td, table.dataframe td {
+            border: 1px solid #dde5ed;
+            padding: 7px;
+            vertical-align: top;
+        }
+
+        table.data-table tr:nth-child(even), table.dataframe tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+
+        .plot-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 20px;
+        }
+
+        .plot-card {
+            margin: 0;
+            background: #fbfdff;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 12px;
+        }
+
+        .plot-card img {
+            width: 100%;
+            max-width: 100%;
+            display: block;
+            border-radius: 10px;
+            border: 1px solid #d9e2ec;
+            background: white;
+        }
+
+        .plot-card figcaption {
+            margin-top: 8px;
+            font-size: 13px;
+            color: var(--muted);
+            text-align: center;
+        }
+
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        a {
+            color: var(--accent);
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <main class="page">
+        <section class="hero">
+            <h1>Reporte por técnica - linear_regression_simple</h1>
+            <p>Reporte estadístico generado para documentar técnica, métricas, coeficientes, predicciones, residuos y evidencia visual.</p>
+        </section>
+        
+    <section class="note">
+        <strong>Técnica:</strong> linear_regression_simple<br>
+        <strong>Target:</strong> storage_cost<br>
+        <strong>Modelo persistido:</strong> output\modeling\statistical\linear_regression_simple\models\linear_regression_simple_storage_cost.joblib<br><br>
+        Regresión lineal simple usada como baseline estadístico. Evalúa si una variable principal explica el comportamiento del target.
+    </section>
+
+    <section class="metrics-grid">
+        
+    <div class="metric-card">
+        <div class="metric-label">R²</div>
+        <div class="metric-value">0.6120</div>
+        <div class="metric-hint">Capacidad explicativa</div>
+    </div>
+    
+    <div class="metric-card">
+        <div class="metric-label">RMSE</div>
+        <div class="metric-value">442.1464</div>
+        <div class="metric-hint">Error promedio cuadrático</div>
+    </div>
+    
+    <div class="metric-card">
+        <div class="metric-label">MAE</div>
+        <div class="metric-value">59.7416</div>
+        <div class="metric-hint">Error absoluto medio</div>
+    </div>
+    
+    <div class="metric-card">
+        <div class="metric-label">F1 / Accuracy</div>
+        <div class="metric-value">N/A</div>
+        <div class="metric-hint">Clasificación</div>
+    </div>
+    
+    </section>
+    
+    <section class="card">
+        <h2>1. Lectura automática del modelo</h2>
+        <p class="section-desc">Interpretación ejecutiva generada a partir de métricas y coeficientes.</p>
+        <div class="table-container">
+            <table class="dataframe data-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>hallazgo</th>
+      <th>valor</th>
+      <th>lectura</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>capacidad_explicativa</td>
+      <td>0.61198</td>
+      <td>Ajuste medio-alto; el modelo explica una parte importante de la variabilidad.</td>
+    </tr>
+    <tr>
+      <td>error_promedio_cuadratico</td>
+      <td>442.14641</td>
+      <td>RMSE permite comparar error entre modelos de regresión sobre el mismo target.</td>
+    </tr>
+    <tr>
+      <td>variables_mas_influyentes</td>
+      <td>size_mb</td>
+      <td>Estas variables dominan el comportamiento del modelo según magnitud absoluta del coeficiente.</td>
+    </tr>
+  </tbody>
+</table>
+        </div>
+    </section>
+    
+    <section class="card">
+        <h2>2. Métricas técnicas</h2>
+        <p class="section-desc">Métricas completas exportadas para esta técnica.</p>
+        <div class="table-container">
+            <table class="dataframe data-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>technique</th>
+      <th>target</th>
+      <th>n</th>
+      <th>mae</th>
+      <th>mse</th>
+      <th>rmse</th>
+      <th>r2</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>linear_regression_simple</td>
+      <td>storage_cost</td>
+      <td>3056</td>
+      <td>59.74161</td>
+      <td>195493.45123</td>
+      <td>442.14641</td>
+      <td>0.61198</td>
+    </tr>
+  </tbody>
+</table>
+        </div>
+    </section>
+    
+    <section class="card">
+        <h2>3. Top coeficientes</h2>
+        <p class="section-desc">Coeficientes ordenados por magnitud absoluta.</p>
+        <div class="table-container">
+            <table class="dataframe data-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>feature</th>
+      <th>coefficient</th>
+      <th>abs_coefficient</th>
+      <th>intercept</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>size_mb</td>
+      <td>0.00002</td>
+      <td>0.00002</td>
+      <td>9.90959</td>
+    </tr>
+  </tbody>
+</table>
+        </div>
+    </section>
+    
+    <section class="card">
+        <h2>Gráficos del modelo</h2>
+        <p class="section-desc">
+            Los gráficos se cargan con rutas relativas desde este HTML hacia la carpeta de plots de la técnica.
+        </p>
+        <div class="plot-grid">
+            
+        <figure class="plot-card">
+            <img src="../plots/actual_vs_predicted.png" alt="Actual Vs Predicted">
+            <figcaption>Actual Vs Predicted</figcaption>
+        </figure>
+        
+        <figure class="plot-card">
+            <img src="../plots/residuals_vs_prediction.png" alt="Residuals Vs Prediction">
+            <figcaption>Residuals Vs Prediction</figcaption>
+        </figure>
+        
+        <figure class="plot-card">
+            <img src="../plots/residual_histogram.png" alt="Residual Histogram">
+            <figcaption>Residual Histogram</figcaption>
+        </figure>
+        
+        <figure class="plot-card">
+            <img src="../plots/coefficients.png" alt="Coefficients">
+            <figcaption>Coefficients</figcaption>
+        </figure>
+        
+        </div>
+    </section>
+    
+    <section class="card">
+        <h2>4. Muestra de predicciones</h2>
+        <p class="section-desc">Primeras predicciones para revisar comportamiento del modelo.</p>
+        <div class="table-container">
+            <table class="dataframe data-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>target</th>
+      <th>y_true</th>
+      <th>y_pred</th>
+      <th>residual</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>storage_cost</td>
+      <td>0.00003</td>
+      <td>9.90960</td>
+      <td>-9.90958</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>0.00897</td>
+      <td>9.91456</td>
+      <td>-9.90560</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>0.00006</td>
+      <td>9.90969</td>
+      <td>-9.90963</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>0.00003</td>
+      <td>9.90961</td>
+      <td>-9.90958</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>0.00001</td>
+      <td>9.90960</td>
+      <td>-9.90960</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>0.05784</td>
+      <td>9.92916</td>
+      <td>-9.87132</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>0.00081</td>
+      <td>9.90979</td>
+      <td>-9.90898</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>741.52337</td>
+      <td>2020.95885</td>
+      <td>-1279.43548</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>0.00006</td>
+      <td>9.90978</td>
+      <td>-9.90972</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>0.00001</td>
+      <td>9.90960</td>
+      <td>-9.90959</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>0.00012</td>
+      <td>9.90982</td>
+      <td>-9.90969</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>0.00152</td>
+      <td>9.91006</td>
+      <td>-9.90853</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>0.00001</td>
+      <td>9.90960</td>
+      <td>-9.90959</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>0.00015</td>
+      <td>9.90980</td>
+      <td>-9.90965</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>0.00301</td>
+      <td>9.91285</td>
+      <td>-9.90984</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>0.00037</td>
+      <td>9.90976</td>
+      <td>-9.90939</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>0.00884</td>
+      <td>9.91904</td>
+      <td>-9.91020</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>0.00003</td>
+      <td>9.90983</td>
+      <td>-9.90981</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>3152.30477</td>
+      <td>2745.65729</td>
+      <td>406.64748</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>1300.41087</td>
+      <td>991.27466</td>
+      <td>309.13622</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>0.00084</td>
+      <td>9.90999</td>
+      <td>-9.90915</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>0.00178</td>
+      <td>9.91185</td>
+      <td>-9.91007</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>0.00339</td>
+      <td>9.91180</td>
+      <td>-9.90841</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>0.00001</td>
+      <td>9.90961</td>
+      <td>-9.90960</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>0.00024</td>
+      <td>9.90978</td>
+      <td>-9.90954</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>0.00006</td>
+      <td>9.90969</td>
+      <td>-9.90963</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>0.00069</td>
+      <td>9.90978</td>
+      <td>-9.90909</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>0.00001</td>
+      <td>9.90961</td>
+      <td>-9.90960</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>0.00003</td>
+      <td>9.90960</td>
+      <td>-9.90957</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>0.00344</td>
+      <td>9.91223</td>
+      <td>-9.90879</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>0.00001</td>
+      <td>9.90960</td>
+      <td>-9.90959</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>0.00010</td>
+      <td>9.90969</td>
+      <td>-9.90960</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>0.00578</td>
+      <td>9.91369</td>
+      <td>-9.90791</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>0.00001</td>
+      <td>9.90960</td>
+      <td>-9.90959</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>0.00017</td>
+      <td>9.90969</td>
+      <td>-9.90952</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>0.00611</td>
+      <td>9.91285</td>
+      <td>-9.90674</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>0.00138</td>
+      <td>9.91033</td>
+      <td>-9.90895</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>0.00011</td>
+      <td>9.91089</td>
+      <td>-9.91078</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>0.00032</td>
+      <td>9.90974</td>
+      <td>-9.90942</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>0.00032</td>
+      <td>9.91010</td>
+      <td>-9.90978</td>
+    </tr>
+  </tbody>
+</table>
+        </div>
+    </section>
+    
+        <section class="card">
+            <h2>5. Diagnósticos adicionales</h2>
+            <p class="muted">No disponible.</p>
+        </section>
+        
+    </main>
+</body>
+</html>

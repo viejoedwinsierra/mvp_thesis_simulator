@@ -1,0 +1,231 @@
+{
+  "simulation": {
+    "simulation_date": "2026-04-03",
+    "max_valid_files_per_day": 100,
+    "output_dir": "C:/git_edwin/mvp_thesis_simulator/output/dataset/15_archive_mal_gobernado",
+    "seed": 9015
+  },
+  "arrival_process": {
+    "strategy": "poisson",
+    "hourly_noise": 0.17
+  },
+  "capacity": {
+    "enabled": true,
+    "files_per_hour": 13,
+    "duration_penalty_factor": 0.575,
+    "error_penalty_factor": 0.38
+  },
+  "outliers": {
+    "enabled": true,
+    "probability": 0.04,
+    "size_multiplier_min": 2,
+    "size_multiplier_max": 7
+  },
+  "file_types": {
+    "distribution": {
+      "json": 0.25,
+      "jpg": 0.3,
+      "pdf": 0.25,
+      "mp4": 0.2
+    },
+    "size_distribution_mb": {
+      "json": {
+        "distribution": "lognormal",
+        "mean": 0.1,
+        "sigma": 0.8,
+        "min": 0.001,
+        "max": 0.5
+      },
+      "jpg": {
+        "distribution": "lognormal",
+        "mean": 1.5,
+        "sigma": 0.7,
+        "min": 0.1,
+        "max": 8
+      },
+      "pdf": {
+        "distribution": "lognormal",
+        "mean": 2.5,
+        "sigma": 0.9,
+        "min": 0.05,
+        "max": 20
+      },
+      "mp4": {
+        "distribution": "lognormal",
+        "mean": 4.8,
+        "sigma": 0.85,
+        "min": 5,
+        "max": 550
+      }
+    }
+  },
+  "lifecycle": {
+    "days_stored": {
+      "distribution": "uniform",
+      "min": 1,
+      "max": 180
+    },
+    "days_since_last_access": {
+      "strategy": "beta_scaled_to_days_stored",
+      "profiles": {
+        "low_access": {
+          "alpha": 5,
+          "beta": 2
+        },
+        "medium_access": {
+          "alpha": 2,
+          "beta": 2
+        },
+        "high_access": {
+          "alpha": 1.2,
+          "beta": 5
+        }
+      },
+      "distribution_weights": {
+        "low_access": 0.8,
+        "medium_access": 0.15,
+        "high_access": 0.05
+      }
+    },
+    "movement_storage_probability": 0.03
+  },
+  "storage_tier": {
+    "strategy": "by_days_since_last_access",
+    "rules": [
+      {
+        "tier": "hot",
+        "max_days_since_last_access": 30
+      },
+      {
+        "tier": "cool",
+        "min_days_since_last_access": 31,
+        "max_days_since_last_access": 90
+      },
+      {
+        "tier": "archive",
+        "min_days_since_last_access": 91
+      }
+    ],
+    "cost_per_mb_per_month": {
+      "hot": 2e-05,
+      "cool": 1e-05,
+      "archive": 2e-06
+    }
+  },
+  "transfer": {
+    "speed_mbps": {
+      "distribution": "lognormal",
+      "mean": 2.8,
+      "sigma": 0.775,
+      "min": 1,
+      "max": 300
+    },
+    "duration_strategy": "size_divided_by_speed"
+  },
+  "cost_model": {
+    "storage_cost_formula": "size_mb * cost_per_mb_per_day * days_stored",
+    "non_linear_adjustments": {
+      "large_file_discount_threshold_mb": 1000,
+      "discount_factor": 0.85
+    }
+  },
+  "errors": {
+    "base_error_probability": 0.0525,
+    "multipliers": {
+      "large_file": {
+        "threshold_mb": 100,
+        "multiplier": 2.5
+      },
+      "low_speed": {
+        "threshold_mbps": 5,
+        "multiplier": 3.0
+      },
+      "long_transfer": {
+        "threshold_sec": 120,
+        "multiplier": 2.0
+      },
+      "archive_tier": 1.4,
+      "peak_hour": 1.8,
+      "movement_storage": 1.3,
+      "congestion": 2.0
+    }
+  },
+  "hash": {
+    "use_full_hash": false,
+    "hash_head_length": 12,
+    "hash_tail_length": 12
+  },
+  "error_families": [
+    {
+      "name": "DUPLICITY_ERRORS",
+      "weight_within_global_error": 0.4,
+      "subtypes": [
+        {
+          "name": "DUP_SAME_CONTENT_DIFFERENT_NAME",
+          "weight_within_family": 0.4
+        },
+        {
+          "name": "DUP_SAME_CONTENT_DIFFERENT_ROUTE",
+          "weight_within_family": 0.35
+        },
+        {
+          "name": "DUP_SAME_CONTENT_DIFFERENT_NAME_AND_ROUTE",
+          "weight_within_family": 0.25
+        }
+      ]
+    },
+    {
+      "name": "ORPHAN_ERRORS",
+      "weight_within_global_error": 0.3,
+      "subtypes": [
+        {
+          "name": "JSON_WITHOUT_PDF",
+          "weight_within_family": 0.6
+        },
+        {
+          "name": "PDF_WITHOUT_JSON",
+          "weight_within_family": 0.4
+        }
+      ]
+    },
+    {
+      "name": "NULL_ERRORS",
+      "weight_within_global_error": 0.15,
+      "subtypes": [
+        {
+          "name": "NULL_JSON",
+          "weight_within_family": 1.0
+        }
+      ]
+    },
+    {
+      "name": "BLOB_STORAGE_ERRORS",
+      "weight_within_global_error": 0.15,
+      "subtypes": [
+        {
+          "name": "BLOB_TIMEOUT",
+          "weight_within_family": 1.0
+        }
+      ],
+      "conditions": {
+        "requires": [
+          "large_file",
+          "low_speed"
+        ]
+      }
+    }
+  ],
+  "scenario": {
+    "name": "15_archive_mal_gobernado",
+    "description": "Escenario controlado de 100 registros para evaluar parametros: 15_archive_mal_gobernado"
+  },
+  "scenario_execution": {
+    "scenario_name": "15_archive_mal_gobernado",
+    "start_date": "2026-04-01",
+    "end_date": "2026-04-07",
+    "current_simulation_date": "2026-04-03",
+    "expected_dataset_file": "blob_inventory_15_archive_mal_gobernado_2026-04-03.csv",
+    "source_config": "C:/git_edwin/mvp_thesis_simulator/config/escenarios/15_archive_mal_gobernado/simulation_config_15_archive_mal_gobernado.json",
+    "generated_at": "2026-05-15T00:10:13"
+  }
+}

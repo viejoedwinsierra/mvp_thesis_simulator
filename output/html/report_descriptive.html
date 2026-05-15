@@ -1,0 +1,1769 @@
+
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <title>Reporte descriptivo univariado - Blob Storage Monte Carlo</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 32px;
+                color: #2c3e50;
+                background: #f8f9fa;
+            }
+
+            h1 {
+                margin-bottom: 6px;
+                color: #1f3a56;
+            }
+
+            h2 {
+                color: #1f3a56;
+                margin-top: 0;
+                border-bottom: 2px solid #e8eef3;
+                padding-bottom: 8px;
+            }
+
+            h3 {
+                margin-top: 0;
+                color: #2c3e50;
+                font-size: 15px;
+            }
+
+            .subtitle {
+                color: #666;
+                margin-bottom: 24px;
+            }
+
+            .card {
+                background: white;
+                padding: 20px;
+                margin-bottom: 24px;
+                border-radius: 10px;
+                box-shadow: 0 1px 5px rgba(0,0,0,0.08);
+            }
+
+            .note {
+                background: #eef6ff;
+                border-left: 5px solid #2c7be5;
+                padding: 14px;
+                border-radius: 6px;
+                margin-bottom: 24px;
+                font-size: 14px;
+            }
+
+            .summary-card {
+                border-left: 5px solid #198754;
+            }
+
+            .section-desc {
+                color: #555;
+                font-size: 14px;
+                margin-top: -4px;
+                margin-bottom: 14px;
+            }
+
+            .table-container {
+                overflow-x: auto;
+            }
+
+            table {
+                border-collapse: collapse;
+                width: 100%;
+                font-size: 13px;
+            }
+
+            th {
+                background-color: #2c3e50;
+                color: white;
+                padding: 8px;
+                text-align: left;
+                white-space: nowrap;
+            }
+
+            td {
+                border: 1px solid #ddd;
+                padding: 7px;
+                white-space: nowrap;
+            }
+
+            tr:nth-child(even) {
+                background-color: #f2f2f2;
+            }
+
+            .grid {
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 20px;
+            }
+
+            .plot-card {
+                background: #ffffff;
+                padding: 16px;
+                border-radius: 8px;
+                border: 1px solid #e4e4e4;
+            }
+
+            img {
+                max-width: 100%;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                background: white;
+            }
+
+            @media (max-width: 900px) {
+                .grid {
+                    grid-template-columns: 1fr;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Reporte descriptivo univariado - Blob Storage Monte Carlo</h1>
+        <p class="subtitle">
+            Fase descriptiva univariada para simulación Monte Carlo de Blob Storage.
+        </p>
+
+        <div class="note">
+            Este reporte es estrictamente univariado: no contiene correlaciones,
+            regresiones, VIF, cruces entre variables, scatter plots, heatmaps ni análisis bivariado.
+            El conteo temporal de muestras se incluye únicamente como control de frecuencia.
+        </div>
+
+        
+    <section class="card ">
+        <h2>1. Información general</h2>
+        <p class='section-desc'>Resumen estructural del dataset usado en la fase descriptiva.</p>
+        <div class="table-container">
+            <table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>n_rows</th>
+      <th>n_columns</th>
+      <th>numeric_columns</th>
+      <th>categorical_columns</th>
+      <th>duplicated_rows</th>
+      <th>total_nulls</th>
+      <th>total_cells</th>
+      <th>null_pct_dataset</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>329651</td>
+      <td>38</td>
+      <td>22</td>
+      <td>13</td>
+      <td>0</td>
+      <td>329651</td>
+      <td>12526738</td>
+      <td>2.6316</td>
+    </tr>
+  </tbody>
+</table>
+        </div>
+    </section>
+    
+    <section class="card summary-card">
+        <h2>2. Resumen ejecutivo univariado</h2>
+        <p class='section-desc'>Síntesis automática de alertas relevantes para la siguiente fase.</p>
+        <div class="table-container">
+            <table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>aspecto</th>
+      <th>resultado</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Variables numéricas a transformar</td>
+      <td>size_mb, transfer_duration_sec, transfer_speed_mbps, storage_cost</td>
+    </tr>
+    <tr>
+      <td>Variables con outliers altos</td>
+      <td>size_mb, transfer_duration_sec, transfer_speed_mbps, storage_cost</td>
+    </tr>
+    <tr>
+      <td>Variables con colas pesadas</td>
+      <td>size_mb, transfer_duration_sec, transfer_speed_mbps, storage_cost</td>
+    </tr>
+    <tr>
+      <td>Variables categóricas a excluir</td>
+      <td>severity</td>
+    </tr>
+    <tr>
+      <td>Variables críticas de calidad</td>
+      <td>content_hash</td>
+    </tr>
+    <tr>
+      <td>Variables con advertencia</td>
+      <td>file_id, hash_head, hash_tail</td>
+    </tr>
+  </tbody>
+</table>
+        </div>
+    </section>
+    
+    <section class="card ">
+        <h2>3. Diccionario de variables</h2>
+        <p class='section-desc'>Definición funcional de las variables disponibles.</p>
+        <div class="table-container">
+            <table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>variable</th>
+      <th>description</th>
+      <th>dtype</th>
+      <th>non_null_count</th>
+      <th>null_count</th>
+      <th>unique_values</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>file_id</td>
+      <td>Identificador único del archivo</td>
+      <td>object</td>
+      <td>329651</td>
+      <td>0</td>
+      <td>329651</td>
+    </tr>
+    <tr>
+      <td>run_id</td>
+      <td>Identificador de la corrida de simulación</td>
+      <td>object</td>
+      <td>329651</td>
+      <td>0</td>
+      <td>30</td>
+    </tr>
+    <tr>
+      <td>simulation_date</td>
+      <td>Fecha lógica de simulación</td>
+      <td>datetime64[ns]</td>
+      <td>329651</td>
+      <td>0</td>
+      <td>30</td>
+    </tr>
+    <tr>
+      <td>weekday_base_load</td>
+      <td>Peso de carga semanal asociado al día</td>
+      <td>float64</td>
+      <td>329651</td>
+      <td>0</td>
+      <td>7</td>
+    </tr>
+    <tr>
+      <td>sequence</td>
+      <td>Número secuencial del registro</td>
+      <td>int64</td>
+      <td>329651</td>
+      <td>0</td>
+      <td>16401</td>
+    </tr>
+    <tr>
+      <td>case_type</td>
+      <td>Tipo de caso asociado</td>
+      <td>object</td>
+      <td>329651</td>
+      <td>0</td>
+      <td>8</td>
+    </tr>
+    <tr>
+      <td>case_group</td>
+      <td>Grupo de casos</td>
+      <td>object</td>
+      <td>329651</td>
+      <td>0</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <td>file_type</td>
+      <td>Tipo de archivo</td>
+      <td>object</td>
+      <td>329651</td>
+      <td>0</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <td>size_mb</td>
+      <td>Tamaño del archivo en MB</td>
+      <td>float64</td>
+      <td>329651</td>
+      <td>0</td>
+      <td>321845</td>
+    </tr>
+    <tr>
+      <td>storage_tier</td>
+      <td>Nivel de almacenamiento</td>
+      <td>object</td>
+      <td>329651</td>
+      <td>0</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td>days_stored</td>
+      <td>Días almacenado</td>
+      <td>int64</td>
+      <td>329651</td>
+      <td>0</td>
+      <td>180</td>
+    </tr>
+    <tr>
+      <td>days_since_last_access</td>
+      <td>Días desde último acceso</td>
+      <td>int64</td>
+      <td>329651</td>
+      <td>0</td>
+      <td>178</td>
+    </tr>
+    <tr>
+      <td>movement_storage</td>
+      <td>Indicador de movimiento de almacenamiento</td>
+      <td>int64</td>
+      <td>329651</td>
+      <td>0</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>transfer_duration_sec</td>
+      <td>Duración de transferencia en segundos</td>
+      <td>float64</td>
+      <td>329651</td>
+      <td>0</td>
+      <td>324342</td>
+    </tr>
+    <tr>
+      <td>transfer_speed_mbps</td>
+      <td>Velocidad de transferencia</td>
+      <td>float64</td>
+      <td>329651</td>
+      <td>0</td>
+      <td>328512</td>
+    </tr>
+    <tr>
+      <td>day_of_week</td>
+      <td>Día de la semana</td>
+      <td>object</td>
+      <td>329651</td>
+      <td>0</td>
+      <td>7</td>
+    </tr>
+    <tr>
+      <td>time_slot</td>
+      <td>Franja horaria</td>
+      <td>object</td>
+      <td>329651</td>
+      <td>0</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <td>created_at</td>
+      <td>Fecha de creación</td>
+      <td>datetime64[ns]</td>
+      <td>329651</td>
+      <td>0</td>
+      <td>285569</td>
+    </tr>
+    <tr>
+      <td>created_hour</td>
+      <td>Hora de creación</td>
+      <td>int32</td>
+      <td>329651</td>
+      <td>0</td>
+      <td>16</td>
+    </tr>
+    <tr>
+      <td>hourly_arrival_count</td>
+      <td>Sin descripción</td>
+      <td>int64</td>
+      <td>329651</td>
+      <td>0</td>
+      <td>396</td>
+    </tr>
+    <tr>
+      <td>hourly_capacity</td>
+      <td>Sin descripción</td>
+      <td>int64</td>
+      <td>329651</td>
+      <td>0</td>
+      <td>344</td>
+    </tr>
+    <tr>
+      <td>congestion_factor</td>
+      <td>Sin descripción</td>
+      <td>float64</td>
+      <td>329651</td>
+      <td>0</td>
+      <td>120</td>
+    </tr>
+    <tr>
+      <td>queue_pressure</td>
+      <td>Sin descripción</td>
+      <td>float64</td>
+      <td>329651</td>
+      <td>0</td>
+      <td>469</td>
+    </tr>
+    <tr>
+      <td>content_hash</td>
+      <td>Hash completo del contenido si está habilitado</td>
+      <td>float64</td>
+      <td>0</td>
+      <td>329651</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>hash_head</td>
+      <td>Hash inicial</td>
+      <td>object</td>
+      <td>329651</td>
+      <td>0</td>
+      <td>329651</td>
+    </tr>
+    <tr>
+      <td>hash_tail</td>
+      <td>Hash final</td>
+      <td>object</td>
+      <td>329651</td>
+      <td>0</td>
+      <td>329651</td>
+    </tr>
+    <tr>
+      <td>error_duplicado</td>
+      <td>Error por duplicado</td>
+      <td>int64</td>
+      <td>329651</td>
+      <td>0</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>error_orphan</td>
+      <td>Error de archivo huérfano</td>
+      <td>int64</td>
+      <td>329651</td>
+      <td>0</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>error_null</td>
+      <td>Error por datos nulos</td>
+      <td>int64</td>
+      <td>329651</td>
+      <td>0</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>error_blob_timeout</td>
+      <td>Error por timeout</td>
+      <td>int64</td>
+      <td>329651</td>
+      <td>0</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>Indicador de error</td>
+      <td>int64</td>
+      <td>329651</td>
+      <td>0</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>is_duplicate</td>
+      <td>Indicador de duplicado</td>
+      <td>int64</td>
+      <td>329651</td>
+      <td>0</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>severity</td>
+      <td>Severidad del error</td>
+      <td>float64</td>
+      <td>329651</td>
+      <td>0</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>Costo de almacenamiento</td>
+      <td>float64</td>
+      <td>329651</td>
+      <td>0</td>
+      <td>314555</td>
+    </tr>
+    <tr>
+      <td>source_file</td>
+      <td>Archivo CSV origen del registro</td>
+      <td>object</td>
+      <td>329651</td>
+      <td>0</td>
+      <td>30</td>
+    </tr>
+    <tr>
+      <td>created_date</td>
+      <td>Fecha derivada desde created_at</td>
+      <td>object</td>
+      <td>329651</td>
+      <td>0</td>
+      <td>30</td>
+    </tr>
+    <tr>
+      <td>simulation_datetime</td>
+      <td>Fecha-hora lógica reconstruida desde simulation_date y created_hour</td>
+      <td>datetime64[ns]</td>
+      <td>329651</td>
+      <td>0</td>
+      <td>480</td>
+    </tr>
+    <tr>
+      <td>size_range</td>
+      <td>Rango de tamaño calculado desde size_mb</td>
+      <td>category</td>
+      <td>329651</td>
+      <td>0</td>
+      <td>5</td>
+    </tr>
+  </tbody>
+</table>
+        </div>
+    </section>
+    
+    <section class="card ">
+        <h2>4. Calidad de datos</h2>
+        <p class='section-desc'>Nulos, valores únicos, flags de calidad y severidad.</p>
+        <div class="table-container">
+            <table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>variable</th>
+      <th>null_count</th>
+      <th>null_pct</th>
+      <th>unique_count</th>
+      <th>flags</th>
+      <th>quality_severity</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>file_id</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>329651</td>
+      <td>HIGH_CARDINALITY, IDENTIFIER</td>
+      <td>WARNING</td>
+    </tr>
+    <tr>
+      <td>run_id</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>30</td>
+      <td>OK</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>simulation_date</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>30</td>
+      <td>OK</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>weekday_base_load</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>7</td>
+      <td>OK</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>sequence</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>16401</td>
+      <td>OK</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>case_type</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>8</td>
+      <td>OK</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>case_group</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>5</td>
+      <td>OK</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>file_type</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>4</td>
+      <td>OK</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>size_mb</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>321845</td>
+      <td>OK</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>storage_tier</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>3</td>
+      <td>OK</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>days_stored</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>180</td>
+      <td>OK</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>days_since_last_access</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>178</td>
+      <td>OK</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>movement_storage</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>2</td>
+      <td>OK</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>transfer_duration_sec</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>324342</td>
+      <td>OK</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>transfer_speed_mbps</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>328512</td>
+      <td>OK</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>day_of_week</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>7</td>
+      <td>OK</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>time_slot</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>4</td>
+      <td>OK</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>created_at</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>285569</td>
+      <td>OK</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>created_hour</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>16</td>
+      <td>OK</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>hourly_arrival_count</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>396</td>
+      <td>OK</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>hourly_capacity</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>344</td>
+      <td>OK</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>congestion_factor</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>120</td>
+      <td>DERIVED</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>queue_pressure</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>469</td>
+      <td>DERIVED</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>content_hash</td>
+      <td>329651</td>
+      <td>100.0</td>
+      <td>0</td>
+      <td>HIGH_NULLS, CONSTANT</td>
+      <td>CRITICAL</td>
+    </tr>
+    <tr>
+      <td>hash_head</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>329651</td>
+      <td>HIGH_CARDINALITY, IDENTIFIER</td>
+      <td>WARNING</td>
+    </tr>
+    <tr>
+      <td>hash_tail</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>329651</td>
+      <td>HIGH_CARDINALITY, IDENTIFIER</td>
+      <td>WARNING</td>
+    </tr>
+    <tr>
+      <td>error_duplicado</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>2</td>
+      <td>ERROR_COMPONENT</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>error_orphan</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>2</td>
+      <td>ERROR_COMPONENT</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>error_null</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>2</td>
+      <td>ERROR_COMPONENT</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>error_blob_timeout</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>2</td>
+      <td>ERROR_COMPONENT</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>2</td>
+      <td>OK</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>is_duplicate</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>2</td>
+      <td>OK</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>severity</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>2</td>
+      <td>POTENTIAL_LEAKAGE</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>314555</td>
+      <td>OK</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>source_file</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>30</td>
+      <td>OK</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>created_date</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>30</td>
+      <td>OK</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>simulation_datetime</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>480</td>
+      <td>OK</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>size_range</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>5</td>
+      <td>DERIVED</td>
+      <td>OK</td>
+    </tr>
+  </tbody>
+</table>
+        </div>
+    </section>
+    
+    <section class="card ">
+        <h2>5. Análisis univariado numérico</h2>
+        <p class='section-desc'>Incluye tendencia central, dispersión, percentiles, asimetría, curtosis, tipo de distribución, escala y recomendación de modelamiento.</p>
+        <div class="table-container">
+            <table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>variable</th>
+      <th>variable_type</th>
+      <th>count</th>
+      <th>mean</th>
+      <th>median</th>
+      <th>std</th>
+      <th>min</th>
+      <th>max</th>
+      <th>p25</th>
+      <th>p75</th>
+      <th>p90</th>
+      <th>p95</th>
+      <th>p99</th>
+      <th>range</th>
+      <th>IQR</th>
+      <th>cv</th>
+      <th>skewness</th>
+      <th>kurtosis</th>
+      <th>tipo_asimetria</th>
+      <th>distribution_type</th>
+      <th>scale_type</th>
+      <th>outlier_pct</th>
+      <th>riesgo_outliers</th>
+      <th>modeling_recommendation</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>size_mb</td>
+      <td>continua</td>
+      <td>329651</td>
+      <td>46.4254</td>
+      <td>5.915</td>
+      <td>108.9358</td>
+      <td>0.0339</td>
+      <td>1558.7561</td>
+      <td>1.2096</td>
+      <td>21.0015</td>
+      <td>156.0745</td>
+      <td>277.5023</td>
+      <td>520.5064</td>
+      <td>1558.7222</td>
+      <td>19.7919</td>
+      <td>2.3465</td>
+      <td>3.9609</td>
+      <td>22.8394</td>
+      <td>alta</td>
+      <td>heavy_tail</td>
+      <td>medium_scale</td>
+      <td>18.3606</td>
+      <td>alto</td>
+      <td>NEEDS_LOG</td>
+    </tr>
+    <tr>
+      <td>days_stored</td>
+      <td>continua</td>
+      <td>329651</td>
+      <td>90.4235</td>
+      <td>90.0</td>
+      <td>51.9586</td>
+      <td>1.0</td>
+      <td>180.0</td>
+      <td>45.0</td>
+      <td>135.0</td>
+      <td>162.0</td>
+      <td>171.0</td>
+      <td>179.0</td>
+      <td>179.0</td>
+      <td>90.0</td>
+      <td>0.5746</td>
+      <td>0.0021</td>
+      <td>-1.2001</td>
+      <td>simetrica</td>
+      <td>aprox_normal</td>
+      <td>medium_scale</td>
+      <td>0.0</td>
+      <td>bajo</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>days_since_last_access</td>
+      <td>continua</td>
+      <td>329651</td>
+      <td>46.5733</td>
+      <td>38.0</td>
+      <td>37.0559</td>
+      <td>0.0</td>
+      <td>179.0</td>
+      <td>15.0</td>
+      <td>72.0</td>
+      <td>101.0</td>
+      <td>117.0</td>
+      <td>142.0</td>
+      <td>179.0</td>
+      <td>57.0</td>
+      <td>0.7956</td>
+      <td>0.7319</td>
+      <td>-0.3203</td>
+      <td>moderada</td>
+      <td>skewed</td>
+      <td>medium_scale</td>
+      <td>0.1951</td>
+      <td>bajo</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>transfer_duration_sec</td>
+      <td>continua</td>
+      <td>329651</td>
+      <td>109.7296</td>
+      <td>6.4993</td>
+      <td>402.2965</td>
+      <td>0.0606</td>
+      <td>3600.0</td>
+      <td>1.6048</td>
+      <td>37.5163</td>
+      <td>187.5735</td>
+      <td>505.0206</td>
+      <td>2434.3707</td>
+      <td>3599.9394</td>
+      <td>35.9114</td>
+      <td>3.6663</td>
+      <td>6.2886</td>
+      <td>44.4222</td>
+      <td>alta</td>
+      <td>heavy_tail</td>
+      <td>medium_scale</td>
+      <td>15.581</td>
+      <td>alto</td>
+      <td>NEEDS_LOG</td>
+    </tr>
+    <tr>
+      <td>transfer_speed_mbps</td>
+      <td>continua</td>
+      <td>329651</td>
+      <td>26.9018</td>
+      <td>20.7221</td>
+      <td>22.5425</td>
+      <td>0.9359</td>
+      <td>341.6145</td>
+      <td>12.4603</td>
+      <td>34.0221</td>
+      <td>52.622</td>
+      <td>68.4291</td>
+      <td>112.2288</td>
+      <td>340.6786</td>
+      <td>21.5618</td>
+      <td>0.838</td>
+      <td>2.8873</td>
+      <td>15.6976</td>
+      <td>alta</td>
+      <td>heavy_tail</td>
+      <td>medium_scale</td>
+      <td>5.4452</td>
+      <td>alto</td>
+      <td>NEEDS_LOG</td>
+    </tr>
+    <tr>
+      <td>created_hour</td>
+      <td>discreta</td>
+      <td>329651</td>
+      <td>13.0821</td>
+      <td>14.0</td>
+      <td>5.4857</td>
+      <td>1.0</td>
+      <td>22.0</td>
+      <td>9.0</td>
+      <td>16.0</td>
+      <td>21.0</td>
+      <td>21.0</td>
+      <td>22.0</td>
+      <td>21.0</td>
+      <td>7.0</td>
+      <td>0.4193</td>
+      <td>-0.3579</td>
+      <td>-0.5469</td>
+      <td>simetrica</td>
+      <td>aprox_normal</td>
+      <td>medium_scale</td>
+      <td>0.0</td>
+      <td>bajo</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>continua</td>
+      <td>329651</td>
+      <td>0.0015</td>
+      <td>0.0001</td>
+      <td>0.0045</td>
+      <td>0.0</td>
+      <td>0.1513</td>
+      <td>0.0</td>
+      <td>0.0006</td>
+      <td>0.0039</td>
+      <td>0.0084</td>
+      <td>0.0225</td>
+      <td>0.1513</td>
+      <td>0.0006</td>
+      <td>3.01</td>
+      <td>6.5877</td>
+      <td>67.6907</td>
+      <td>alta</td>
+      <td>heavy_tail</td>
+      <td>small_scale</td>
+      <td>16.5815</td>
+      <td>alto</td>
+      <td>NEEDS_LOG</td>
+    </tr>
+    <tr>
+      <td>hourly_arrival_count</td>
+      <td>continua</td>
+      <td>329651</td>
+      <td>1105.5233</td>
+      <td>963.0</td>
+      <td>685.4453</td>
+      <td>75.0</td>
+      <td>2796.0</td>
+      <td>512.0</td>
+      <td>1601.0</td>
+      <td>2284.0</td>
+      <td>2406.0</td>
+      <td>2596.0</td>
+      <td>2721.0</td>
+      <td>1089.0</td>
+      <td>0.62</td>
+      <td>0.6956</td>
+      <td>-0.6055</td>
+      <td>moderada</td>
+      <td>skewed</td>
+      <td>medium_scale</td>
+      <td>0.0</td>
+      <td>bajo</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>hourly_capacity</td>
+      <td>continua</td>
+      <td>329651</td>
+      <td>803.1606</td>
+      <td>857.0</td>
+      <td>218.9438</td>
+      <td>339.0</td>
+      <td>1227.0</td>
+      <td>592.0</td>
+      <td>986.0</td>
+      <td>1048.0</td>
+      <td>1099.0</td>
+      <td>1176.0</td>
+      <td>888.0</td>
+      <td>394.0</td>
+      <td>0.2726</td>
+      <td>-0.4016</td>
+      <td>-1.0437</td>
+      <td>simetrica</td>
+      <td>aprox_normal</td>
+      <td>medium_scale</td>
+      <td>0.0</td>
+      <td>bajo</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>queue_pressure</td>
+      <td>continua</td>
+      <td>329651</td>
+      <td>1.4098</td>
+      <td>1.2677</td>
+      <td>0.8124</td>
+      <td>0.0968</td>
+      <td>3.0</td>
+      <td>0.7185</td>
+      <td>2.0188</td>
+      <td>2.7013</td>
+      <td>3.0</td>
+      <td>3.0</td>
+      <td>2.9032</td>
+      <td>1.3003</td>
+      <td>0.5763</td>
+      <td>0.4852</td>
+      <td>-0.8561</td>
+      <td>simetrica</td>
+      <td>aprox_normal</td>
+      <td>medium_scale</td>
+      <td>0.0</td>
+      <td>bajo</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>congestion_factor</td>
+      <td>continua</td>
+      <td>329651</td>
+      <td>2.3135</td>
+      <td>1.2135</td>
+      <td>1.6581</td>
+      <td>0.9857</td>
+      <td>5.0</td>
+      <td>1.0</td>
+      <td>4.0821</td>
+      <td>5.0</td>
+      <td>5.0</td>
+      <td>5.0</td>
+      <td>4.0143</td>
+      <td>3.0821</td>
+      <td>0.7167</td>
+      <td>0.8113</td>
+      <td>-1.0913</td>
+      <td>moderada</td>
+      <td>skewed</td>
+      <td>medium_scale</td>
+      <td>0.0</td>
+      <td>bajo</td>
+      <td>OK</td>
+    </tr>
+  </tbody>
+</table>
+        </div>
+    </section>
+    
+    <section class="card ">
+        <h2>6. Variables categóricas</h2>
+        <p class='section-desc'>Número de categorías, categoría dominante, cardinalidad y recomendación de uso.</p>
+        <div class="table-container">
+            <table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>variable</th>
+      <th>n_categories</th>
+      <th>most_frequent_value</th>
+      <th>dominant_pct</th>
+      <th>cardinality</th>
+      <th>recommendation</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>file_type</td>
+      <td>4</td>
+      <td>jpg</td>
+      <td>29.8176</td>
+      <td>baja</td>
+      <td>dummy</td>
+    </tr>
+    <tr>
+      <td>storage_tier</td>
+      <td>3</td>
+      <td>hot</td>
+      <td>42.8062</td>
+      <td>baja</td>
+      <td>dummy</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>2</td>
+      <td>0</td>
+      <td>83.1137</td>
+      <td>baja</td>
+      <td>dummy</td>
+    </tr>
+    <tr>
+      <td>severity</td>
+      <td>2</td>
+      <td>0.0</td>
+      <td>83.1137</td>
+      <td>baja</td>
+      <td>excluir</td>
+    </tr>
+  </tbody>
+</table>
+        </div>
+    </section>
+    
+    <section class="card ">
+        <h2>7. Outliers univariados</h2>
+        <p class='section-desc'>Detección por método IQR. En simulación Monte Carlo no se recomienda eliminar automáticamente valores extremos.</p>
+        <div class="table-container">
+            <table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>variable</th>
+      <th>Q1</th>
+      <th>Q3</th>
+      <th>IQR</th>
+      <th>lower_bound</th>
+      <th>upper_bound</th>
+      <th>outlier_count</th>
+      <th>outlier_pct</th>
+      <th>clasificacion</th>
+      <th>decision_modelado</th>
+      <th>nota</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>size_mb</td>
+      <td>1.2096</td>
+      <td>21.0015</td>
+      <td>19.7919</td>
+      <td>-28.4783</td>
+      <td>50.6894</td>
+      <td>60526</td>
+      <td>18.3606</td>
+      <td>alto</td>
+      <td>TRANSFORM</td>
+      <td>No eliminar automaticamente; revisar si representa comportamiento real del sistema.</td>
+    </tr>
+    <tr>
+      <td>days_stored</td>
+      <td>45.0</td>
+      <td>135.0</td>
+      <td>90.0</td>
+      <td>-90.0</td>
+      <td>270.0</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>bajo</td>
+      <td>KEEP</td>
+      <td>No eliminar automaticamente; revisar si representa comportamiento real del sistema.</td>
+    </tr>
+    <tr>
+      <td>days_since_last_access</td>
+      <td>15.0</td>
+      <td>72.0</td>
+      <td>57.0</td>
+      <td>-70.5</td>
+      <td>157.5</td>
+      <td>643</td>
+      <td>0.1951</td>
+      <td>bajo</td>
+      <td>KEEP</td>
+      <td>No eliminar automaticamente; revisar si representa comportamiento real del sistema.</td>
+    </tr>
+    <tr>
+      <td>transfer_duration_sec</td>
+      <td>1.6048</td>
+      <td>37.5163</td>
+      <td>35.9114</td>
+      <td>-52.2623</td>
+      <td>91.3834</td>
+      <td>51363</td>
+      <td>15.581</td>
+      <td>alto</td>
+      <td>TRANSFORM</td>
+      <td>No eliminar automaticamente; revisar si representa comportamiento real del sistema.</td>
+    </tr>
+    <tr>
+      <td>transfer_speed_mbps</td>
+      <td>12.4603</td>
+      <td>34.0221</td>
+      <td>21.5618</td>
+      <td>-19.8824</td>
+      <td>66.3647</td>
+      <td>17950</td>
+      <td>5.4452</td>
+      <td>alto</td>
+      <td>TRANSFORM</td>
+      <td>No eliminar automaticamente; revisar si representa comportamiento real del sistema.</td>
+    </tr>
+    <tr>
+      <td>created_hour</td>
+      <td>9.0</td>
+      <td>16.0</td>
+      <td>7.0</td>
+      <td>-1.5</td>
+      <td>26.5</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>bajo</td>
+      <td>KEEP</td>
+      <td>No eliminar automaticamente; revisar si representa comportamiento real del sistema.</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>0.0</td>
+      <td>0.0006</td>
+      <td>0.0006</td>
+      <td>-0.0009</td>
+      <td>0.0015</td>
+      <td>54661</td>
+      <td>16.5815</td>
+      <td>alto</td>
+      <td>TRANSFORM</td>
+      <td>No eliminar automaticamente; revisar si representa comportamiento real del sistema.</td>
+    </tr>
+    <tr>
+      <td>hourly_arrival_count</td>
+      <td>512.0</td>
+      <td>1601.0</td>
+      <td>1089.0</td>
+      <td>-1121.5</td>
+      <td>3234.5</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>bajo</td>
+      <td>KEEP</td>
+      <td>No eliminar automaticamente; revisar si representa comportamiento real del sistema.</td>
+    </tr>
+    <tr>
+      <td>hourly_capacity</td>
+      <td>592.0</td>
+      <td>986.0</td>
+      <td>394.0</td>
+      <td>1.0</td>
+      <td>1577.0</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>bajo</td>
+      <td>KEEP</td>
+      <td>No eliminar automaticamente; revisar si representa comportamiento real del sistema.</td>
+    </tr>
+    <tr>
+      <td>queue_pressure</td>
+      <td>0.7185</td>
+      <td>2.0188</td>
+      <td>1.3003</td>
+      <td>-1.232</td>
+      <td>3.9693</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>bajo</td>
+      <td>KEEP</td>
+      <td>No eliminar automaticamente; revisar si representa comportamiento real del sistema.</td>
+    </tr>
+    <tr>
+      <td>congestion_factor</td>
+      <td>1.0</td>
+      <td>4.0821</td>
+      <td>3.0821</td>
+      <td>-3.6232</td>
+      <td>8.7053</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>bajo</td>
+      <td>KEEP</td>
+      <td>No eliminar automaticamente; revisar si representa comportamiento real del sistema.</td>
+    </tr>
+  </tbody>
+</table>
+        </div>
+    </section>
+    
+    <section class="card">
+        <h2>8. Gráficos univariados</h2>
+        <p class="section-desc">
+            Histogramas, histogramas log1p, boxplots, boxplots recortados,
+            barras de frecuencia y conteo temporal de muestras. No se incluyen
+            cruces entre variables.
+        </p>
+        <div class="grid">
+    
+        <div class="plot-card">
+            <h3>Histograma - size_mb</h3>
+            <img src="../plots/descriptive/size_mb_histogram.png" alt="Histograma - size_mb">
+        </div>
+        
+        <div class="plot-card">
+            <h3>Histograma - transfer_duration_sec</h3>
+            <img src="../plots/descriptive/transfer_duration_sec_histogram.png" alt="Histograma - transfer_duration_sec">
+        </div>
+        
+        <div class="plot-card">
+            <h3>Histograma - storage_cost</h3>
+            <img src="../plots/descriptive/storage_cost_histogram.png" alt="Histograma - storage_cost">
+        </div>
+        
+        <div class="plot-card">
+            <h3>Histograma - transfer_speed_mbps</h3>
+            <img src="../plots/descriptive/transfer_speed_mbps_histogram.png" alt="Histograma - transfer_speed_mbps">
+        </div>
+        
+        <div class="plot-card">
+            <h3>Histograma log1p - size_mb</h3>
+            <img src="../plots/descriptive/size_mb_log_histogram.png" alt="Histograma log1p - size_mb">
+        </div>
+        
+        <div class="plot-card">
+            <h3>Histograma log1p - transfer_duration_sec</h3>
+            <img src="../plots/descriptive/transfer_duration_sec_log_histogram.png" alt="Histograma log1p - transfer_duration_sec">
+        </div>
+        
+        <div class="plot-card">
+            <h3>Histograma log1p - storage_cost</h3>
+            <img src="../plots/descriptive/storage_cost_log_histogram.png" alt="Histograma log1p - storage_cost">
+        </div>
+        
+        <div class="plot-card">
+            <h3>Histograma log1p - transfer_speed_mbps</h3>
+            <img src="../plots/descriptive/transfer_speed_mbps_log_histogram.png" alt="Histograma log1p - transfer_speed_mbps">
+        </div>
+        
+        <div class="plot-card">
+            <h3>Boxplot - size_mb</h3>
+            <img src="../plots/descriptive/size_mb_boxplot.png" alt="Boxplot - size_mb">
+        </div>
+        
+        <div class="plot-card">
+            <h3>Boxplot - transfer_duration_sec</h3>
+            <img src="../plots/descriptive/transfer_duration_sec_boxplot.png" alt="Boxplot - transfer_duration_sec">
+        </div>
+        
+        <div class="plot-card">
+            <h3>Boxplot - storage_cost</h3>
+            <img src="../plots/descriptive/storage_cost_boxplot.png" alt="Boxplot - storage_cost">
+        </div>
+        
+        <div class="plot-card">
+            <h3>Boxplot recortado - size_mb</h3>
+            <img src="../plots/descriptive/size_mb_trimmed_boxplot.png" alt="Boxplot recortado - size_mb">
+        </div>
+        
+        <div class="plot-card">
+            <h3>Boxplot recortado - transfer_duration_sec</h3>
+            <img src="../plots/descriptive/transfer_duration_sec_trimmed_boxplot.png" alt="Boxplot recortado - transfer_duration_sec">
+        </div>
+        
+        <div class="plot-card">
+            <h3>Boxplot recortado - storage_cost</h3>
+            <img src="../plots/descriptive/storage_cost_trimmed_boxplot.png" alt="Boxplot recortado - storage_cost">
+        </div>
+        
+        <div class="plot-card">
+            <h3>Barras - file_type</h3>
+            <img src="../plots/descriptive/file_type_bar_chart.png" alt="Barras - file_type">
+        </div>
+        
+        <div class="plot-card">
+            <h3>Barras - storage_tier</h3>
+            <img src="../plots/descriptive/storage_tier_bar_chart.png" alt="Barras - storage_tier">
+        </div>
+        
+        <div class="plot-card">
+            <h3>Barras - has_error</h3>
+            <img src="../plots/descriptive/has_error_bar_chart.png" alt="Barras - has_error">
+        </div>
+        
+        <div class="plot-card">
+            <h3>Barras - severity</h3>
+            <img src="../plots/descriptive/severity_bar_chart.png" alt="Barras - severity">
+        </div>
+        
+        <div class="plot-card">
+            <h3>Frecuencia de muestras en el tiempo</h3>
+            <img src="../plots/descriptive/samples_over_time.png" alt="Frecuencia de muestras en el tiempo">
+        </div>
+        
+        </div>
+    </section>
+    
+    <section class="card ">
+        <h2>9. Clasificación de variables</h2>
+        <p class='section-desc'>Rol sugerido de cada variable para fases posteriores de modelamiento.</p>
+        <div class="table-container">
+            <table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>variable</th>
+      <th>tipo</th>
+      <th>rol_modelo</th>
+      <th>usar</th>
+      <th>motivo</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>file_id</td>
+      <td>identificador</td>
+      <td>no_usar</td>
+      <td>NO</td>
+      <td>Identificador único; no aporta señal estadística generalizable</td>
+    </tr>
+    <tr>
+      <td>run_id</td>
+      <td>identificador_simulacion</td>
+      <td>control</td>
+      <td>NO</td>
+      <td>Identifica corrida; usar solo para trazabilidad</td>
+    </tr>
+    <tr>
+      <td>simulation_date</td>
+      <td>temporal</td>
+      <td>control</td>
+      <td>NO</td>
+      <td>Fecha lógica; útil para auditoría temporal, no predictor directo en fase univariada</td>
+    </tr>
+    <tr>
+      <td>source_file</td>
+      <td>origen</td>
+      <td>control</td>
+      <td>NO</td>
+      <td>Archivo fuente; usar solo para trazabilidad</td>
+    </tr>
+    <tr>
+      <td>file_type</td>
+      <td>categorica</td>
+      <td>predictor</td>
+      <td>SI</td>
+      <td>Tipo de archivo operacionalmente relevante</td>
+    </tr>
+    <tr>
+      <td>size_mb</td>
+      <td>continua</td>
+      <td>predictor</td>
+      <td>SI</td>
+      <td>Variable principal de tamaño; requiere revisar transformación log</td>
+    </tr>
+    <tr>
+      <td>storage_tier</td>
+      <td>categorica</td>
+      <td>predictor</td>
+      <td>SI</td>
+      <td>Nivel de almacenamiento asociado a costo y acceso</td>
+    </tr>
+    <tr>
+      <td>days_stored</td>
+      <td>continua</td>
+      <td>predictor</td>
+      <td>SI</td>
+      <td>Tiempo de permanencia del blob</td>
+    </tr>
+    <tr>
+      <td>days_since_last_access</td>
+      <td>continua</td>
+      <td>predictor</td>
+      <td>SI</td>
+      <td>Recencia de acceso</td>
+    </tr>
+    <tr>
+      <td>transfer_duration_sec</td>
+      <td>continua</td>
+      <td>target</td>
+      <td>SI</td>
+      <td>Tiempo de transferencia a explicar o simular</td>
+    </tr>
+    <tr>
+      <td>transfer_speed_mbps</td>
+      <td>continua</td>
+      <td>predictor</td>
+      <td>SI</td>
+      <td>Velocidad observada de transferencia</td>
+    </tr>
+    <tr>
+      <td>created_hour</td>
+      <td>discreta</td>
+      <td>predictor</td>
+      <td>SI</td>
+      <td>Hora de creación del blob</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>binaria</td>
+      <td>target</td>
+      <td>SI</td>
+      <td>Indicador principal de evento de error</td>
+    </tr>
+    <tr>
+      <td>severity</td>
+      <td>categorica</td>
+      <td>no_usar</td>
+      <td>NO</td>
+      <td>Posible fuga de información posterior al error</td>
+    </tr>
+    <tr>
+      <td>error_duplicado</td>
+      <td>binaria</td>
+      <td>no_usar</td>
+      <td>NO</td>
+      <td>Componente del error; puede inducir fuga si el target es has_error</td>
+    </tr>
+    <tr>
+      <td>error_orphan</td>
+      <td>binaria</td>
+      <td>no_usar</td>
+      <td>NO</td>
+      <td>Componente del error; puede inducir fuga si el target es has_error</td>
+    </tr>
+    <tr>
+      <td>error_null</td>
+      <td>binaria</td>
+      <td>no_usar</td>
+      <td>NO</td>
+      <td>Componente del error; puede inducir fuga si el target es has_error</td>
+    </tr>
+    <tr>
+      <td>error_blob_timeout</td>
+      <td>binaria</td>
+      <td>no_usar</td>
+      <td>NO</td>
+      <td>Componente del error; puede inducir fuga si el target es has_error</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>continua</td>
+      <td>target/predictor</td>
+      <td>SI</td>
+      <td>Costo operacional individual; requiere revisar transformación log</td>
+    </tr>
+    <tr>
+      <td>hourly_arrival_count</td>
+      <td>discreta</td>
+      <td>predictor</td>
+      <td>SI</td>
+      <td>Carga horaria de llegada</td>
+    </tr>
+    <tr>
+      <td>hourly_capacity</td>
+      <td>discreta</td>
+      <td>predictor</td>
+      <td>SI</td>
+      <td>Capacidad horaria disponible</td>
+    </tr>
+    <tr>
+      <td>queue_pressure</td>
+      <td>derivada</td>
+      <td>no_usar</td>
+      <td>NO</td>
+      <td>Variable derivada; revisar solo en fase avanzada</td>
+    </tr>
+    <tr>
+      <td>congestion_factor</td>
+      <td>derivada</td>
+      <td>no_usar</td>
+      <td>NO</td>
+      <td>Variable derivada; puede inducir dependencia artificial</td>
+    </tr>
+    <tr>
+      <td>size_range</td>
+      <td>derivada</td>
+      <td>no_usar</td>
+      <td>NO</td>
+      <td>Variable derivada desde size_mb; evitar duplicidad</td>
+    </tr>
+    <tr>
+      <td>content_hash</td>
+      <td>tecnica</td>
+      <td>no_usar</td>
+      <td>NO</td>
+      <td>100% nula o sin utilidad predictiva</td>
+    </tr>
+    <tr>
+      <td>hash_head</td>
+      <td>identificador</td>
+      <td>no_usar</td>
+      <td>NO</td>
+      <td>Alta cardinalidad técnica; no generalizable</td>
+    </tr>
+    <tr>
+      <td>hash_tail</td>
+      <td>identificador</td>
+      <td>no_usar</td>
+      <td>NO</td>
+      <td>Alta cardinalidad técnica; no generalizable</td>
+    </tr>
+  </tbody>
+</table>
+        </div>
+    </section>
+    
+    <section class="card ">
+        <h2>10. Interpretación automática</h2>
+        <p class='section-desc'>Conclusiones generadas a partir de asimetría, distribución, outliers, cardinalidad, nulos, derivadas y posible fuga de información.</p>
+        <div class="table-container">
+            <table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>conclusion</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>size_mb presenta asimetría/outliers relevantes (skew=3.96, kurtosis=22.84, outliers=18.36%). Distribución sugerida: heavy_tail. Recomendación: evaluar log1p o transformación robusta.</td>
+    </tr>
+    <tr>
+      <td>transfer_duration_sec presenta asimetría/outliers relevantes (skew=6.29, kurtosis=44.42, outliers=15.58%). Distribución sugerida: heavy_tail. Recomendación: evaluar log1p o transformación robusta.</td>
+    </tr>
+    <tr>
+      <td>transfer_speed_mbps presenta asimetría/outliers relevantes (skew=2.89, kurtosis=15.70, outliers=5.45%). Distribución sugerida: heavy_tail. Recomendación: evaluar log1p o transformación robusta.</td>
+    </tr>
+    <tr>
+      <td>storage_cost presenta asimetría/outliers relevantes (skew=6.59, kurtosis=67.69, outliers=16.58%). Distribución sugerida: heavy_tail. Recomendación: evaluar log1p o transformación robusta.</td>
+    </tr>
+    <tr>
+      <td>Variables con alto porcentaje de outliers: size_mb, transfer_duration_sec, transfer_speed_mbps, storage_cost. En simulación Monte Carlo no deben eliminarse automáticamente; primero validar si representan escenarios extremos reales.</td>
+    </tr>
+    <tr>
+      <td>Variables categóricas sugeridas para exclusión: severity.</td>
+    </tr>
+    <tr>
+      <td>Variables con problemas críticos de calidad: content_hash. Requieren exclusión, imputación o revisión de origen.</td>
+    </tr>
+    <tr>
+      <td>Variables con alertas de calidad: file_id, hash_head, hash_tail. Revisar antes de modelar.</td>
+    </tr>
+    <tr>
+      <td>Variables con posible fuga de información: severity. No usarlas como predictoras si el objetivo es predecir error.</td>
+    </tr>
+    <tr>
+      <td>Variables derivadas detectadas: congestion_factor, queue_pressure, size_range. Evitar duplicidad en fases de modelamiento.</td>
+    </tr>
+  </tbody>
+</table>
+        </div>
+    </section>
+    
+    </body>
+    </html>
+    

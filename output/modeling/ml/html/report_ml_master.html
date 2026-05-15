@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Reporte maestro de Machine Learning</title>
+<style>
+:root {
+  --bg:#f3f6fa; --card:#fff; --ink:#17212b; --muted:#667085;
+  --primary:#17324d; --accent:#2c7be5; --border:#e5edf3;
+}
+body { font-family: Arial, sans-serif; margin:0; background:var(--bg); color:var(--ink); }
+.page { max-width:1320px; margin:0 auto; padding:32px; }
+.hero { background:linear-gradient(135deg,#17324d,#245a89); color:white; padding:28px; border-radius:18px; margin-bottom:24px; }
+.hero h1 { margin:0 0 8px 0; font-size:30px; }
+.hero p { margin:0; opacity:.92; }
+.card { background:white; padding:22px; margin-bottom:22px; border-radius:16px; border:1px solid var(--border); box-shadow:0 2px 10px rgba(0,0,0,.05); }
+.note { background:#eef6ff; border-left:6px solid var(--accent); padding:16px 18px; border-radius:12px; margin-bottom:22px; line-height:1.5; }
+h2 { color:var(--primary); margin-top:0; border-bottom:1px solid var(--border); padding-bottom:9px; }
+.section-desc,.muted { color:var(--muted); font-size:14px; }
+.metrics-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:16px; margin-bottom:22px; }
+.metric-card { background:white; border:1px solid var(--border); border-radius:14px; padding:18px; box-shadow:0 1px 6px rgba(0,0,0,.05); }
+.metric-label { font-size:13px; color:var(--muted); margin-bottom:8px; }
+.metric-value { font-size:25px; font-weight:700; color:var(--primary); }
+.metric-hint { font-size:12px; color:var(--muted); margin-top:8px; }
+.table-container { overflow-x:auto; }
+table.data-table, table.dataframe { border-collapse:collapse; width:100%; font-size:13px; }
+table.data-table th, table.dataframe th { background-color:var(--primary); color:white; padding:8px; text-align:left; }
+table.data-table td, table.dataframe td { border:1px solid #dde5ed; padding:7px; vertical-align:top; }
+table.data-table tr:nth-child(even), table.dataframe tr:nth-child(even) { background-color:#f8fafc; }
+.plot-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:20px; }
+.plot-card { margin:0; background:#fbfdff; border:1px solid var(--border); border-radius:14px; padding:12px; }
+.plot-card img { width:100%; max-width:100%; display:block; border-radius:10px; border:1px solid #d9e2ec; background:white; }
+.plot-card figcaption { margin-top:8px; font-size:13px; color:var(--muted); text-align:center; }
+a { color:var(--accent); font-weight:600; text-decoration:none; }
+</style>
+</head>
+<body>
+<main class="page">
+<section class="hero"><h1>Reporte maestro de Machine Learning</h1><p>Modelamiento de Machine Learning aplicado al universo simulado de Blob Storage.</p></section>
+
+    <section class="note">
+      Este reporte consolida modelos de Machine Learning y permite compararlos con la fase estadística.
+      La finalidad es identificar cuándo los modelos no lineales mejoran la capacidad predictiva del simulador.
+    </section>
+    <section class="metrics-grid">
+    <div class="metric-card">
+        <div class="metric-label">Modelos ML</div>
+        <div class="metric-value">6.0000</div>
+        <div class="metric-hint">Técnicas ejecutadas</div>
+    </div>
+    
+    <div class="metric-card">
+        <div class="metric-label">Mejor R²</div>
+        <div class="metric-value">0.9819</div>
+        <div class="metric-hint">Regresión</div>
+    </div>
+    
+    <div class="metric-card">
+        <div class="metric-label">Menor RMSE</div>
+        <div class="metric-value">95.3781</div>
+        <div class="metric-hint">Regresión</div>
+    </div>
+    
+    <div class="metric-card">
+        <div class="metric-label">Mejor ROC-AUC</div>
+        <div class="metric-value">0.8822</div>
+        <div class="metric-hint">Clasificación</div>
+    </div>
+    </section>
+    
+    <section class="card">
+        <h2>1. Hallazgos ML</h2>
+        <p class="section-desc"></p>
+        <div class="table-container">
+            <table class="dataframe data-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>hallazgo</th>
+      <th>technique</th>
+      <th>target</th>
+      <th>value</th>
+      <th>lectura</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>mejor_r2</td>
+      <td>random_forest_regressor</td>
+      <td>storage_cost</td>
+      <td>0.98194</td>
+      <td>Mejor capacidad explicativa en regresión.</td>
+    </tr>
+    <tr>
+      <td>menor_rmse</td>
+      <td>random_forest_regressor</td>
+      <td>storage_cost</td>
+      <td>95.37809</td>
+      <td>Menor error de predicción en regresión.</td>
+    </tr>
+    <tr>
+      <td>mejor_roc_auc</td>
+      <td>random_forest_classifier</td>
+      <td>has_error</td>
+      <td>0.88216</td>
+      <td>Mejor separabilidad de clases.</td>
+    </tr>
+    <tr>
+      <td>mejor_f1</td>
+      <td>random_forest_classifier</td>
+      <td>has_error</td>
+      <td>0.54348</td>
+      <td>Mejor equilibrio precisión/recall.</td>
+    </tr>
+  </tbody>
+</table>
+        </div>
+    </section>
+    
+    <section class="card">
+        <h2>2. Registro de modelos ML</h2>
+        <p class="section-desc"></p>
+        <div class="table-container">
+            <table class="dataframe data-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>technique</th>
+      <th>target</th>
+      <th>task_type</th>
+      <th>report</th>
+      <th>model</th>
+      <th>report_link</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>random_forest_regressor</td>
+      <td>storage_cost</td>
+      <td>regression</td>
+      <td>output\modeling\ml\random_forest_regressor\html\report_random_forest_regressor_storage_cost.html</td>
+      <td>output\modeling\ml\random_forest_regressor\models\random_forest_regressor_storage_cost.joblib</td>
+      <td><a href='../random_forest_regressor/html/report_random_forest_regressor_storage_cost.html'>Abrir reporte</a></td>
+    </tr>
+    <tr>
+      <td>gradient_boosting_regressor</td>
+      <td>storage_cost</td>
+      <td>regression</td>
+      <td>output\modeling\ml\gradient_boosting_regressor\html\report_gradient_boosting_regressor_storage_cost.html</td>
+      <td>output\modeling\ml\gradient_boosting_regressor\models\gradient_boosting_regressor_storage_cost.joblib</td>
+      <td><a href='../gradient_boosting_regressor/html/report_gradient_boosting_regressor_storage_cost.html'>Abrir reporte</a></td>
+    </tr>
+    <tr>
+      <td>hist_gradient_boosting_regressor</td>
+      <td>storage_cost</td>
+      <td>regression</td>
+      <td>output\modeling\ml\hist_gradient_boosting_regressor\html\report_hist_gradient_boosting_regressor_storage_cost.html</td>
+      <td>output\modeling\ml\hist_gradient_boosting_regressor\models\hist_gradient_boosting_regressor_storage_cost.joblib</td>
+      <td><a href='../hist_gradient_boosting_regressor/html/report_hist_gradient_boosting_regressor_storage_cost.html'>Abrir reporte</a></td>
+    </tr>
+    <tr>
+      <td>random_forest_classifier</td>
+      <td>has_error</td>
+      <td>classification</td>
+      <td>output\modeling\ml\random_forest_classifier\html\report_random_forest_classifier_has_error.html</td>
+      <td>output\modeling\ml\random_forest_classifier\models\random_forest_classifier_has_error.joblib</td>
+      <td><a href='../random_forest_classifier/html/report_random_forest_classifier_has_error.html'>Abrir reporte</a></td>
+    </tr>
+    <tr>
+      <td>gradient_boosting_classifier</td>
+      <td>has_error</td>
+      <td>classification</td>
+      <td>output\modeling\ml\gradient_boosting_classifier\html\report_gradient_boosting_classifier_has_error.html</td>
+      <td>output\modeling\ml\gradient_boosting_classifier\models\gradient_boosting_classifier_has_error.joblib</td>
+      <td><a href='../gradient_boosting_classifier/html/report_gradient_boosting_classifier_has_error.html'>Abrir reporte</a></td>
+    </tr>
+    <tr>
+      <td>hist_gradient_boosting_classifier</td>
+      <td>has_error</td>
+      <td>classification</td>
+      <td>output\modeling\ml\hist_gradient_boosting_classifier\html\report_hist_gradient_boosting_classifier_has_error.html</td>
+      <td>output\modeling\ml\hist_gradient_boosting_classifier\models\hist_gradient_boosting_classifier_has_error.joblib</td>
+      <td><a href='../hist_gradient_boosting_classifier/html/report_hist_gradient_boosting_classifier_has_error.html'>Abrir reporte</a></td>
+    </tr>
+  </tbody>
+</table>
+        </div>
+    </section>
+    
+    <section class="card">
+        <h2>3. Métricas comparativas</h2>
+        <p class="section-desc"></p>
+        <div class="table-container">
+            <table class="dataframe data-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>technique</th>
+      <th>target</th>
+      <th>task_type</th>
+      <th>n</th>
+      <th>mae</th>
+      <th>mse</th>
+      <th>rmse</th>
+      <th>r2</th>
+      <th>accuracy</th>
+      <th>precision</th>
+      <th>recall</th>
+      <th>f1</th>
+      <th>roc_auc</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>random_forest_regressor</td>
+      <td>storage_cost</td>
+      <td>regression</td>
+      <td>3056</td>
+      <td>10.69423</td>
+      <td>9096.98012</td>
+      <td>95.37809</td>
+      <td>0.98194</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <td>gradient_boosting_regressor</td>
+      <td>storage_cost</td>
+      <td>regression</td>
+      <td>3056</td>
+      <td>12.56792</td>
+      <td>12192.68233</td>
+      <td>110.42048</td>
+      <td>0.97580</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <td>hist_gradient_boosting_regressor</td>
+      <td>storage_cost</td>
+      <td>regression</td>
+      <td>3056</td>
+      <td>18.82135</td>
+      <td>32628.83697</td>
+      <td>180.63454</td>
+      <td>0.93524</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <td>random_forest_classifier</td>
+      <td>has_error</td>
+      <td>classification</td>
+      <td>3056</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>0.93128</td>
+      <td>0.79618</td>
+      <td>0.41254</td>
+      <td>0.54348</td>
+      <td>0.88216</td>
+    </tr>
+    <tr>
+      <td>gradient_boosting_classifier</td>
+      <td>has_error</td>
+      <td>classification</td>
+      <td>3056</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>0.91067</td>
+      <td>0.75000</td>
+      <td>0.14851</td>
+      <td>0.24793</td>
+      <td>0.79989</td>
+    </tr>
+    <tr>
+      <td>hist_gradient_boosting_classifier</td>
+      <td>has_error</td>
+      <td>classification</td>
+      <td>3056</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>0.92736</td>
+      <td>0.85841</td>
+      <td>0.32013</td>
+      <td>0.46635</td>
+      <td>0.86100</td>
+    </tr>
+  </tbody>
+</table>
+        </div>
+    </section>
+    <section class='card'><h2>Gráficos</h2><div class='plot-grid'><figure class='plot-card'><img src='../plots/comparison/comparison_r2.png' alt='Comparison R2'><figcaption>Comparison R2</figcaption></figure><figure class='plot-card'><img src='../plots/comparison/comparison_rmse.png' alt='Comparison Rmse'><figcaption>Comparison Rmse</figcaption></figure><figure class='plot-card'><img src='../plots/comparison/comparison_f1.png' alt='Comparison F1'><figcaption>Comparison F1</figcaption></figure><figure class='plot-card'><img src='../plots/comparison/comparison_roc_auc.png' alt='Comparison Roc Auc'><figcaption>Comparison Roc Auc</figcaption></figure></div></section>
+</main>
+</body>
+</html>

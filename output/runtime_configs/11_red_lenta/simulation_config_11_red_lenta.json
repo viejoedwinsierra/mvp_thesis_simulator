@@ -1,0 +1,223 @@
+{
+  "simulation": {
+    "simulation_date": "2026-04-25",
+    "max_valid_files_per_day": 1000000,
+    "output_dir": "C:/git_edwin/mvp_thesis_simulator/output/dataset/11_red_lenta",
+    "seed": 1011
+  },
+  "arrival_process": {
+    "strategy": "poisson",
+    "hourly_noise": 0.2
+  },
+  "capacity": {
+    "enabled": true,
+    "files_per_hour": 17000,
+    "duration_penalty_factor": 0.9,
+    "error_penalty_factor": 0.66
+  },
+  "outliers": {
+    "enabled": true,
+    "probability": 0.04,
+    "size_multiplier_min": 3,
+    "size_multiplier_max": 10
+  },
+  "file_types": {
+    "distribution": {
+      "json": 0.15,
+      "jpg": 0.28,
+      "pdf": 0.32,
+      "mp4": 0.25
+    },
+    "size_distribution_mb": {
+      "json": {
+        "distribution": "lognormal",
+        "mean": 0.135,
+        "sigma": 0.8336,
+        "min": 0.001,
+        "max": 0.675
+      },
+      "jpg": {
+        "distribution": "lognormal",
+        "mean": 2.025,
+        "sigma": 0.7294,
+        "min": 0.1,
+        "max": 20.25
+      },
+      "pdf": {
+        "distribution": "lognormal",
+        "mean": 3.5438,
+        "sigma": 0.9378,
+        "min": 0.05,
+        "max": 54.0
+      },
+      "mp4": {
+        "distribution": "lognormal",
+        "mean": 8.1,
+        "sigma": 0.8857,
+        "min": 5,
+        "max": 1080.0
+      }
+    }
+  },
+  "lifecycle": {
+    "days_stored": {
+      "distribution": "uniform",
+      "min": 1,
+      "max": 240
+    },
+    "days_since_last_access": {
+      "strategy": "beta_scaled_to_days_stored",
+      "profiles": {
+        "low_access": {
+          "alpha": 5,
+          "beta": 2
+        },
+        "medium_access": {
+          "alpha": 2,
+          "beta": 2
+        },
+        "high_access": {
+          "alpha": 1.2,
+          "beta": 5
+        }
+      },
+      "distribution_weights": {
+        "low_access": 0.2,
+        "medium_access": 0.3,
+        "high_access": 0.5
+      }
+    },
+    "movement_storage_probability": 0.18
+  },
+  "storage_tier": {
+    "strategy": "by_days_since_last_access",
+    "rules": [
+      {
+        "tier": "hot",
+        "max_days_since_last_access": 45
+      },
+      {
+        "tier": "cool",
+        "min_days_since_last_access": 46,
+        "max_days_since_last_access": 120
+      },
+      {
+        "tier": "archive",
+        "min_days_since_last_access": 121
+      }
+    ],
+    "cost_per_mb_per_month": {
+      "hot": 2e-05,
+      "cool": 1e-05,
+      "archive": 2e-06
+    }
+  },
+  "transfer": {
+    "speed_mbps": {
+      "distribution": "lognormal",
+      "mean": 1.76,
+      "sigma": 0.65,
+      "min": 0.5,
+      "max": 250
+    },
+    "duration_strategy": "size_divided_by_speed"
+  },
+  "cost_model": {
+    "storage_cost_formula": "size_mb * cost_per_mb_per_day * days_stored",
+    "non_linear_adjustments": {
+      "large_file_discount_threshold_mb": 1000,
+      "discount_factor": 0.85
+    }
+  },
+  "errors": {
+    "base_error_probability": 0.05,
+    "multipliers": {
+      "large_file": {
+        "threshold_mb": 80,
+        "multiplier": 2.5
+      },
+      "low_speed": {
+        "threshold_mbps": 8,
+        "multiplier": 3.0
+      },
+      "long_transfer": {
+        "threshold_sec": 120,
+        "multiplier": 2.0
+      },
+      "archive_tier": 1.4,
+      "peak_hour": 2.5,
+      "movement_storage": 1.3,
+      "congestion": 2.4
+    }
+  },
+  "hash": {
+    "use_full_hash": false,
+    "hash_head_length": 12,
+    "hash_tail_length": 12
+  },
+  "error_families": [
+    {
+      "name": "DUPLICITY_ERRORS",
+      "weight_within_global_error": 0.28,
+      "subtypes": [
+        {
+          "name": "DUP_SAME_CONTENT_DIFFERENT_NAME",
+          "weight_within_family": 0.4
+        },
+        {
+          "name": "DUP_SAME_CONTENT_DIFFERENT_ROUTE",
+          "weight_within_family": 0.35
+        },
+        {
+          "name": "DUP_SAME_CONTENT_DIFFERENT_NAME_AND_ROUTE",
+          "weight_within_family": 0.25
+        }
+      ]
+    },
+    {
+      "name": "ORPHAN_ERRORS",
+      "weight_within_global_error": 0.2,
+      "subtypes": [
+        {
+          "name": "JSON_WITHOUT_PDF",
+          "weight_within_family": 0.6
+        },
+        {
+          "name": "PDF_WITHOUT_JSON",
+          "weight_within_family": 0.4
+        }
+      ]
+    },
+    {
+      "name": "NULL_ERRORS",
+      "weight_within_global_error": 0.08,
+      "subtypes": [
+        {
+          "name": "NULL_JSON",
+          "weight_within_family": 1.0
+        }
+      ]
+    },
+    {
+      "name": "BLOB_STORAGE_ERRORS",
+      "weight_within_global_error": 0.44,
+      "subtypes": [
+        {
+          "name": "BLOB_TIMEOUT",
+          "weight_within_family": 1.0
+        }
+      ],
+      "conditions": {
+        "requires": [
+          "large_file",
+          "low_speed"
+        ]
+      }
+    }
+  ],
+  "scenario_execution": {
+    "scenario_name": "11_red_lenta",
+    "source_config": "C:/git_edwin/mvp_thesis_simulator/config/escenarios/11_red_lenta/simulation_config_11_red_lenta.json",
+    "generated_at": "2026-05-14T22:45:41"
+  }
+}

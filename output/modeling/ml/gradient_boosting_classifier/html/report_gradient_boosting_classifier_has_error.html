@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Reporte ML - gradient_boosting_classifier</title>
+<style>
+:root {
+  --bg:#f3f6fa; --card:#fff; --ink:#17212b; --muted:#667085;
+  --primary:#17324d; --accent:#2c7be5; --border:#e5edf3;
+}
+body { font-family: Arial, sans-serif; margin:0; background:var(--bg); color:var(--ink); }
+.page { max-width:1320px; margin:0 auto; padding:32px; }
+.hero { background:linear-gradient(135deg,#17324d,#245a89); color:white; padding:28px; border-radius:18px; margin-bottom:24px; }
+.hero h1 { margin:0 0 8px 0; font-size:30px; }
+.hero p { margin:0; opacity:.92; }
+.card { background:white; padding:22px; margin-bottom:22px; border-radius:16px; border:1px solid var(--border); box-shadow:0 2px 10px rgba(0,0,0,.05); }
+.note { background:#eef6ff; border-left:6px solid var(--accent); padding:16px 18px; border-radius:12px; margin-bottom:22px; line-height:1.5; }
+h2 { color:var(--primary); margin-top:0; border-bottom:1px solid var(--border); padding-bottom:9px; }
+.section-desc,.muted { color:var(--muted); font-size:14px; }
+.metrics-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:16px; margin-bottom:22px; }
+.metric-card { background:white; border:1px solid var(--border); border-radius:14px; padding:18px; box-shadow:0 1px 6px rgba(0,0,0,.05); }
+.metric-label { font-size:13px; color:var(--muted); margin-bottom:8px; }
+.metric-value { font-size:25px; font-weight:700; color:var(--primary); }
+.metric-hint { font-size:12px; color:var(--muted); margin-top:8px; }
+.table-container { overflow-x:auto; }
+table.data-table, table.dataframe { border-collapse:collapse; width:100%; font-size:13px; }
+table.data-table th, table.dataframe th { background-color:var(--primary); color:white; padding:8px; text-align:left; }
+table.data-table td, table.dataframe td { border:1px solid #dde5ed; padding:7px; vertical-align:top; }
+table.data-table tr:nth-child(even), table.dataframe tr:nth-child(even) { background-color:#f8fafc; }
+.plot-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:20px; }
+.plot-card { margin:0; background:#fbfdff; border:1px solid var(--border); border-radius:14px; padding:12px; }
+.plot-card img { width:100%; max-width:100%; display:block; border-radius:10px; border:1px solid #d9e2ec; background:white; }
+.plot-card figcaption { margin-top:8px; font-size:13px; color:var(--muted); text-align:center; }
+a { color:var(--accent); font-weight:600; text-decoration:none; }
+</style>
+</head>
+<body>
+<main class="page">
+<section class="hero"><h1>Reporte ML - gradient_boosting_classifier</h1><p>Modelamiento de Machine Learning aplicado al universo simulado de Blob Storage.</p></section>
+
+    <section class="note">
+      <strong>Técnica:</strong> gradient_boosting_classifier<br>
+      <strong>Target:</strong> has_error<br>
+      <strong>Tipo:</strong> classification<br>
+      <strong>Modelo:</strong> output\modeling\ml\gradient_boosting_classifier\models\gradient_boosting_classifier_has_error.joblib<br><br>
+      Este reporte permite comparar modelos ML contra los modelos estadísticos previos.
+      Los modelos de árbol y boosting capturan no linealidades y relaciones de interacción que las regresiones clásicas no representan bien.
+    </section>
+    <section class="metrics-grid">
+    <div class="metric-card">
+        <div class="metric-label">R²</div>
+        <div class="metric-value">N/A</div>
+        <div class="metric-hint">Regresión</div>
+    </div>
+    
+    <div class="metric-card">
+        <div class="metric-label">RMSE</div>
+        <div class="metric-value">N/A</div>
+        <div class="metric-hint">Error</div>
+    </div>
+    
+    <div class="metric-card">
+        <div class="metric-label">F1</div>
+        <div class="metric-value">0.2479</div>
+        <div class="metric-hint">Clasificación</div>
+    </div>
+    
+    <div class="metric-card">
+        <div class="metric-label">ROC-AUC</div>
+        <div class="metric-value">0.7999</div>
+        <div class="metric-hint">Separabilidad</div>
+    </div>
+    </section>
+    
+    <section class="card">
+        <h2>1. Métricas</h2>
+        <p class="section-desc"></p>
+        <div class="table-container">
+            <table class="dataframe data-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>technique</th>
+      <th>target</th>
+      <th>task_type</th>
+      <th>n</th>
+      <th>accuracy</th>
+      <th>precision</th>
+      <th>recall</th>
+      <th>f1</th>
+      <th>roc_auc</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>gradient_boosting_classifier</td>
+      <td>has_error</td>
+      <td>classification</td>
+      <td>3056</td>
+      <td>0.91067</td>
+      <td>0.75</td>
+      <td>0.14851</td>
+      <td>0.24793</td>
+      <td>0.79989</td>
+    </tr>
+  </tbody>
+</table>
+        </div>
+    </section>
+    
+    <section class="card">
+        <h2>2. Top variables</h2>
+        <p class="section-desc">Variables más influyentes según importancia o coeficiente.</p>
+        <div class="table-container">
+            <table class="dataframe data-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>feature</th>
+      <th>importance</th>
+      <th>technique</th>
+      <th>abs_value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>transfer_duration_sec</td>
+      <td>0.29235</td>
+      <td>gradient_boosting_classifier</td>
+      <td>0.29235</td>
+    </tr>
+    <tr>
+      <td>transfer_speed_mbps</td>
+      <td>0.24399</td>
+      <td>gradient_boosting_classifier</td>
+      <td>0.24399</td>
+    </tr>
+    <tr>
+      <td>size_mb</td>
+      <td>0.18641</td>
+      <td>gradient_boosting_classifier</td>
+      <td>0.18641</td>
+    </tr>
+    <tr>
+      <td>days_stored</td>
+      <td>0.07105</td>
+      <td>gradient_boosting_classifier</td>
+      <td>0.07105</td>
+    </tr>
+    <tr>
+      <td>days_since_last_access</td>
+      <td>0.06514</td>
+      <td>gradient_boosting_classifier</td>
+      <td>0.06514</td>
+    </tr>
+    <tr>
+      <td>created_hour</td>
+      <td>0.03788</td>
+      <td>gradient_boosting_classifier</td>
+      <td>0.03788</td>
+    </tr>
+    <tr>
+      <td>scenario_name_17_operacion_24x7</td>
+      <td>0.03232</td>
+      <td>gradient_boosting_classifier</td>
+      <td>0.03232</td>
+    </tr>
+    <tr>
+      <td>queue_pressure</td>
+      <td>0.02017</td>
+      <td>gradient_boosting_classifier</td>
+      <td>0.02017</td>
+    </tr>
+    <tr>
+      <td>movement_storage</td>
+      <td>0.01258</td>
+      <td>gradient_boosting_classifier</td>
+      <td>0.01258</td>
+    </tr>
+    <tr>
+      <td>scenario_name_10_duplicidad_alta</td>
+      <td>0.00734</td>
+      <td>gradient_boosting_classifier</td>
+      <td>0.00734</td>
+    </tr>
+    <tr>
+      <td>scenario_name_19_costos_agresivos</td>
+      <td>0.00639</td>
+      <td>gradient_boosting_classifier</td>
+      <td>0.00639</td>
+    </tr>
+    <tr>
+      <td>scenario_name_18_finde_alto</td>
+      <td>0.00507</td>
+      <td>gradient_boosting_classifier</td>
+      <td>0.00507</td>
+    </tr>
+    <tr>
+      <td>scenario_name_07_pdf_documental</td>
+      <td>0.00380</td>
+      <td>gradient_boosting_classifier</td>
+      <td>0.00380</td>
+    </tr>
+    <tr>
+      <td>scenario_name_15_archive_mal_gobernado</td>
+      <td>0.00351</td>
+      <td>gradient_boosting_classifier</td>
+      <td>0.00351</td>
+    </tr>
+    <tr>
+      <td>scenario_name_02_carga_media_estable</td>
+      <td>0.00333</td>
+      <td>gradient_boosting_classifier</td>
+      <td>0.00333</td>
+    </tr>
+    <tr>
+      <td>hourly_arrival_count</td>
+      <td>0.00190</td>
+      <td>gradient_boosting_classifier</td>
+      <td>0.00190</td>
+    </tr>
+    <tr>
+      <td>scenario_name_11_huerfanos_json_pdf</td>
+      <td>0.00101</td>
+      <td>gradient_boosting_classifier</td>
+      <td>0.00101</td>
+    </tr>
+    <tr>
+      <td>storage_tier_archive</td>
+      <td>0.00093</td>
+      <td>gradient_boosting_classifier</td>
+      <td>0.00093</td>
+    </tr>
+    <tr>
+      <td>time_slot_tarde</td>
+      <td>0.00090</td>
+      <td>gradient_boosting_classifier</td>
+      <td>0.00090</td>
+    </tr>
+    <tr>
+      <td>scenario_name_04_baja_capacidad</td>
+      <td>0.00078</td>
+      <td>gradient_boosting_classifier</td>
+      <td>0.00078</td>
+    </tr>
+    <tr>
+      <td>file_type_pdf</td>
+      <td>0.00064</td>
+      <td>gradient_boosting_classifier</td>
+      <td>0.00064</td>
+    </tr>
+    <tr>
+      <td>time_slot_madrugada</td>
+      <td>0.00053</td>
+      <td>gradient_boosting_classifier</td>
+      <td>0.00053</td>
+    </tr>
+    <tr>
+      <td>file_type_mp4</td>
+      <td>0.00048</td>
+      <td>gradient_boosting_classifier</td>
+      <td>0.00048</td>
+    </tr>
+    <tr>
+      <td>scenario_name_08_jpg_masivo</td>
+      <td>0.00042</td>
+      <td>gradient_boosting_classifier</td>
+      <td>0.00042</td>
+    </tr>
+    <tr>
+      <td>scenario_name_05_red_lenta</td>
+      <td>0.00042</td>
+      <td>gradient_boosting_classifier</td>
+      <td>0.00042</td>
+    </tr>
+  </tbody>
+</table>
+        </div>
+    </section>
+    <section class='card'><h2>Gráficos</h2><div class='plot-grid'><figure class='plot-card'><img src='../plots/confusion_matrix.png' alt='Confusion Matrix'><figcaption>Confusion Matrix</figcaption></figure><figure class='plot-card'><img src='../plots/feature_importance.png' alt='Feature Importance'><figcaption>Feature Importance</figcaption></figure></div></section>
+    <section class="card">
+        <h2>3. Muestra de predicciones</h2>
+        <p class="section-desc"> Se muestran las primeras 40 filas.</p>
+        <div class="table-container">
+            <table class="dataframe data-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>target</th>
+      <th>y_true</th>
+      <th>y_pred</th>
+      <th>score</th>
+      <th>residual</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>has_error</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0.28233</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.05547</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.06646</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.06516</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.04341</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.08812</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.04049</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0.36607</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.09062</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.03527</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.23967</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.05476</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.04288</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.04167</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.16947</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.03278</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0.05754</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.16479</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.14636</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.04347</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.05690</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.02609</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0.03664</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.04731</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.05014</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.03784</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.04535</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.03753</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.06906</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.04379</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0.55611</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0.12801</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.03512</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.04283</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.11641</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.05443</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.10195</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.02133</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0.06367</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.04055</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+        </div>
+    </section>
+    
+</main>
+</body>
+</html>

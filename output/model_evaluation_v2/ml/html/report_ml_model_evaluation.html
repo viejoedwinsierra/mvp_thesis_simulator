@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Evaluación de modelos guardados sobre nuevos datasets</title>
+<style>
+:root {
+  --bg:#f3f6fa; --card:#fff; --ink:#17212b; --muted:#667085;
+  --primary:#17324d; --accent:#2c7be5; --border:#e5edf3;
+}
+body { font-family: Arial, sans-serif; margin:0; background:var(--bg); color:var(--ink); }
+.page { max-width:1360px; margin:0 auto; padding:32px; }
+.hero { background:linear-gradient(135deg,#17324d,#245a89); color:white; padding:28px; border-radius:18px; margin-bottom:24px; }
+.hero h1 { margin:0 0 8px 0; font-size:30px; }
+.hero p { margin:0; opacity:.92; }
+.card { background:white; padding:22px; margin-bottom:22px; border-radius:16px; border:1px solid var(--border); box-shadow:0 2px 10px rgba(0,0,0,.05); }
+.note { background:#eef6ff; border-left:6px solid var(--accent); padding:16px 18px; border-radius:12px; margin-bottom:22px; line-height:1.5; }
+h2 { color:var(--primary); margin-top:0; border-bottom:1px solid var(--border); padding-bottom:9px; }
+.section-desc,.muted { color:var(--muted); font-size:14px; }
+.metrics-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:16px; margin-bottom:22px; }
+.metric-card { background:white; border:1px solid var(--border); border-radius:14px; padding:18px; box-shadow:0 1px 6px rgba(0,0,0,.05); }
+.metric-label { font-size:13px; color:var(--muted); margin-bottom:8px; }
+.metric-value { font-size:25px; font-weight:700; color:var(--primary); }
+.metric-hint { font-size:12px; color:var(--muted); margin-top:8px; }
+.table-container { overflow-x:auto; }
+table.data-table, table.dataframe { border-collapse:collapse; width:100%; font-size:13px; }
+table.data-table th, table.dataframe th { background-color:var(--primary); color:white; padding:8px; text-align:left; }
+table.data-table td, table.dataframe td { border:1px solid #dde5ed; padding:7px; vertical-align:top; }
+table.data-table tr:nth-child(even), table.dataframe tr:nth-child(even) { background-color:#f8fafc; }
+.plot-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:20px; }
+.plot-card { margin:0; background:#fbfdff; border:1px solid var(--border); border-radius:14px; padding:12px; }
+.plot-card img { width:100%; max-width:100%; display:block; border-radius:10px; border:1px solid #d9e2ec; background:white; }
+.plot-card figcaption { margin-top:8px; font-size:13px; color:var(--muted); text-align:center; }
+</style>
+</head>
+<body>
+<main class="page">
+<section class="hero">
+<h1>Evaluación de modelos guardados sobre nuevos datasets</h1>
+<p>Evaluación de modelos guardados sobre nuevos datasets generados por el simulador, sin reentrenamiento.</p>
+</section>
+
+    <section class="note">
+        <strong>Directorio de modelos:</strong> output\modeling\ml<br>
+        <strong>Evidencia exportada:</strong> output\model_evaluation_v2\ml<br>
+        <strong>Threshold clasificación:</strong> 0.5<br><br>
+        Este reporte representa la fase tipo producción: se generan nuevos datasets y los modelos guardados se evalúan sin reentrenar.
+        Esto permite medir generalización, robustez, degradación y sensibilidad ante nueva variabilidad simulada.
+    </section>
+
+    <section class="metrics-grid">
+        
+    <div class="metric-card">
+        <div class="metric-label">Modelos OK</div>
+        <div class="metric-value">6.0000</div>
+        <div class="metric-hint">Evaluados sin reentrenar</div>
+    </div>
+    
+    <div class="metric-card">
+        <div class="metric-label">Modelos con error</div>
+        <div class="metric-value">0.0000</div>
+        <div class="metric-hint">Revisar registry/model path</div>
+    </div>
+    
+    <div class="metric-card">
+        <div class="metric-label">Mejor R²</div>
+        <div class="metric-value">0.9894</div>
+        <div class="metric-hint">Regresión</div>
+    </div>
+    
+    <div class="metric-card">
+        <div class="metric-label">Mejor ROC-AUC</div>
+        <div class="metric-value">0.9793</div>
+        <div class="metric-hint">Clasificación</div>
+    </div>
+    
+    </section>
+    
+    <section class="card">
+        <h2>1. Hallazgos de evaluación</h2>
+        <p class="section-desc">Resumen ejecutivo sobre el desempeño de modelos guardados.</p>
+        <div class="table-container">
+            <table class="dataframe data-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>hallazgo</th>
+      <th>technique</th>
+      <th>target</th>
+      <th>value</th>
+      <th>lectura</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>mejor_r2</td>
+      <td>gradient_boosting_regressor</td>
+      <td>storage_cost</td>
+      <td>0.98940</td>
+      <td>Modelo con mejor capacidad explicativa sobre nuevos datos.</td>
+    </tr>
+    <tr>
+      <td>menor_rmse</td>
+      <td>gradient_boosting_regressor</td>
+      <td>storage_cost</td>
+      <td>79.03213</td>
+      <td>Modelo con menor error sobre nuevos datos.</td>
+    </tr>
+    <tr>
+      <td>mejor_roc_auc</td>
+      <td>random_forest_classifier</td>
+      <td>has_error</td>
+      <td>0.97929</td>
+      <td>Modelo con mejor separación entre clases en nuevos datos.</td>
+    </tr>
+    <tr>
+      <td>mejor_recall</td>
+      <td>random_forest_classifier</td>
+      <td>has_error</td>
+      <td>0.85314</td>
+      <td>Modelo que recupera más errores reales.</td>
+    </tr>
+  </tbody>
+</table>
+        </div>
+    </section>
+    
+    <section class="card">
+        <h2>2. Métricas completas</h2>
+        <p class="section-desc">Resultados sobre el dataset nuevo.</p>
+        <div class="table-container">
+            <table class="dataframe data-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>family</th>
+      <th>technique</th>
+      <th>target</th>
+      <th>task_type</th>
+      <th>status</th>
+      <th>n</th>
+      <th>accuracy</th>
+      <th>precision</th>
+      <th>recall</th>
+      <th>f1</th>
+      <th>roc_auc</th>
+      <th>model_path</th>
+      <th>mae</th>
+      <th>mse</th>
+      <th>rmse</th>
+      <th>r2</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>machine_learning</td>
+      <td>gradient_boosting_classifier</td>
+      <td>has_error</td>
+      <td>classification</td>
+      <td>ok</td>
+      <td>12223</td>
+      <td>0.91647</td>
+      <td>0.86873</td>
+      <td>0.18564</td>
+      <td>0.30591</td>
+      <td>0.83472</td>
+      <td>output\modeling\ml\gradient_boosting_classifier\models\gradient_boosting_classifier_has_error.joblib</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <td>machine_learning</td>
+      <td>gradient_boosting_regressor</td>
+      <td>storage_cost</td>
+      <td>regression</td>
+      <td>ok</td>
+      <td>12223</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>output\modeling\ml\gradient_boosting_regressor\models\gradient_boosting_regressor_storage_cost.joblib</td>
+      <td>9.25989</td>
+      <td>6246.07831</td>
+      <td>79.03213</td>
+      <td>0.98940</td>
+    </tr>
+    <tr>
+      <td>machine_learning</td>
+      <td>hist_gradient_boosting_classifier</td>
+      <td>has_error</td>
+      <td>classification</td>
+      <td>ok</td>
+      <td>12223</td>
+      <td>0.95304</td>
+      <td>0.96912</td>
+      <td>0.54373</td>
+      <td>0.69662</td>
+      <td>0.96372</td>
+      <td>output\modeling\ml\hist_gradient_boosting_classifier\models\hist_gradient_boosting_classifier_has_error.joblib</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <td>machine_learning</td>
+      <td>hist_gradient_boosting_regressor</td>
+      <td>storage_cost</td>
+      <td>regression</td>
+      <td>ok</td>
+      <td>12223</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>output\modeling\ml\hist_gradient_boosting_regressor\models\hist_gradient_boosting_regressor_storage_cost.joblib</td>
+      <td>16.03245</td>
+      <td>51088.87939</td>
+      <td>226.02849</td>
+      <td>0.91327</td>
+    </tr>
+    <tr>
+      <td>machine_learning</td>
+      <td>random_forest_classifier</td>
+      <td>has_error</td>
+      <td>classification</td>
+      <td>ok</td>
+      <td>12223</td>
+      <td>0.98176</td>
+      <td>0.95829</td>
+      <td>0.85314</td>
+      <td>0.90266</td>
+      <td>0.97929</td>
+      <td>output\modeling\ml\random_forest_classifier\models\random_forest_classifier_has_error.joblib</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <td>machine_learning</td>
+      <td>random_forest_regressor</td>
+      <td>storage_cost</td>
+      <td>regression</td>
+      <td>ok</td>
+      <td>12223</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>output\modeling\ml\random_forest_regressor\models\random_forest_regressor_storage_cost.joblib</td>
+      <td>9.01384</td>
+      <td>16768.50919</td>
+      <td>129.49328</td>
+      <td>0.97153</td>
+    </tr>
+  </tbody>
+</table>
+        </div>
+    </section>
+    
+    <section class="card">
+        <h2>Gráficos de evaluación</h2>
+        <div class="plot-grid">
+        <figure class="plot-card">
+            <img src="../plots/evaluation_r2.png" alt="Evaluation R2">
+            <figcaption>Evaluation R2</figcaption>
+        </figure>
+        
+        <figure class="plot-card">
+            <img src="../plots/evaluation_rmse.png" alt="Evaluation Rmse">
+            <figcaption>Evaluation Rmse</figcaption>
+        </figure>
+        
+        <figure class="plot-card">
+            <img src="../plots/evaluation_mae.png" alt="Evaluation Mae">
+            <figcaption>Evaluation Mae</figcaption>
+        </figure>
+        
+        <figure class="plot-card">
+            <img src="../plots/evaluation_f1.png" alt="Evaluation F1">
+            <figcaption>Evaluation F1</figcaption>
+        </figure>
+        
+        <figure class="plot-card">
+            <img src="../plots/evaluation_roc_auc.png" alt="Evaluation Roc Auc">
+            <figcaption>Evaluation Roc Auc</figcaption>
+        </figure>
+        
+        <figure class="plot-card">
+            <img src="../plots/evaluation_recall.png" alt="Evaluation Recall">
+            <figcaption>Evaluation Recall</figcaption>
+        </figure>
+        
+        <figure class="plot-card">
+            <img src="../plots/evaluation_precision.png" alt="Evaluation Precision">
+            <figcaption>Evaluation Precision</figcaption>
+        </figure>
+        
+        <figure class="plot-card">
+            <img src="../plots/gradient_boosting_classifier_confusion_matrix.png" alt="Gradient Boosting Classifier Confusion Matrix">
+            <figcaption>Gradient Boosting Classifier Confusion Matrix</figcaption>
+        </figure>
+        
+        <figure class="plot-card">
+            <img src="../plots/gradient_boosting_regressor_actual_vs_predicted.png" alt="Gradient Boosting Regressor Actual Vs Predicted">
+            <figcaption>Gradient Boosting Regressor Actual Vs Predicted</figcaption>
+        </figure>
+        
+        <figure class="plot-card">
+            <img src="../plots/gradient_boosting_regressor_residuals.png" alt="Gradient Boosting Regressor Residuals">
+            <figcaption>Gradient Boosting Regressor Residuals</figcaption>
+        </figure>
+        
+        <figure class="plot-card">
+            <img src="../plots/hist_gradient_boosting_classifier_confusion_matrix.png" alt="Hist Gradient Boosting Classifier Confusion Matrix">
+            <figcaption>Hist Gradient Boosting Classifier Confusion Matrix</figcaption>
+        </figure>
+        
+        <figure class="plot-card">
+            <img src="../plots/hist_gradient_boosting_regressor_actual_vs_predicted.png" alt="Hist Gradient Boosting Regressor Actual Vs Predicted">
+            <figcaption>Hist Gradient Boosting Regressor Actual Vs Predicted</figcaption>
+        </figure>
+        
+        <figure class="plot-card">
+            <img src="../plots/hist_gradient_boosting_regressor_residuals.png" alt="Hist Gradient Boosting Regressor Residuals">
+            <figcaption>Hist Gradient Boosting Regressor Residuals</figcaption>
+        </figure>
+        
+        <figure class="plot-card">
+            <img src="../plots/random_forest_classifier_confusion_matrix.png" alt="Random Forest Classifier Confusion Matrix">
+            <figcaption>Random Forest Classifier Confusion Matrix</figcaption>
+        </figure>
+        
+        <figure class="plot-card">
+            <img src="../plots/random_forest_regressor_actual_vs_predicted.png" alt="Random Forest Regressor Actual Vs Predicted">
+            <figcaption>Random Forest Regressor Actual Vs Predicted</figcaption>
+        </figure>
+        
+        <figure class="plot-card">
+            <img src="../plots/random_forest_regressor_residuals.png" alt="Random Forest Regressor Residuals">
+            <figcaption>Random Forest Regressor Residuals</figcaption>
+        </figure>
+        </div>
+    </section>
+    
+    <section class="card">
+        <h2>3. Predicciones exportadas</h2>
+        <p class="section-desc">Cantidad de predicciones generadas por modelo.</p>
+        <div class="table-container">
+            <table class="dataframe data-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>modelo</th>
+      <th>predicciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>gradient_boosting_classifier_has_error</td>
+      <td>12223</td>
+    </tr>
+    <tr>
+      <td>gradient_boosting_regressor_storage_cost</td>
+      <td>12223</td>
+    </tr>
+    <tr>
+      <td>hist_gradient_boosting_classifier_has_error</td>
+      <td>12223</td>
+    </tr>
+    <tr>
+      <td>hist_gradient_boosting_regressor_storage_cost</td>
+      <td>12223</td>
+    </tr>
+    <tr>
+      <td>random_forest_classifier_has_error</td>
+      <td>12223</td>
+    </tr>
+    <tr>
+      <td>random_forest_regressor_storage_cost</td>
+      <td>12223</td>
+    </tr>
+  </tbody>
+</table>
+        </div>
+    </section>
+    
+</main>
+</body>
+</html>

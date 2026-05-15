@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Reporte ML - hist_gradient_boosting_classifier</title>
+<style>
+:root {
+  --bg:#f3f6fa; --card:#fff; --ink:#17212b; --muted:#667085;
+  --primary:#17324d; --accent:#2c7be5; --border:#e5edf3;
+}
+body { font-family: Arial, sans-serif; margin:0; background:var(--bg); color:var(--ink); }
+.page { max-width:1320px; margin:0 auto; padding:32px; }
+.hero { background:linear-gradient(135deg,#17324d,#245a89); color:white; padding:28px; border-radius:18px; margin-bottom:24px; }
+.hero h1 { margin:0 0 8px 0; font-size:30px; }
+.hero p { margin:0; opacity:.92; }
+.card { background:white; padding:22px; margin-bottom:22px; border-radius:16px; border:1px solid var(--border); box-shadow:0 2px 10px rgba(0,0,0,.05); }
+.note { background:#eef6ff; border-left:6px solid var(--accent); padding:16px 18px; border-radius:12px; margin-bottom:22px; line-height:1.5; }
+h2 { color:var(--primary); margin-top:0; border-bottom:1px solid var(--border); padding-bottom:9px; }
+.section-desc,.muted { color:var(--muted); font-size:14px; }
+.metrics-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:16px; margin-bottom:22px; }
+.metric-card { background:white; border:1px solid var(--border); border-radius:14px; padding:18px; box-shadow:0 1px 6px rgba(0,0,0,.05); }
+.metric-label { font-size:13px; color:var(--muted); margin-bottom:8px; }
+.metric-value { font-size:25px; font-weight:700; color:var(--primary); }
+.metric-hint { font-size:12px; color:var(--muted); margin-top:8px; }
+.table-container { overflow-x:auto; }
+table.data-table, table.dataframe { border-collapse:collapse; width:100%; font-size:13px; }
+table.data-table th, table.dataframe th { background-color:var(--primary); color:white; padding:8px; text-align:left; }
+table.data-table td, table.dataframe td { border:1px solid #dde5ed; padding:7px; vertical-align:top; }
+table.data-table tr:nth-child(even), table.dataframe tr:nth-child(even) { background-color:#f8fafc; }
+.plot-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:20px; }
+.plot-card { margin:0; background:#fbfdff; border:1px solid var(--border); border-radius:14px; padding:12px; }
+.plot-card img { width:100%; max-width:100%; display:block; border-radius:10px; border:1px solid #d9e2ec; background:white; }
+.plot-card figcaption { margin-top:8px; font-size:13px; color:var(--muted); text-align:center; }
+a { color:var(--accent); font-weight:600; text-decoration:none; }
+</style>
+</head>
+<body>
+<main class="page">
+<section class="hero"><h1>Reporte ML - hist_gradient_boosting_classifier</h1><p>Modelamiento de Machine Learning aplicado al universo simulado de Blob Storage.</p></section>
+
+    <section class="note">
+      <strong>Técnica:</strong> hist_gradient_boosting_classifier<br>
+      <strong>Target:</strong> has_error<br>
+      <strong>Tipo:</strong> classification<br>
+      <strong>Modelo:</strong> output\modeling\ml\hist_gradient_boosting_classifier\models\hist_gradient_boosting_classifier_has_error.joblib<br><br>
+      Este reporte permite comparar modelos ML contra los modelos estadísticos previos.
+      Los modelos de árbol y boosting capturan no linealidades y relaciones de interacción que las regresiones clásicas no representan bien.
+    </section>
+    <section class="metrics-grid">
+    <div class="metric-card">
+        <div class="metric-label">R²</div>
+        <div class="metric-value">N/A</div>
+        <div class="metric-hint">Regresión</div>
+    </div>
+    
+    <div class="metric-card">
+        <div class="metric-label">RMSE</div>
+        <div class="metric-value">N/A</div>
+        <div class="metric-hint">Error</div>
+    </div>
+    
+    <div class="metric-card">
+        <div class="metric-label">F1</div>
+        <div class="metric-value">0.4663</div>
+        <div class="metric-hint">Clasificación</div>
+    </div>
+    
+    <div class="metric-card">
+        <div class="metric-label">ROC-AUC</div>
+        <div class="metric-value">0.8610</div>
+        <div class="metric-hint">Separabilidad</div>
+    </div>
+    </section>
+    
+    <section class="card">
+        <h2>1. Métricas</h2>
+        <p class="section-desc"></p>
+        <div class="table-container">
+            <table class="dataframe data-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>technique</th>
+      <th>target</th>
+      <th>task_type</th>
+      <th>n</th>
+      <th>accuracy</th>
+      <th>precision</th>
+      <th>recall</th>
+      <th>f1</th>
+      <th>roc_auc</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>hist_gradient_boosting_classifier</td>
+      <td>has_error</td>
+      <td>classification</td>
+      <td>3056</td>
+      <td>0.92736</td>
+      <td>0.85841</td>
+      <td>0.32013</td>
+      <td>0.46635</td>
+      <td>0.861</td>
+    </tr>
+  </tbody>
+</table>
+        </div>
+    </section>
+    <section class='card'><h2>2. Top variables</h2><p class='muted'>No disponible.</p></section><section class='card'><h2>Gráficos</h2><div class='plot-grid'><figure class='plot-card'><img src='../plots/confusion_matrix.png' alt='Confusion Matrix'><figcaption>Confusion Matrix</figcaption></figure></div></section>
+    <section class="card">
+        <h2>3. Muestra de predicciones</h2>
+        <p class="section-desc"> Se muestran las primeras 40 filas.</p>
+        <div class="table-container">
+            <table class="dataframe data-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>target</th>
+      <th>y_true</th>
+      <th>y_pred</th>
+      <th>score</th>
+      <th>residual</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>has_error</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0.40037</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.03557</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.05224</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.13488</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.02466</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.06280</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.03430</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0.58715</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.09341</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.00802</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.20559</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.03797</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.02826</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.01799</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.11631</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.00927</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0.10493</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.18853</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.11541</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.01946</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.14113</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.00371</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0.04383</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.02101</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.02486</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.03635</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.13357</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.01342</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.09675</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.02493</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0.58110</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0.75787</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.03020</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.01902</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.06905</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.01955</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.08002</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.00449</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0.02482</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.03066</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+        </div>
+    </section>
+    
+</main>
+</body>
+</html>

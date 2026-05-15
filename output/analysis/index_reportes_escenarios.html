@@ -1,0 +1,612 @@
+
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <title>Indice general - Analisis por escenario</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 32px;
+                color: #2c3e50;
+                background: #f8f9fa;
+            }
+
+            h1 {
+                margin-bottom: 6px;
+                color: #1f3a56;
+            }
+
+            h2 {
+                color: #1f3a56;
+                margin-top: 0;
+                border-bottom: 2px solid #e8eef3;
+                padding-bottom: 8px;
+            }
+
+            h3 {
+                margin-top: 0;
+                color: #2c3e50;
+                font-size: 15px;
+            }
+
+            .subtitle {
+                color: #666;
+                margin-bottom: 24px;
+            }
+
+            .card {
+                background: white;
+                padding: 20px;
+                margin-bottom: 24px;
+                border-radius: 10px;
+                box-shadow: 0 1px 5px rgba(0,0,0,0.08);
+            }
+
+            .note {
+                background: #eef6ff;
+                border-left: 5px solid #2c7be5;
+                padding: 14px;
+                border-radius: 6px;
+                margin-bottom: 24px;
+                font-size: 14px;
+            }
+
+            .summary-card {
+                border-left: 5px solid #198754;
+            }
+
+            .section-desc {
+                color: #555;
+                font-size: 14px;
+                margin-top: -4px;
+                margin-bottom: 14px;
+            }
+
+            .table-container {
+                overflow-x: auto;
+            }
+
+            table {
+                border-collapse: collapse;
+                width: 100%;
+                font-size: 13px;
+            }
+
+            th {
+                background-color: #2c3e50;
+                color: white;
+                padding: 8px;
+                text-align: left;
+                white-space: nowrap;
+            }
+
+            td {
+                border: 1px solid #ddd;
+                padding: 7px;
+                white-space: nowrap;
+            }
+
+            tr:nth-child(even) {
+                background-color: #f2f2f2;
+            }
+
+            .grid {
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 20px;
+            }
+
+            .plot-card {
+                background: #ffffff;
+                padding: 16px;
+                border-radius: 8px;
+                border: 1px solid #e4e4e4;
+            }
+
+            img {
+                max-width: 100%;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                background: white;
+            }
+
+            @media (max-width: 900px) {
+                .grid {
+                    grid-template-columns: 1fr;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Indice general - Analisis por escenario</h1>
+        <p class="subtitle">
+            Fase descriptiva univariada para simulación Monte Carlo de Blob Storage.
+        </p>
+
+        <div class="note">
+            Este reporte es estrictamente univariado: no contiene correlaciones,
+            regresiones, VIF, cruces entre variables, scatter plots, heatmaps ni análisis bivariado.
+            El conteo temporal de muestras se incluye únicamente como control de frecuencia.
+        </div>
+
+        
+    <section class="card summary-card">
+        <h2>Indice de reportes por escenario</h2>
+        <p class='section-desc'>Cada fila abre el reporte HTML descriptivo y avanzado de un escenario.</p>
+        <div class="table-container">
+            <table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>scenario</th>
+      <th>rows</th>
+      <th>csv_files</th>
+      <th>descriptive_report</th>
+      <th>advanced_report</th>
+      <th>descriptive_plots_dir</th>
+      <th>advanced_plots_dir</th>
+      <th>tables_dir</th>
+      <th>advanced_tables_count</th>
+      <th>status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>01_base_controlada_100</td>
+      <td>739</td>
+      <td>7</td>
+      <td><a href='01_base_controlada_100/html/report_01_base_controlada_100.html'>Abrir descriptivo</a></td>
+      <td><a href='01_base_controlada_100/html/advanced_report_01_base_controlada_100.html'>Abrir avanzado</a></td>
+      <td>output\analysis\01_base_controlada_100\plots\descriptive</td>
+      <td>output\analysis\01_base_controlada_100\plots\advanced</td>
+      <td>output\analysis\01_base_controlada_100\tables</td>
+      <td>11</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>02_carga_media_estable</td>
+      <td>707</td>
+      <td>7</td>
+      <td><a href='02_carga_media_estable/html/report_02_carga_media_estable.html'>Abrir descriptivo</a></td>
+      <td><a href='02_carga_media_estable/html/advanced_report_02_carga_media_estable.html'>Abrir avanzado</a></td>
+      <td>output\analysis\02_carga_media_estable\plots\descriptive</td>
+      <td>output\analysis\02_carga_media_estable\plots\advanced</td>
+      <td>output\analysis\02_carga_media_estable\tables</td>
+      <td>11</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>03_pico_tarde</td>
+      <td>715</td>
+      <td>7</td>
+      <td><a href='03_pico_tarde/html/report_03_pico_tarde.html'>Abrir descriptivo</a></td>
+      <td><a href='03_pico_tarde/html/advanced_report_03_pico_tarde.html'>Abrir avanzado</a></td>
+      <td>output\analysis\03_pico_tarde\plots\descriptive</td>
+      <td>output\analysis\03_pico_tarde\plots\advanced</td>
+      <td>output\analysis\03_pico_tarde\tables</td>
+      <td>11</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>04_baja_capacidad</td>
+      <td>729</td>
+      <td>7</td>
+      <td><a href='04_baja_capacidad/html/report_04_baja_capacidad.html'>Abrir descriptivo</a></td>
+      <td><a href='04_baja_capacidad/html/advanced_report_04_baja_capacidad.html'>Abrir avanzado</a></td>
+      <td>output\analysis\04_baja_capacidad\plots\descriptive</td>
+      <td>output\analysis\04_baja_capacidad\plots\advanced</td>
+      <td>output\analysis\04_baja_capacidad\tables</td>
+      <td>11</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>05_red_lenta</td>
+      <td>724</td>
+      <td>7</td>
+      <td><a href='05_red_lenta/html/report_05_red_lenta.html'>Abrir descriptivo</a></td>
+      <td><a href='05_red_lenta/html/advanced_report_05_red_lenta.html'>Abrir avanzado</a></td>
+      <td>output\analysis\05_red_lenta\plots\descriptive</td>
+      <td>output\analysis\05_red_lenta\plots\advanced</td>
+      <td>output\analysis\05_red_lenta\tables</td>
+      <td>11</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>06_mp4_pesado</td>
+      <td>736</td>
+      <td>7</td>
+      <td><a href='06_mp4_pesado/html/report_06_mp4_pesado.html'>Abrir descriptivo</a></td>
+      <td><a href='06_mp4_pesado/html/advanced_report_06_mp4_pesado.html'>Abrir avanzado</a></td>
+      <td>output\analysis\06_mp4_pesado\plots\descriptive</td>
+      <td>output\analysis\06_mp4_pesado\plots\advanced</td>
+      <td>output\analysis\06_mp4_pesado\tables</td>
+      <td>11</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>07_pdf_documental</td>
+      <td>692</td>
+      <td>7</td>
+      <td><a href='07_pdf_documental/html/report_07_pdf_documental.html'>Abrir descriptivo</a></td>
+      <td><a href='07_pdf_documental/html/advanced_report_07_pdf_documental.html'>Abrir avanzado</a></td>
+      <td>output\analysis\07_pdf_documental\plots\descriptive</td>
+      <td>output\analysis\07_pdf_documental\plots\advanced</td>
+      <td>output\analysis\07_pdf_documental\tables</td>
+      <td>11</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>08_jpg_masivo</td>
+      <td>757</td>
+      <td>7</td>
+      <td><a href='08_jpg_masivo/html/report_08_jpg_masivo.html'>Abrir descriptivo</a></td>
+      <td><a href='08_jpg_masivo/html/advanced_report_08_jpg_masivo.html'>Abrir avanzado</a></td>
+      <td>output\analysis\08_jpg_masivo\plots\descriptive</td>
+      <td>output\analysis\08_jpg_masivo\plots\advanced</td>
+      <td>output\analysis\08_jpg_masivo\tables</td>
+      <td>11</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>10_duplicidad_alta</td>
+      <td>685</td>
+      <td>7</td>
+      <td><a href='10_duplicidad_alta/html/report_10_duplicidad_alta.html'>Abrir descriptivo</a></td>
+      <td><a href='10_duplicidad_alta/html/advanced_report_10_duplicidad_alta.html'>Abrir avanzado</a></td>
+      <td>output\analysis\10_duplicidad_alta\plots\descriptive</td>
+      <td>output\analysis\10_duplicidad_alta\plots\advanced</td>
+      <td>output\analysis\10_duplicidad_alta\tables</td>
+      <td>11</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>11_huerfanos_json_pdf</td>
+      <td>715</td>
+      <td>7</td>
+      <td><a href='11_huerfanos_json_pdf/html/report_11_huerfanos_json_pdf.html'>Abrir descriptivo</a></td>
+      <td><a href='11_huerfanos_json_pdf/html/advanced_report_11_huerfanos_json_pdf.html'>Abrir avanzado</a></td>
+      <td>output\analysis\11_huerfanos_json_pdf\plots\descriptive</td>
+      <td>output\analysis\11_huerfanos_json_pdf\plots\advanced</td>
+      <td>output\analysis\11_huerfanos_json_pdf\tables</td>
+      <td>11</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>12_null_json_alto</td>
+      <td>730</td>
+      <td>7</td>
+      <td><a href='12_null_json_alto/html/report_12_null_json_alto.html'>Abrir descriptivo</a></td>
+      <td><a href='12_null_json_alto/html/advanced_report_12_null_json_alto.html'>Abrir avanzado</a></td>
+      <td>output\analysis\12_null_json_alto\plots\descriptive</td>
+      <td>output\analysis\12_null_json_alto\plots\advanced</td>
+      <td>output\analysis\12_null_json_alto\tables</td>
+      <td>11</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>13_timeout_blob</td>
+      <td>731</td>
+      <td>7</td>
+      <td><a href='13_timeout_blob/html/report_13_timeout_blob.html'>Abrir descriptivo</a></td>
+      <td><a href='13_timeout_blob/html/advanced_report_13_timeout_blob.html'>Abrir avanzado</a></td>
+      <td>output\analysis\13_timeout_blob\plots\descriptive</td>
+      <td>output\analysis\13_timeout_blob\plots\advanced</td>
+      <td>output\analysis\13_timeout_blob\tables</td>
+      <td>11</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>14_hot_storage_extremo</td>
+      <td>663</td>
+      <td>7</td>
+      <td><a href='14_hot_storage_extremo/html/report_14_hot_storage_extremo.html'>Abrir descriptivo</a></td>
+      <td><a href='14_hot_storage_extremo/html/advanced_report_14_hot_storage_extremo.html'>Abrir avanzado</a></td>
+      <td>output\analysis\14_hot_storage_extremo\plots\descriptive</td>
+      <td>output\analysis\14_hot_storage_extremo\plots\advanced</td>
+      <td>output\analysis\14_hot_storage_extremo\tables</td>
+      <td>11</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>15_archive_mal_gobernado</td>
+      <td>757</td>
+      <td>7</td>
+      <td><a href='15_archive_mal_gobernado/html/report_15_archive_mal_gobernado.html'>Abrir descriptivo</a></td>
+      <td><a href='15_archive_mal_gobernado/html/advanced_report_15_archive_mal_gobernado.html'>Abrir avanzado</a></td>
+      <td>output\analysis\15_archive_mal_gobernado\plots\descriptive</td>
+      <td>output\analysis\15_archive_mal_gobernado\plots\advanced</td>
+      <td>output\analysis\15_archive_mal_gobernado\tables</td>
+      <td>11</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>17_operacion_24x7</td>
+      <td>784</td>
+      <td>7</td>
+      <td><a href='17_operacion_24x7/html/report_17_operacion_24x7.html'>Abrir descriptivo</a></td>
+      <td><a href='17_operacion_24x7/html/advanced_report_17_operacion_24x7.html'>Abrir avanzado</a></td>
+      <td>output\analysis\17_operacion_24x7\plots\descriptive</td>
+      <td>output\analysis\17_operacion_24x7\plots\advanced</td>
+      <td>output\analysis\17_operacion_24x7\tables</td>
+      <td>11</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>18_finde_alto</td>
+      <td>628</td>
+      <td>7</td>
+      <td><a href='18_finde_alto/html/report_18_finde_alto.html'>Abrir descriptivo</a></td>
+      <td><a href='18_finde_alto/html/advanced_report_18_finde_alto.html'>Abrir avanzado</a></td>
+      <td>output\analysis\18_finde_alto\plots\descriptive</td>
+      <td>output\analysis\18_finde_alto\plots\advanced</td>
+      <td>output\analysis\18_finde_alto\tables</td>
+      <td>11</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>19_costos_agresivos</td>
+      <td>731</td>
+      <td>7</td>
+      <td><a href='19_costos_agresivos/html/report_19_costos_agresivos.html'>Abrir descriptivo</a></td>
+      <td><a href='19_costos_agresivos/html/advanced_report_19_costos_agresivos.html'>Abrir avanzado</a></td>
+      <td>output\analysis\19_costos_agresivos\plots\descriptive</td>
+      <td>output\analysis\19_costos_agresivos\plots\advanced</td>
+      <td>output\analysis\19_costos_agresivos\tables</td>
+      <td>11</td>
+      <td>OK</td>
+    </tr>
+  </tbody>
+</table>
+        </div>
+    </section>
+    
+    <section class="card ">
+        <h2>Resumen tecnico de ejecucion</h2>
+        <p class='section-desc'>Trazabilidad de filas, columnas, archivos, reportes, graficos y tablas generadas.</p>
+        <div class="table-container">
+            <table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>scenario</th>
+      <th>rows</th>
+      <th>columns</th>
+      <th>csv_files</th>
+      <th>descriptive_report</th>
+      <th>advanced_report</th>
+      <th>descriptive_plots_dir</th>
+      <th>advanced_plots_dir</th>
+      <th>tables_dir</th>
+      <th>advanced_tables_count</th>
+      <th>status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>01_base_controlada_100</td>
+      <td>739</td>
+      <td>40</td>
+      <td>7</td>
+      <td>output\analysis\01_base_controlada_100\html\report_01_base_controlada_100.html</td>
+      <td>output\analysis\01_base_controlada_100\html\advanced_report_01_base_controlada_100.html</td>
+      <td>output\analysis\01_base_controlada_100\plots\descriptive</td>
+      <td>output\analysis\01_base_controlada_100\plots\advanced</td>
+      <td>output\analysis\01_base_controlada_100\tables</td>
+      <td>11</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>02_carga_media_estable</td>
+      <td>707</td>
+      <td>40</td>
+      <td>7</td>
+      <td>output\analysis\02_carga_media_estable\html\report_02_carga_media_estable.html</td>
+      <td>output\analysis\02_carga_media_estable\html\advanced_report_02_carga_media_estable.html</td>
+      <td>output\analysis\02_carga_media_estable\plots\descriptive</td>
+      <td>output\analysis\02_carga_media_estable\plots\advanced</td>
+      <td>output\analysis\02_carga_media_estable\tables</td>
+      <td>11</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>03_pico_tarde</td>
+      <td>715</td>
+      <td>40</td>
+      <td>7</td>
+      <td>output\analysis\03_pico_tarde\html\report_03_pico_tarde.html</td>
+      <td>output\analysis\03_pico_tarde\html\advanced_report_03_pico_tarde.html</td>
+      <td>output\analysis\03_pico_tarde\plots\descriptive</td>
+      <td>output\analysis\03_pico_tarde\plots\advanced</td>
+      <td>output\analysis\03_pico_tarde\tables</td>
+      <td>11</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>04_baja_capacidad</td>
+      <td>729</td>
+      <td>40</td>
+      <td>7</td>
+      <td>output\analysis\04_baja_capacidad\html\report_04_baja_capacidad.html</td>
+      <td>output\analysis\04_baja_capacidad\html\advanced_report_04_baja_capacidad.html</td>
+      <td>output\analysis\04_baja_capacidad\plots\descriptive</td>
+      <td>output\analysis\04_baja_capacidad\plots\advanced</td>
+      <td>output\analysis\04_baja_capacidad\tables</td>
+      <td>11</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>05_red_lenta</td>
+      <td>724</td>
+      <td>40</td>
+      <td>7</td>
+      <td>output\analysis\05_red_lenta\html\report_05_red_lenta.html</td>
+      <td>output\analysis\05_red_lenta\html\advanced_report_05_red_lenta.html</td>
+      <td>output\analysis\05_red_lenta\plots\descriptive</td>
+      <td>output\analysis\05_red_lenta\plots\advanced</td>
+      <td>output\analysis\05_red_lenta\tables</td>
+      <td>11</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>06_mp4_pesado</td>
+      <td>736</td>
+      <td>40</td>
+      <td>7</td>
+      <td>output\analysis\06_mp4_pesado\html\report_06_mp4_pesado.html</td>
+      <td>output\analysis\06_mp4_pesado\html\advanced_report_06_mp4_pesado.html</td>
+      <td>output\analysis\06_mp4_pesado\plots\descriptive</td>
+      <td>output\analysis\06_mp4_pesado\plots\advanced</td>
+      <td>output\analysis\06_mp4_pesado\tables</td>
+      <td>11</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>07_pdf_documental</td>
+      <td>692</td>
+      <td>40</td>
+      <td>7</td>
+      <td>output\analysis\07_pdf_documental\html\report_07_pdf_documental.html</td>
+      <td>output\analysis\07_pdf_documental\html\advanced_report_07_pdf_documental.html</td>
+      <td>output\analysis\07_pdf_documental\plots\descriptive</td>
+      <td>output\analysis\07_pdf_documental\plots\advanced</td>
+      <td>output\analysis\07_pdf_documental\tables</td>
+      <td>11</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>08_jpg_masivo</td>
+      <td>757</td>
+      <td>40</td>
+      <td>7</td>
+      <td>output\analysis\08_jpg_masivo\html\report_08_jpg_masivo.html</td>
+      <td>output\analysis\08_jpg_masivo\html\advanced_report_08_jpg_masivo.html</td>
+      <td>output\analysis\08_jpg_masivo\plots\descriptive</td>
+      <td>output\analysis\08_jpg_masivo\plots\advanced</td>
+      <td>output\analysis\08_jpg_masivo\tables</td>
+      <td>11</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>10_duplicidad_alta</td>
+      <td>685</td>
+      <td>40</td>
+      <td>7</td>
+      <td>output\analysis\10_duplicidad_alta\html\report_10_duplicidad_alta.html</td>
+      <td>output\analysis\10_duplicidad_alta\html\advanced_report_10_duplicidad_alta.html</td>
+      <td>output\analysis\10_duplicidad_alta\plots\descriptive</td>
+      <td>output\analysis\10_duplicidad_alta\plots\advanced</td>
+      <td>output\analysis\10_duplicidad_alta\tables</td>
+      <td>11</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>11_huerfanos_json_pdf</td>
+      <td>715</td>
+      <td>40</td>
+      <td>7</td>
+      <td>output\analysis\11_huerfanos_json_pdf\html\report_11_huerfanos_json_pdf.html</td>
+      <td>output\analysis\11_huerfanos_json_pdf\html\advanced_report_11_huerfanos_json_pdf.html</td>
+      <td>output\analysis\11_huerfanos_json_pdf\plots\descriptive</td>
+      <td>output\analysis\11_huerfanos_json_pdf\plots\advanced</td>
+      <td>output\analysis\11_huerfanos_json_pdf\tables</td>
+      <td>11</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>12_null_json_alto</td>
+      <td>730</td>
+      <td>40</td>
+      <td>7</td>
+      <td>output\analysis\12_null_json_alto\html\report_12_null_json_alto.html</td>
+      <td>output\analysis\12_null_json_alto\html\advanced_report_12_null_json_alto.html</td>
+      <td>output\analysis\12_null_json_alto\plots\descriptive</td>
+      <td>output\analysis\12_null_json_alto\plots\advanced</td>
+      <td>output\analysis\12_null_json_alto\tables</td>
+      <td>11</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>13_timeout_blob</td>
+      <td>731</td>
+      <td>40</td>
+      <td>7</td>
+      <td>output\analysis\13_timeout_blob\html\report_13_timeout_blob.html</td>
+      <td>output\analysis\13_timeout_blob\html\advanced_report_13_timeout_blob.html</td>
+      <td>output\analysis\13_timeout_blob\plots\descriptive</td>
+      <td>output\analysis\13_timeout_blob\plots\advanced</td>
+      <td>output\analysis\13_timeout_blob\tables</td>
+      <td>11</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>14_hot_storage_extremo</td>
+      <td>663</td>
+      <td>40</td>
+      <td>7</td>
+      <td>output\analysis\14_hot_storage_extremo\html\report_14_hot_storage_extremo.html</td>
+      <td>output\analysis\14_hot_storage_extremo\html\advanced_report_14_hot_storage_extremo.html</td>
+      <td>output\analysis\14_hot_storage_extremo\plots\descriptive</td>
+      <td>output\analysis\14_hot_storage_extremo\plots\advanced</td>
+      <td>output\analysis\14_hot_storage_extremo\tables</td>
+      <td>11</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>15_archive_mal_gobernado</td>
+      <td>757</td>
+      <td>40</td>
+      <td>7</td>
+      <td>output\analysis\15_archive_mal_gobernado\html\report_15_archive_mal_gobernado.html</td>
+      <td>output\analysis\15_archive_mal_gobernado\html\advanced_report_15_archive_mal_gobernado.html</td>
+      <td>output\analysis\15_archive_mal_gobernado\plots\descriptive</td>
+      <td>output\analysis\15_archive_mal_gobernado\plots\advanced</td>
+      <td>output\analysis\15_archive_mal_gobernado\tables</td>
+      <td>11</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>17_operacion_24x7</td>
+      <td>784</td>
+      <td>40</td>
+      <td>7</td>
+      <td>output\analysis\17_operacion_24x7\html\report_17_operacion_24x7.html</td>
+      <td>output\analysis\17_operacion_24x7\html\advanced_report_17_operacion_24x7.html</td>
+      <td>output\analysis\17_operacion_24x7\plots\descriptive</td>
+      <td>output\analysis\17_operacion_24x7\plots\advanced</td>
+      <td>output\analysis\17_operacion_24x7\tables</td>
+      <td>11</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>18_finde_alto</td>
+      <td>628</td>
+      <td>40</td>
+      <td>7</td>
+      <td>output\analysis\18_finde_alto\html\report_18_finde_alto.html</td>
+      <td>output\analysis\18_finde_alto\html\advanced_report_18_finde_alto.html</td>
+      <td>output\analysis\18_finde_alto\plots\descriptive</td>
+      <td>output\analysis\18_finde_alto\plots\advanced</td>
+      <td>output\analysis\18_finde_alto\tables</td>
+      <td>11</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>19_costos_agresivos</td>
+      <td>731</td>
+      <td>40</td>
+      <td>7</td>
+      <td>output\analysis\19_costos_agresivos\html\report_19_costos_agresivos.html</td>
+      <td>output\analysis\19_costos_agresivos\html\advanced_report_19_costos_agresivos.html</td>
+      <td>output\analysis\19_costos_agresivos\plots\descriptive</td>
+      <td>output\analysis\19_costos_agresivos\plots\advanced</td>
+      <td>output\analysis\19_costos_agresivos\tables</td>
+      <td>11</td>
+      <td>OK</td>
+    </tr>
+  </tbody>
+</table>
+        </div>
+    </section>
+    
+    </body>
+    </html>
+    

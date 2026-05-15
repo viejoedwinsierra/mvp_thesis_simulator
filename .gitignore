@@ -19,3 +19,4 @@ output/models/
 *.zip
 *.csv
 *.png
+*.log

@@ -1,0 +1,1227 @@
+
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <title>Reporte de modelamiento estadístico - Blob Storage Monte Carlo</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 32px;
+                color: #2c3e50;
+                background: #f8f9fa;
+            }
+
+            h1 {
+                margin-bottom: 6px;
+                color: #1f3a56;
+            }
+
+            h2 {
+                color: #1f3a56;
+                margin-top: 0;
+                border-bottom: 2px solid #e8eef3;
+                padding-bottom: 8px;
+            }
+
+            h3 {
+                margin-top: 0;
+                color: #2c3e50;
+                font-size: 15px;
+            }
+
+            .subtitle {
+                color: #666;
+                margin-bottom: 24px;
+            }
+
+            .card {
+                background: white;
+                padding: 20px;
+                margin-bottom: 24px;
+                border-radius: 10px;
+                box-shadow: 0 1px 5px rgba(0,0,0,0.08);
+            }
+
+            .note {
+                background: #eef6ff;
+                border-left: 5px solid #2c7be5;
+                padding: 14px;
+                border-radius: 6px;
+                margin-bottom: 24px;
+                font-size: 14px;
+            }
+
+            .summary-card {
+                border-left: 5px solid #198754;
+            }
+
+            .section-desc {
+                color: #555;
+                font-size: 14px;
+                margin-top: -4px;
+                margin-bottom: 14px;
+            }
+
+            .table-container {
+                overflow-x: auto;
+            }
+
+            table {
+                border-collapse: collapse;
+                width: 100%;
+                font-size: 13px;
+            }
+
+            th {
+                background-color: #2c3e50;
+                color: white;
+                padding: 8px;
+                text-align: left;
+                white-space: nowrap;
+            }
+
+            td {
+                border: 1px solid #ddd;
+                padding: 7px;
+                white-space: nowrap;
+            }
+
+            tr:nth-child(even) {
+                background-color: #f2f2f2;
+            }
+
+            .grid {
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 20px;
+            }
+
+            .plot-card {
+                background: #ffffff;
+                padding: 16px;
+                border-radius: 8px;
+                border: 1px solid #e4e4e4;
+            }
+
+            img {
+                max-width: 100%;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                background: white;
+            }
+
+            @media (max-width: 900px) {
+                .grid {
+                    grid-template-columns: 1fr;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Reporte de modelamiento estadístico - Blob Storage Monte Carlo</h1>
+        <p class="subtitle">
+            Fase de modelamiento estadístico para simulación Monte Carlo de Blob Storage.
+        </p>
+
+        <div class="note">
+            Este reporte contiene modelos estadísticos interpretables. No incluye machine learning complejo, optimización ni tuning.
+        </div>
+
+        
+        <section class='card'>
+            <h2>Objetivo del reporte de modelamiento estadístico</h2>
+            <p>
+                Este reporte presenta modelos estadísticos interpretables para los
+                objetivos definidos: duración de transferencia, costo de almacenamiento
+                y ocurrencia de error. No incluye algoritmos de machine learning
+                complejos ni procesos de tuning.
+            </p>
+        </section>
+        
+    <section class="card ">
+        <h2>1. Resumen de modelos</h2>
+        
+        <div class="table-container">
+            <table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>target</th>
+      <th>model_type</th>
+      <th>status</th>
+      <th>train_rows</th>
+      <th>test_rows</th>
+      <th>metric_1</th>
+      <th>metric_2</th>
+      <th>metric_3</th>
+      <th>metrics</th>
+      <th>notes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>transfer_duration_sec</td>
+      <td>ols_log_linear</td>
+      <td>ok</td>
+      <td>247238</td>
+      <td>82413</td>
+      <td>0.3013</td>
+      <td>0.3845</td>
+      <td>0.9579</td>
+      <td>mae=0.3013, rmse=0.3845, r2=0.9579</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>transfer_duration_sec</td>
+      <td>glm_gamma_log</td>
+      <td>ok</td>
+      <td>247238</td>
+      <td>82413</td>
+      <td>0.5875</td>
+      <td>1.3318</td>
+      <td>0.4951</td>
+      <td>mae=0.5875, rmse=1.3318, r2=0.4951</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>ols_log_linear</td>
+      <td>ok</td>
+      <td>247238</td>
+      <td>82413</td>
+      <td>0.0012</td>
+      <td>0.0026</td>
+      <td>0.6576</td>
+      <td>mae=0.0012, rmse=0.0026, r2=0.6576</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>glm_gamma_log</td>
+      <td>ok</td>
+      <td>247238</td>
+      <td>82413</td>
+      <td>0.0003</td>
+      <td>0.0012</td>
+      <td>0.9248</td>
+      <td>mae=0.0003, rmse=0.0012, r2=0.9248</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>logistic_regression</td>
+      <td>ok</td>
+      <td>247238</td>
+      <td>82413</td>
+      <td>0.8454</td>
+      <td>0.3282</td>
+      <td>0.8156</td>
+      <td>accuracy=0.8454, f1=0.3282, roc_auc=0.8156</td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+        </div>
+    </section>
+    
+    <section class="card ">
+        <h2>2. Coeficientes de modelos</h2>
+        
+        <div class="table-container">
+            <table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>target</th>
+      <th>model_type</th>
+      <th>term</th>
+      <th>coefficient</th>
+      <th>p_value</th>
+      <th>ci_lower</th>
+      <th>ci_upper</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>transfer_duration_sec</td>
+      <td>ols_log_linear</td>
+      <td>const</td>
+      <td>1.8956</td>
+      <td>0.0</td>
+      <td>1.8788</td>
+      <td>1.9124</td>
+    </tr>
+    <tr>
+      <td>transfer_duration_sec</td>
+      <td>ols_log_linear</td>
+      <td>size_mb</td>
+      <td>0.0003</td>
+      <td>0.0</td>
+      <td>0.0003</td>
+      <td>0.0003</td>
+    </tr>
+    <tr>
+      <td>transfer_duration_sec</td>
+      <td>ols_log_linear</td>
+      <td>transfer_speed_mbps</td>
+      <td>0.0057</td>
+      <td>0.0</td>
+      <td>0.0055</td>
+      <td>0.0058</td>
+    </tr>
+    <tr>
+      <td>transfer_duration_sec</td>
+      <td>ols_log_linear</td>
+      <td>created_hour</td>
+      <td>-0.0039</td>
+      <td>0.0</td>
+      <td>-0.0055</td>
+      <td>-0.0023</td>
+    </tr>
+    <tr>
+      <td>transfer_duration_sec</td>
+      <td>ols_log_linear</td>
+      <td>hourly_arrival_count</td>
+      <td>0.0</td>
+      <td>0.0015</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <td>transfer_duration_sec</td>
+      <td>ols_log_linear</td>
+      <td>hourly_capacity</td>
+      <td>-0.0002</td>
+      <td>0.0</td>
+      <td>-0.0002</td>
+      <td>-0.0002</td>
+    </tr>
+    <tr>
+      <td>transfer_duration_sec</td>
+      <td>ols_log_linear</td>
+      <td>congestion_factor</td>
+      <td>0.4888</td>
+      <td>0.0</td>
+      <td>0.4866</td>
+      <td>0.4909</td>
+    </tr>
+    <tr>
+      <td>transfer_duration_sec</td>
+      <td>ols_log_linear</td>
+      <td>log1p_size_mb</td>
+      <td>0.8938</td>
+      <td>0.0</td>
+      <td>0.8904</td>
+      <td>0.8973</td>
+    </tr>
+    <tr>
+      <td>transfer_duration_sec</td>
+      <td>ols_log_linear</td>
+      <td>log1p_transfer_speed_mbps</td>
+      <td>-0.8873</td>
+      <td>0.0</td>
+      <td>-0.8919</td>
+      <td>-0.8827</td>
+    </tr>
+    <tr>
+      <td>transfer_duration_sec</td>
+      <td>ols_log_linear</td>
+      <td>file_type_json</td>
+      <td>0.0714</td>
+      <td>0.0</td>
+      <td>0.0656</td>
+      <td>0.0772</td>
+    </tr>
+    <tr>
+      <td>transfer_duration_sec</td>
+      <td>ols_log_linear</td>
+      <td>file_type_mp4</td>
+      <td>0.0892</td>
+      <td>0.0</td>
+      <td>0.079</td>
+      <td>0.0995</td>
+    </tr>
+    <tr>
+      <td>transfer_duration_sec</td>
+      <td>ols_log_linear</td>
+      <td>file_type_pdf</td>
+      <td>-0.0021</td>
+      <td>0.392</td>
+      <td>-0.007</td>
+      <td>0.0027</td>
+    </tr>
+    <tr>
+      <td>transfer_duration_sec</td>
+      <td>ols_log_linear</td>
+      <td>storage_tier_cool</td>
+      <td>0.0008</td>
+      <td>0.7227</td>
+      <td>-0.0037</td>
+      <td>0.0054</td>
+    </tr>
+    <tr>
+      <td>transfer_duration_sec</td>
+      <td>ols_log_linear</td>
+      <td>storage_tier_hot</td>
+      <td>-0.0007</td>
+      <td>0.7761</td>
+      <td>-0.0052</td>
+      <td>0.0039</td>
+    </tr>
+    <tr>
+      <td>transfer_duration_sec</td>
+      <td>ols_log_linear</td>
+      <td>time_slot_mañana</td>
+      <td>0.1256</td>
+      <td>0.0</td>
+      <td>0.1144</td>
+      <td>0.1368</td>
+    </tr>
+    <tr>
+      <td>transfer_duration_sec</td>
+      <td>ols_log_linear</td>
+      <td>time_slot_noche</td>
+      <td>0.1313</td>
+      <td>0.0</td>
+      <td>0.1022</td>
+      <td>0.1603</td>
+    </tr>
+    <tr>
+      <td>transfer_duration_sec</td>
+      <td>ols_log_linear</td>
+      <td>time_slot_tarde</td>
+      <td>0.1334</td>
+      <td>0.0</td>
+      <td>0.1132</td>
+      <td>0.1537</td>
+    </tr>
+    <tr>
+      <td>transfer_duration_sec</td>
+      <td>ols_log_linear</td>
+      <td>day_of_week_monday</td>
+      <td>0.0863</td>
+      <td>0.0</td>
+      <td>0.0803</td>
+      <td>0.0923</td>
+    </tr>
+    <tr>
+      <td>transfer_duration_sec</td>
+      <td>ols_log_linear</td>
+      <td>day_of_week_saturday</td>
+      <td>-0.0311</td>
+      <td>0.0</td>
+      <td>-0.0379</td>
+      <td>-0.0243</td>
+    </tr>
+    <tr>
+      <td>transfer_duration_sec</td>
+      <td>ols_log_linear</td>
+      <td>day_of_week_sunday</td>
+      <td>-0.0778</td>
+      <td>0.0</td>
+      <td>-0.0869</td>
+      <td>-0.0687</td>
+    </tr>
+    <tr>
+      <td>transfer_duration_sec</td>
+      <td>ols_log_linear</td>
+      <td>day_of_week_thursday</td>
+      <td>0.0413</td>
+      <td>0.0</td>
+      <td>0.036</td>
+      <td>0.0465</td>
+    </tr>
+    <tr>
+      <td>transfer_duration_sec</td>
+      <td>ols_log_linear</td>
+      <td>day_of_week_tuesday</td>
+      <td>0.0248</td>
+      <td>0.0</td>
+      <td>0.0193</td>
+      <td>0.0303</td>
+    </tr>
+    <tr>
+      <td>transfer_duration_sec</td>
+      <td>ols_log_linear</td>
+      <td>day_of_week_wednesday</td>
+      <td>0.0281</td>
+      <td>0.0</td>
+      <td>0.0228</td>
+      <td>0.0333</td>
+    </tr>
+    <tr>
+      <td>transfer_duration_sec</td>
+      <td>glm_gamma_log</td>
+      <td>const</td>
+      <td>0.3298</td>
+      <td>0.0</td>
+      <td>0.3183</td>
+      <td>0.3412</td>
+    </tr>
+    <tr>
+      <td>transfer_duration_sec</td>
+      <td>glm_gamma_log</td>
+      <td>size_mb</td>
+      <td>-0.0011</td>
+      <td>0.0</td>
+      <td>-0.0011</td>
+      <td>-0.0011</td>
+    </tr>
+    <tr>
+      <td>transfer_duration_sec</td>
+      <td>glm_gamma_log</td>
+      <td>transfer_speed_mbps</td>
+      <td>0.0002</td>
+      <td>0.0016</td>
+      <td>0.0001</td>
+      <td>0.0003</td>
+    </tr>
+    <tr>
+      <td>transfer_duration_sec</td>
+      <td>glm_gamma_log</td>
+      <td>created_hour</td>
+      <td>-0.0035</td>
+      <td>0.0</td>
+      <td>-0.0046</td>
+      <td>-0.0024</td>
+    </tr>
+    <tr>
+      <td>transfer_duration_sec</td>
+      <td>glm_gamma_log</td>
+      <td>hourly_arrival_count</td>
+      <td>0.0001</td>
+      <td>0.0</td>
+      <td>0.0001</td>
+      <td>0.0001</td>
+    </tr>
+    <tr>
+      <td>transfer_duration_sec</td>
+      <td>glm_gamma_log</td>
+      <td>hourly_capacity</td>
+      <td>-0.0001</td>
+      <td>0.0</td>
+      <td>-0.0001</td>
+      <td>-0.0001</td>
+    </tr>
+    <tr>
+      <td>transfer_duration_sec</td>
+      <td>glm_gamma_log</td>
+      <td>congestion_factor</td>
+      <td>0.2307</td>
+      <td>0.0</td>
+      <td>0.2292</td>
+      <td>0.2321</td>
+    </tr>
+    <tr>
+      <td>transfer_duration_sec</td>
+      <td>glm_gamma_log</td>
+      <td>log1p_size_mb</td>
+      <td>0.4652</td>
+      <td>0.0</td>
+      <td>0.4629</td>
+      <td>0.4676</td>
+    </tr>
+    <tr>
+      <td>transfer_duration_sec</td>
+      <td>glm_gamma_log</td>
+      <td>log1p_transfer_speed_mbps</td>
+      <td>-0.384</td>
+      <td>0.0</td>
+      <td>-0.3871</td>
+      <td>-0.3808</td>
+    </tr>
+    <tr>
+      <td>transfer_duration_sec</td>
+      <td>glm_gamma_log</td>
+      <td>file_type_json</td>
+      <td>-0.2576</td>
+      <td>0.0</td>
+      <td>-0.2616</td>
+      <td>-0.2537</td>
+    </tr>
+    <tr>
+      <td>transfer_duration_sec</td>
+      <td>glm_gamma_log</td>
+      <td>file_type_mp4</td>
+      <td>-0.207</td>
+      <td>0.0</td>
+      <td>-0.2141</td>
+      <td>-0.2</td>
+    </tr>
+    <tr>
+      <td>transfer_duration_sec</td>
+      <td>glm_gamma_log</td>
+      <td>file_type_pdf</td>
+      <td>-0.0021</td>
+      <td>0.2119</td>
+      <td>-0.0055</td>
+      <td>0.0012</td>
+    </tr>
+    <tr>
+      <td>transfer_duration_sec</td>
+      <td>glm_gamma_log</td>
+      <td>storage_tier_cool</td>
+      <td>0.0</td>
+      <td>0.9942</td>
+      <td>-0.0031</td>
+      <td>0.0031</td>
+    </tr>
+    <tr>
+      <td>transfer_duration_sec</td>
+      <td>glm_gamma_log</td>
+      <td>storage_tier_hot</td>
+      <td>0.0003</td>
+      <td>0.8578</td>
+      <td>-0.0028</td>
+      <td>0.0034</td>
+    </tr>
+    <tr>
+      <td>transfer_duration_sec</td>
+      <td>glm_gamma_log</td>
+      <td>time_slot_mañana</td>
+      <td>0.0863</td>
+      <td>0.0</td>
+      <td>0.0786</td>
+      <td>0.0939</td>
+    </tr>
+    <tr>
+      <td>transfer_duration_sec</td>
+      <td>glm_gamma_log</td>
+      <td>time_slot_noche</td>
+      <td>0.0991</td>
+      <td>0.0</td>
+      <td>0.0792</td>
+      <td>0.119</td>
+    </tr>
+    <tr>
+      <td>transfer_duration_sec</td>
+      <td>glm_gamma_log</td>
+      <td>time_slot_tarde</td>
+      <td>0.0974</td>
+      <td>0.0</td>
+      <td>0.0836</td>
+      <td>0.1113</td>
+    </tr>
+    <tr>
+      <td>transfer_duration_sec</td>
+      <td>glm_gamma_log</td>
+      <td>day_of_week_monday</td>
+      <td>0.0579</td>
+      <td>0.0</td>
+      <td>0.0538</td>
+      <td>0.062</td>
+    </tr>
+    <tr>
+      <td>transfer_duration_sec</td>
+      <td>glm_gamma_log</td>
+      <td>day_of_week_saturday</td>
+      <td>-0.0349</td>
+      <td>0.0</td>
+      <td>-0.0396</td>
+      <td>-0.0303</td>
+    </tr>
+    <tr>
+      <td>transfer_duration_sec</td>
+      <td>glm_gamma_log</td>
+      <td>day_of_week_sunday</td>
+      <td>-0.0205</td>
+      <td>0.0</td>
+      <td>-0.0267</td>
+      <td>-0.0143</td>
+    </tr>
+    <tr>
+      <td>transfer_duration_sec</td>
+      <td>glm_gamma_log</td>
+      <td>day_of_week_thursday</td>
+      <td>0.0175</td>
+      <td>0.0</td>
+      <td>0.0139</td>
+      <td>0.0211</td>
+    </tr>
+    <tr>
+      <td>transfer_duration_sec</td>
+      <td>glm_gamma_log</td>
+      <td>day_of_week_tuesday</td>
+      <td>0.0188</td>
+      <td>0.0</td>
+      <td>0.0151</td>
+      <td>0.0226</td>
+    </tr>
+    <tr>
+      <td>transfer_duration_sec</td>
+      <td>glm_gamma_log</td>
+      <td>day_of_week_wednesday</td>
+      <td>0.006</td>
+      <td>0.0011</td>
+      <td>0.0024</td>
+      <td>0.0096</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>ols_log_linear</td>
+      <td>const</td>
+      <td>-0.0041</td>
+      <td>0.0</td>
+      <td>-0.0042</td>
+      <td>-0.004</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>ols_log_linear</td>
+      <td>size_mb</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>ols_log_linear</td>
+      <td>days_stored</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>ols_log_linear</td>
+      <td>days_since_last_access</td>
+      <td>-0.0</td>
+      <td>0.0</td>
+      <td>-0.0</td>
+      <td>-0.0</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>ols_log_linear</td>
+      <td>created_hour</td>
+      <td>-0.0</td>
+      <td>0.0327</td>
+      <td>-0.0</td>
+      <td>-0.0</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>ols_log_linear</td>
+      <td>log1p_size_mb</td>
+      <td>0.0001</td>
+      <td>0.0</td>
+      <td>0.0001</td>
+      <td>0.0001</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>ols_log_linear</td>
+      <td>storage_tier_cool</td>
+      <td>0.0019</td>
+      <td>0.0</td>
+      <td>0.0018</td>
+      <td>0.0019</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>ols_log_linear</td>
+      <td>storage_tier_hot</td>
+      <td>0.0029</td>
+      <td>0.0</td>
+      <td>0.0028</td>
+      <td>0.003</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>ols_log_linear</td>
+      <td>file_type_json</td>
+      <td>0.0001</td>
+      <td>0.0</td>
+      <td>0.0001</td>
+      <td>0.0001</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>ols_log_linear</td>
+      <td>file_type_mp4</td>
+      <td>-0.0</td>
+      <td>0.6573</td>
+      <td>-0.0001</td>
+      <td>0.0001</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>ols_log_linear</td>
+      <td>file_type_pdf</td>
+      <td>-0.0001</td>
+      <td>0.0002</td>
+      <td>-0.0001</td>
+      <td>-0.0</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>glm_gamma_log</td>
+      <td>const</td>
+      <td>-14.3595</td>
+      <td>0.0</td>
+      <td>-14.3707</td>
+      <td>-14.3484</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>glm_gamma_log</td>
+      <td>size_mb</td>
+      <td>-0.0009</td>
+      <td>0.0</td>
+      <td>-0.0009</td>
+      <td>-0.0009</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>glm_gamma_log</td>
+      <td>days_stored</td>
+      <td>0.0145</td>
+      <td>0.0</td>
+      <td>0.0145</td>
+      <td>0.0146</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>glm_gamma_log</td>
+      <td>days_since_last_access</td>
+      <td>0.0008</td>
+      <td>0.0</td>
+      <td>0.0007</td>
+      <td>0.0009</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>glm_gamma_log</td>
+      <td>created_hour</td>
+      <td>0.0002</td>
+      <td>0.123</td>
+      <td>-0.0</td>
+      <td>0.0004</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>glm_gamma_log</td>
+      <td>log1p_size_mb</td>
+      <td>1.2094</td>
+      <td>0.0</td>
+      <td>1.2068</td>
+      <td>1.2121</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>glm_gamma_log</td>
+      <td>storage_tier_cool</td>
+      <td>1.888</td>
+      <td>0.0</td>
+      <td>1.8824</td>
+      <td>1.8937</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>glm_gamma_log</td>
+      <td>storage_tier_hot</td>
+      <td>2.4167</td>
+      <td>0.0</td>
+      <td>2.4079</td>
+      <td>2.4255</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>glm_gamma_log</td>
+      <td>file_type_json</td>
+      <td>-0.4829</td>
+      <td>0.0</td>
+      <td>-0.4873</td>
+      <td>-0.4785</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>glm_gamma_log</td>
+      <td>file_type_mp4</td>
+      <td>-0.2873</td>
+      <td>0.0</td>
+      <td>-0.2951</td>
+      <td>-0.2795</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>glm_gamma_log</td>
+      <td>file_type_pdf</td>
+      <td>-0.0336</td>
+      <td>0.0</td>
+      <td>-0.0373</td>
+      <td>-0.0298</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>logistic_regression</td>
+      <td>const</td>
+      <td>-1.7639</td>
+      <td>0.0</td>
+      <td>-1.9027</td>
+      <td>-1.6251</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>logistic_regression</td>
+      <td>size_mb</td>
+      <td>0.0004</td>
+      <td>0.0</td>
+      <td>0.0002</td>
+      <td>0.0006</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>logistic_regression</td>
+      <td>transfer_speed_mbps</td>
+      <td>0.0094</td>
+      <td>0.0</td>
+      <td>0.0083</td>
+      <td>0.0105</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>logistic_regression</td>
+      <td>created_hour</td>
+      <td>-0.0064</td>
+      <td>0.3677</td>
+      <td>-0.0203</td>
+      <td>0.0075</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>logistic_regression</td>
+      <td>hourly_arrival_count</td>
+      <td>0.0001</td>
+      <td>0.0</td>
+      <td>0.0001</td>
+      <td>0.0002</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>logistic_regression</td>
+      <td>hourly_capacity</td>
+      <td>-0.0013</td>
+      <td>0.0</td>
+      <td>-0.0014</td>
+      <td>-0.0012</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>logistic_regression</td>
+      <td>congestion_factor</td>
+      <td>0.443</td>
+      <td>0.0</td>
+      <td>0.4284</td>
+      <td>0.4577</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>logistic_regression</td>
+      <td>log1p_size_mb</td>
+      <td>0.3164</td>
+      <td>0.0</td>
+      <td>0.2888</td>
+      <td>0.344</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>logistic_regression</td>
+      <td>log1p_transfer_speed_mbps</td>
+      <td>-0.5172</td>
+      <td>0.0</td>
+      <td>-0.5511</td>
+      <td>-0.4832</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>logistic_regression</td>
+      <td>file_type_json</td>
+      <td>0.2961</td>
+      <td>0.0</td>
+      <td>0.2477</td>
+      <td>0.3446</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>logistic_regression</td>
+      <td>file_type_mp4</td>
+      <td>0.1505</td>
+      <td>0.0002</td>
+      <td>0.0705</td>
+      <td>0.2304</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>logistic_regression</td>
+      <td>file_type_pdf</td>
+      <td>-0.0404</td>
+      <td>0.0485</td>
+      <td>-0.0806</td>
+      <td>-0.0003</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>logistic_regression</td>
+      <td>storage_tier_cool</td>
+      <td>-0.3083</td>
+      <td>0.0</td>
+      <td>-0.3429</td>
+      <td>-0.2737</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>logistic_regression</td>
+      <td>storage_tier_hot</td>
+      <td>-0.2985</td>
+      <td>0.0</td>
+      <td>-0.333</td>
+      <td>-0.2639</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>logistic_regression</td>
+      <td>time_slot_mañana</td>
+      <td>0.7011</td>
+      <td>0.0</td>
+      <td>0.5908</td>
+      <td>0.8113</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>logistic_regression</td>
+      <td>time_slot_noche</td>
+      <td>0.7975</td>
+      <td>0.0</td>
+      <td>0.5365</td>
+      <td>1.0585</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>logistic_regression</td>
+      <td>time_slot_tarde</td>
+      <td>1.0206</td>
+      <td>0.0</td>
+      <td>0.8358</td>
+      <td>1.2054</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>logistic_regression</td>
+      <td>day_of_week_monday</td>
+      <td>-0.3005</td>
+      <td>0.0</td>
+      <td>-0.3482</td>
+      <td>-0.2528</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>logistic_regression</td>
+      <td>day_of_week_saturday</td>
+      <td>-0.6368</td>
+      <td>0.0</td>
+      <td>-0.7097</td>
+      <td>-0.5639</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>logistic_regression</td>
+      <td>day_of_week_sunday</td>
+      <td>-1.0508</td>
+      <td>0.0</td>
+      <td>-1.152</td>
+      <td>-0.9496</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>logistic_regression</td>
+      <td>day_of_week_thursday</td>
+      <td>-0.5145</td>
+      <td>0.0</td>
+      <td>-0.5567</td>
+      <td>-0.4722</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>logistic_regression</td>
+      <td>day_of_week_tuesday</td>
+      <td>-0.5519</td>
+      <td>0.0</td>
+      <td>-0.5957</td>
+      <td>-0.5081</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>logistic_regression</td>
+      <td>day_of_week_wednesday</td>
+      <td>-0.2948</td>
+      <td>0.0</td>
+      <td>-0.335</td>
+      <td>-0.2545</td>
+    </tr>
+  </tbody>
+</table>
+        </div>
+    </section>
+    
+    <section class="card">
+        <h2>8. Gráficos univariados</h2>
+        <p class="section-desc">
+            Histogramas, histogramas log1p, boxplots, boxplots recortados,
+            barras de frecuencia y conteo temporal de muestras. No se incluyen
+            cruces entre variables.
+        </p>
+        <div class="grid">
+    
+        <div class="plot-card">
+            <h3>Modeling Absolute Error Vs Predicted Storage Cost Glm Gamma Log</h3>
+            <img src="../plots/modeling/modeling_absolute_error_vs_predicted_storage_cost_glm_gamma_log.png" alt="Modeling Absolute Error Vs Predicted Storage Cost Glm Gamma Log">
+        </div>
+        
+        <div class="plot-card">
+            <h3>Modeling Absolute Error Vs Predicted Storage Cost Ols Log Linear</h3>
+            <img src="../plots/modeling/modeling_absolute_error_vs_predicted_storage_cost_ols_log_linear.png" alt="Modeling Absolute Error Vs Predicted Storage Cost Ols Log Linear">
+        </div>
+        
+        <div class="plot-card">
+            <h3>Modeling Absolute Error Vs Predicted Transfer Duration Sec Glm Gamma Log</h3>
+            <img src="../plots/modeling/modeling_absolute_error_vs_predicted_transfer_duration_sec_glm_gamma_log.png" alt="Modeling Absolute Error Vs Predicted Transfer Duration Sec Glm Gamma Log">
+        </div>
+        
+        <div class="plot-card">
+            <h3>Modeling Absolute Error Vs Predicted Transfer Duration Sec Ols Log Linear</h3>
+            <img src="../plots/modeling/modeling_absolute_error_vs_predicted_transfer_duration_sec_ols_log_linear.png" alt="Modeling Absolute Error Vs Predicted Transfer Duration Sec Ols Log Linear">
+        </div>
+        
+        <div class="plot-card">
+            <h3>Modeling Calibration Curve Has Error Logistic Regression</h3>
+            <img src="../plots/modeling/modeling_calibration_curve_has_error_logistic_regression.png" alt="Modeling Calibration Curve Has Error Logistic Regression">
+        </div>
+        
+        <div class="plot-card">
+            <h3>Modeling Confusion Matrix Has Error Logistic Regression</h3>
+            <img src="../plots/modeling/modeling_confusion_matrix_has_error_logistic_regression.png" alt="Modeling Confusion Matrix Has Error Logistic Regression">
+        </div>
+        
+        <div class="plot-card">
+            <h3>Modeling Deviance Residuals Storage Cost Glm Gamma Log</h3>
+            <img src="../plots/modeling/modeling_deviance_residuals_storage_cost_glm_gamma_log.png" alt="Modeling Deviance Residuals Storage Cost Glm Gamma Log">
+        </div>
+        
+        <div class="plot-card">
+            <h3>Modeling Deviance Residuals Transfer Duration Sec Glm Gamma Log</h3>
+            <img src="../plots/modeling/modeling_deviance_residuals_transfer_duration_sec_glm_gamma_log.png" alt="Modeling Deviance Residuals Transfer Duration Sec Glm Gamma Log">
+        </div>
+        
+        <div class="plot-card">
+            <h3>Modeling Has Error Logistic Regression</h3>
+            <img src="../plots/modeling/modeling_has_error_logistic_regression.png" alt="Modeling Has Error Logistic Regression">
+        </div>
+        
+        <div class="plot-card">
+            <h3>Modeling Log Observed Vs Predicted Storage Cost Glm Gamma Log</h3>
+            <img src="../plots/modeling/modeling_log_observed_vs_predicted_storage_cost_glm_gamma_log.png" alt="Modeling Log Observed Vs Predicted Storage Cost Glm Gamma Log">
+        </div>
+        
+        <div class="plot-card">
+            <h3>Modeling Log Observed Vs Predicted Transfer Duration Sec Glm Gamma Log</h3>
+            <img src="../plots/modeling/modeling_log_observed_vs_predicted_transfer_duration_sec_glm_gamma_log.png" alt="Modeling Log Observed Vs Predicted Transfer Duration Sec Glm Gamma Log">
+        </div>
+        
+        <div class="plot-card">
+            <h3>Modeling Precision Recall Curve Has Error Logistic Regression</h3>
+            <img src="../plots/modeling/modeling_precision_recall_curve_has_error_logistic_regression.png" alt="Modeling Precision Recall Curve Has Error Logistic Regression">
+        </div>
+        
+        <div class="plot-card">
+            <h3>Modeling Qq Residuals Storage Cost Glm Gamma Log</h3>
+            <img src="../plots/modeling/modeling_qq_residuals_storage_cost_glm_gamma_log.png" alt="Modeling Qq Residuals Storage Cost Glm Gamma Log">
+        </div>
+        
+        <div class="plot-card">
+            <h3>Modeling Qq Residuals Storage Cost Ols Log Linear</h3>
+            <img src="../plots/modeling/modeling_qq_residuals_storage_cost_ols_log_linear.png" alt="Modeling Qq Residuals Storage Cost Ols Log Linear">
+        </div>
+        
+        <div class="plot-card">
+            <h3>Modeling Qq Residuals Transfer Duration Sec Glm Gamma Log</h3>
+            <img src="../plots/modeling/modeling_qq_residuals_transfer_duration_sec_glm_gamma_log.png" alt="Modeling Qq Residuals Transfer Duration Sec Glm Gamma Log">
+        </div>
+        
+        <div class="plot-card">
+            <h3>Modeling Qq Residuals Transfer Duration Sec Ols Log Linear</h3>
+            <img src="../plots/modeling/modeling_qq_residuals_transfer_duration_sec_ols_log_linear.png" alt="Modeling Qq Residuals Transfer Duration Sec Ols Log Linear">
+        </div>
+        
+        <div class="plot-card">
+            <h3>Modeling Residual Histogram Storage Cost Glm Gamma Log</h3>
+            <img src="../plots/modeling/modeling_residual_histogram_storage_cost_glm_gamma_log.png" alt="Modeling Residual Histogram Storage Cost Glm Gamma Log">
+        </div>
+        
+        <div class="plot-card">
+            <h3>Modeling Residual Histogram Storage Cost Ols Log Linear</h3>
+            <img src="../plots/modeling/modeling_residual_histogram_storage_cost_ols_log_linear.png" alt="Modeling Residual Histogram Storage Cost Ols Log Linear">
+        </div>
+        
+        <div class="plot-card">
+            <h3>Modeling Residual Histogram Transfer Duration Sec Glm Gamma Log</h3>
+            <img src="../plots/modeling/modeling_residual_histogram_transfer_duration_sec_glm_gamma_log.png" alt="Modeling Residual Histogram Transfer Duration Sec Glm Gamma Log">
+        </div>
+        
+        <div class="plot-card">
+            <h3>Modeling Residual Histogram Transfer Duration Sec Ols Log Linear</h3>
+            <img src="../plots/modeling/modeling_residual_histogram_transfer_duration_sec_ols_log_linear.png" alt="Modeling Residual Histogram Transfer Duration Sec Ols Log Linear">
+        </div>
+        
+        <div class="plot-card">
+            <h3>Modeling Residuals Vs Predicted Storage Cost Glm Gamma Log</h3>
+            <img src="../plots/modeling/modeling_residuals_vs_predicted_storage_cost_glm_gamma_log.png" alt="Modeling Residuals Vs Predicted Storage Cost Glm Gamma Log">
+        </div>
+        
+        <div class="plot-card">
+            <h3>Modeling Residuals Vs Predicted Storage Cost Ols Log Linear</h3>
+            <img src="../plots/modeling/modeling_residuals_vs_predicted_storage_cost_ols_log_linear.png" alt="Modeling Residuals Vs Predicted Storage Cost Ols Log Linear">
+        </div>
+        
+        <div class="plot-card">
+            <h3>Modeling Residuals Vs Predicted Transfer Duration Sec Glm Gamma Log</h3>
+            <img src="../plots/modeling/modeling_residuals_vs_predicted_transfer_duration_sec_glm_gamma_log.png" alt="Modeling Residuals Vs Predicted Transfer Duration Sec Glm Gamma Log">
+        </div>
+        
+        <div class="plot-card">
+            <h3>Modeling Residuals Vs Predicted Transfer Duration Sec Ols Log Linear</h3>
+            <img src="../plots/modeling/modeling_residuals_vs_predicted_transfer_duration_sec_ols_log_linear.png" alt="Modeling Residuals Vs Predicted Transfer Duration Sec Ols Log Linear">
+        </div>
+        
+        <div class="plot-card">
+            <h3>Modeling Roc Curve Has Error Logistic Regression</h3>
+            <img src="../plots/modeling/modeling_roc_curve_has_error_logistic_regression.png" alt="Modeling Roc Curve Has Error Logistic Regression">
+        </div>
+        
+        <div class="plot-card">
+            <h3>Modeling Storage Cost Glm Gamma Log</h3>
+            <img src="../plots/modeling/modeling_storage_cost_glm_gamma_log.png" alt="Modeling Storage Cost Glm Gamma Log">
+        </div>
+        
+        <div class="plot-card">
+            <h3>Modeling Storage Cost Ols Log Linear</h3>
+            <img src="../plots/modeling/modeling_storage_cost_ols_log_linear.png" alt="Modeling Storage Cost Ols Log Linear">
+        </div>
+        
+        <div class="plot-card">
+            <h3>Modeling Transfer Duration Sec Glm Gamma Log</h3>
+            <img src="../plots/modeling/modeling_transfer_duration_sec_glm_gamma_log.png" alt="Modeling Transfer Duration Sec Glm Gamma Log">
+        </div>
+        
+        <div class="plot-card">
+            <h3>Modeling Transfer Duration Sec Ols Log Linear</h3>
+            <img src="../plots/modeling/modeling_transfer_duration_sec_ols_log_linear.png" alt="Modeling Transfer Duration Sec Ols Log Linear">
+        </div>
+        
+        </div>
+    </section>
+    
+    </body>
+    </html>
+    

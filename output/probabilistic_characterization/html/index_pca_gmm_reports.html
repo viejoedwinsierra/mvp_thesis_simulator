@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Índice general PCA + GMM</title>
+<style>
+:root {
+  --bg:#f3f6fa; --card:#fff; --ink:#17212b; --muted:#667085;
+  --primary:#17324d; --accent:#2c7be5; --border:#e5edf3;
+}
+body { font-family: Arial, sans-serif; margin:0; background:var(--bg); color:var(--ink); }
+.page { max-width:1360px; margin:0 auto; padding:32px; }
+.hero { background:linear-gradient(135deg,#17324d,#245a89); color:white; padding:28px; border-radius:18px; margin-bottom:24px; }
+.hero h1 { margin:0 0 8px 0; font-size:30px; }
+.hero p { margin:0; opacity:.92; }
+.card { background:white; padding:22px; margin-bottom:22px; border-radius:16px; border:1px solid var(--border); box-shadow:0 2px 10px rgba(0,0,0,.05); }
+.note { background:#eef6ff; border-left:6px solid var(--accent); padding:16px 18px; border-radius:12px; margin-bottom:22px; line-height:1.5; }
+h2 { color:var(--primary); margin-top:0; border-bottom:1px solid var(--border); padding-bottom:9px; }
+.section-desc,.muted { color:var(--muted); font-size:14px; }
+.metrics-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:16px; margin-bottom:22px; }
+.metric-card { background:white; border:1px solid var(--border); border-radius:14px; padding:18px; box-shadow:0 1px 6px rgba(0,0,0,.05); }
+.metric-label { font-size:13px; color:var(--muted); margin-bottom:8px; }
+.metric-value { font-size:25px; font-weight:700; color:var(--primary); }
+.metric-hint { font-size:12px; color:var(--muted); margin-top:8px; }
+.table-container { overflow-x:auto; }
+table.data-table, table.dataframe { border-collapse:collapse; width:100%; font-size:13px; }
+table.data-table th, table.dataframe th { background-color:var(--primary); color:white; padding:8px; text-align:left; }
+table.data-table td, table.dataframe td { border:1px solid #dde5ed; padding:7px; vertical-align:top; }
+table.data-table tr:nth-child(even), table.dataframe tr:nth-child(even) { background-color:#f8fafc; }
+.plot-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:20px; }
+.plot-card { margin:0; background:#fbfdff; border:1px solid var(--border); border-radius:14px; padding:12px; }
+.plot-card img { width:100%; max-width:100%; display:block; border-radius:10px; border:1px solid #d9e2ec; background:white; }
+.plot-card figcaption { margin-top:8px; font-size:13px; color:var(--muted); text-align:center; }
+</style>
+</head>
+<body>
+<main class="page">
+<section class="hero">
+<h1>Índice general PCA + GMM</h1>
+<p>PCA para estructura latente y GMM para composición probabilística del simulador.</p>
+</section>
+
+        <section class="note">
+            Índice general de caracterización probabilística.
+            Incluye análisis global y análisis por escenario cuando están disponibles.
+        </section>
+        
+    <section class="card">
+        <h2>Índice de reportes PCA/GMM</h2>
+        <p class="section-desc">Resumen de alcances generados.</p>
+        <div class="table-container">
+            <table class="dataframe data-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>scope</th>
+      <th>observations</th>
+      <th>scenarios</th>
+      <th>best_gmm_components</th>
+      <th>pca_explained_variance_pc1</th>
+      <th>pca_explained_variance_pc1_pc2</th>
+      <th>anomalies</th>
+      <th>low_confidence</th>
+      <th>report</th>
+      <th>tables_dir</th>
+      <th>plots_dir</th>
+      <th>report_link</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>global</td>
+      <td>119</td>
+      <td>17</td>
+      <td>3</td>
+      <td>0.42420</td>
+      <td>0.76935</td>
+      <td>6</td>
+      <td>0</td>
+      <td>output\probabilistic_characterization\global\html\report_pca_gmm_global.html</td>
+      <td>output\probabilistic_characterization\global\tables</td>
+      <td>output\probabilistic_characterization\global\plots</td>
+      <td><a href='../global/html/report_pca_gmm_global.html'>Abrir reporte</a></td>
+    </tr>
+    <tr>
+      <td>scenario_01_base_controlada_100</td>
+      <td>7</td>
+      <td>1</td>
+      <td>5</td>
+      <td>0.52664</td>
+      <td>0.95269</td>
+      <td>1</td>
+      <td>0</td>
+      <td>output\probabilistic_characterization\scenario_01_base_controlada_100\html\report_pca_gmm_scenario_01_base_controlada_100.html</td>
+      <td>output\probabilistic_characterization\scenario_01_base_controlada_100\tables</td>
+      <td>output\probabilistic_characterization\scenario_01_base_controlada_100\plots</td>
+      <td><a href='../scenario_01_base_controlada_100/html/report_pca_gmm_scenario_01_base_controlada_100.html'>Abrir reporte</a></td>
+    </tr>
+    <tr>
+      <td>scenario_02_carga_media_estable</td>
+      <td>7</td>
+      <td>1</td>
+      <td>4</td>
+      <td>0.90130</td>
+      <td>0.96316</td>
+      <td>1</td>
+      <td>0</td>
+      <td>output\probabilistic_characterization\scenario_02_carga_media_estable\html\report_pca_gmm_scenario_02_carga_media_estable.html</td>
+      <td>output\probabilistic_characterization\scenario_02_carga_media_estable\tables</td>
+      <td>output\probabilistic_characterization\scenario_02_carga_media_estable\plots</td>
+      <td><a href='../scenario_02_carga_media_estable/html/report_pca_gmm_scenario_02_carga_media_estable.html'>Abrir reporte</a></td>
+    </tr>
+    <tr>
+      <td>scenario_03_pico_tarde</td>
+      <td>7</td>
+      <td>1</td>
+      <td>4</td>
+      <td>0.70356</td>
+      <td>0.88394</td>
+      <td>2</td>
+      <td>0</td>
+      <td>output\probabilistic_characterization\scenario_03_pico_tarde\html\report_pca_gmm_scenario_03_pico_tarde.html</td>
+      <td>output\probabilistic_characterization\scenario_03_pico_tarde\tables</td>
+      <td>output\probabilistic_characterization\scenario_03_pico_tarde\plots</td>
+      <td><a href='../scenario_03_pico_tarde/html/report_pca_gmm_scenario_03_pico_tarde.html'>Abrir reporte</a></td>
+    </tr>
+    <tr>
+      <td>scenario_04_baja_capacidad</td>
+      <td>7</td>
+      <td>1</td>
+      <td>4</td>
+      <td>0.73739</td>
+      <td>0.93668</td>
+      <td>2</td>
+      <td>0</td>
+      <td>output\probabilistic_characterization\scenario_04_baja_capacidad\html\report_pca_gmm_scenario_04_baja_capacidad.html</td>
+      <td>output\probabilistic_characterization\scenario_04_baja_capacidad\tables</td>
+      <td>output\probabilistic_characterization\scenario_04_baja_capacidad\plots</td>
+      <td><a href='../scenario_04_baja_capacidad/html/report_pca_gmm_scenario_04_baja_capacidad.html'>Abrir reporte</a></td>
+    </tr>
+    <tr>
+      <td>scenario_05_red_lenta</td>
+      <td>7</td>
+      <td>1</td>
+      <td>4</td>
+      <td>0.78664</td>
+      <td>0.93839</td>
+      <td>1</td>
+      <td>0</td>
+      <td>output\probabilistic_characterization\scenario_05_red_lenta\html\report_pca_gmm_scenario_05_red_lenta.html</td>
+      <td>output\probabilistic_characterization\scenario_05_red_lenta\tables</td>
+      <td>output\probabilistic_characterization\scenario_05_red_lenta\plots</td>
+      <td><a href='../scenario_05_red_lenta/html/report_pca_gmm_scenario_05_red_lenta.html'>Abrir reporte</a></td>
+    </tr>
+    <tr>
+      <td>scenario_06_mp4_pesado</td>
+      <td>7</td>
+      <td>1</td>
+      <td>5</td>
+      <td>0.83257</td>
+      <td>0.96508</td>
+      <td>1</td>
+      <td>0</td>
+      <td>output\probabilistic_characterization\scenario_06_mp4_pesado\html\report_pca_gmm_scenario_06_mp4_pesado.html</td>
+      <td>output\probabilistic_characterization\scenario_06_mp4_pesado\tables</td>
+      <td>output\probabilistic_characterization\scenario_06_mp4_pesado\plots</td>
+      <td><a href='../scenario_06_mp4_pesado/html/report_pca_gmm_scenario_06_mp4_pesado.html'>Abrir reporte</a></td>
+    </tr>
+    <tr>
+      <td>scenario_07_pdf_documental</td>
+      <td>7</td>
+      <td>1</td>
+      <td>5</td>
+      <td>0.68001</td>
+      <td>0.95329</td>
+      <td>2</td>
+      <td>0</td>
+      <td>output\probabilistic_characterization\scenario_07_pdf_documental\html\report_pca_gmm_scenario_07_pdf_documental.html</td>
+      <td>output\probabilistic_characterization\scenario_07_pdf_documental\tables</td>
+      <td>output\probabilistic_characterization\scenario_07_pdf_documental\plots</td>
+      <td><a href='../scenario_07_pdf_documental/html/report_pca_gmm_scenario_07_pdf_documental.html'>Abrir reporte</a></td>
+    </tr>
+    <tr>
+      <td>scenario_08_jpg_masivo</td>
+      <td>7</td>
+      <td>1</td>
+      <td>4</td>
+      <td>0.74077</td>
+      <td>0.95735</td>
+      <td>2</td>
+      <td>0</td>
+      <td>output\probabilistic_characterization\scenario_08_jpg_masivo\html\report_pca_gmm_scenario_08_jpg_masivo.html</td>
+      <td>output\probabilistic_characterization\scenario_08_jpg_masivo\tables</td>
+      <td>output\probabilistic_characterization\scenario_08_jpg_masivo\plots</td>
+      <td><a href='../scenario_08_jpg_masivo/html/report_pca_gmm_scenario_08_jpg_masivo.html'>Abrir reporte</a></td>
+    </tr>
+    <tr>
+      <td>scenario_10_duplicidad_alta</td>
+      <td>7</td>
+      <td>1</td>
+      <td>4</td>
+      <td>0.53011</td>
+      <td>0.84628</td>
+      <td>1</td>
+      <td>0</td>
+      <td>output\probabilistic_characterization\scenario_10_duplicidad_alta\html\report_pca_gmm_scenario_10_duplicidad_alta.html</td>
+      <td>output\probabilistic_characterization\scenario_10_duplicidad_alta\tables</td>
+      <td>output\probabilistic_characterization\scenario_10_duplicidad_alta\plots</td>
+      <td><a href='../scenario_10_duplicidad_alta/html/report_pca_gmm_scenario_10_duplicidad_alta.html'>Abrir reporte</a></td>
+    </tr>
+    <tr>
+      <td>scenario_11_huerfanos_json_pdf</td>
+      <td>7</td>
+      <td>1</td>
+      <td>5</td>
+      <td>0.71917</td>
+      <td>0.92925</td>
+      <td>2</td>
+      <td>0</td>
+      <td>output\probabilistic_characterization\scenario_11_huerfanos_json_pdf\html\report_pca_gmm_scenario_11_huerfanos_json_pdf.html</td>
+      <td>output\probabilistic_characterization\scenario_11_huerfanos_json_pdf\tables</td>
+      <td>output\probabilistic_characterization\scenario_11_huerfanos_json_pdf\plots</td>
+      <td><a href='../scenario_11_huerfanos_json_pdf/html/report_pca_gmm_scenario_11_huerfanos_json_pdf.html'>Abrir reporte</a></td>
+    </tr>
+    <tr>
+      <td>scenario_12_null_json_alto</td>
+      <td>7</td>
+      <td>1</td>
+      <td>4</td>
+      <td>0.80807</td>
+      <td>0.92790</td>
+      <td>2</td>
+      <td>0</td>
+      <td>output\probabilistic_characterization\scenario_12_null_json_alto\html\report_pca_gmm_scenario_12_null_json_alto.html</td>
+      <td>output\probabilistic_characterization\scenario_12_null_json_alto\tables</td>
+      <td>output\probabilistic_characterization\scenario_12_null_json_alto\plots</td>
+      <td><a href='../scenario_12_null_json_alto/html/report_pca_gmm_scenario_12_null_json_alto.html'>Abrir reporte</a></td>
+    </tr>
+    <tr>
+      <td>scenario_13_timeout_blob</td>
+      <td>7</td>
+      <td>1</td>
+      <td>4</td>
+      <td>0.86495</td>
+      <td>0.95647</td>
+      <td>2</td>
+      <td>0</td>
+      <td>output\probabilistic_characterization\scenario_13_timeout_blob\html\report_pca_gmm_scenario_13_timeout_blob.html</td>
+      <td>output\probabilistic_characterization\scenario_13_timeout_blob\tables</td>
+      <td>output\probabilistic_characterization\scenario_13_timeout_blob\plots</td>
+      <td><a href='../scenario_13_timeout_blob/html/report_pca_gmm_scenario_13_timeout_blob.html'>Abrir reporte</a></td>
+    </tr>
+    <tr>
+      <td>scenario_14_hot_storage_extremo</td>
+      <td>7</td>
+      <td>1</td>
+      <td>4</td>
+      <td>0.59010</td>
+      <td>0.94020</td>
+      <td>1</td>
+      <td>0</td>
+      <td>output\probabilistic_characterization\scenario_14_hot_storage_extremo\html\report_pca_gmm_scenario_14_hot_storage_extremo.html</td>
+      <td>output\probabilistic_characterization\scenario_14_hot_storage_extremo\tables</td>
+      <td>output\probabilistic_characterization\scenario_14_hot_storage_extremo\plots</td>
+      <td><a href='../scenario_14_hot_storage_extremo/html/report_pca_gmm_scenario_14_hot_storage_extremo.html'>Abrir reporte</a></td>
+    </tr>
+    <tr>
+      <td>scenario_15_archive_mal_gobernado</td>
+      <td>7</td>
+      <td>1</td>
+      <td>3</td>
+      <td>0.64921</td>
+      <td>0.95539</td>
+      <td>2</td>
+      <td>0</td>
+      <td>output\probabilistic_characterization\scenario_15_archive_mal_gobernado\html\report_pca_gmm_scenario_15_archive_mal_gobernado.html</td>
+      <td>output\probabilistic_characterization\scenario_15_archive_mal_gobernado\tables</td>
+      <td>output\probabilistic_characterization\scenario_15_archive_mal_gobernado\plots</td>
+      <td><a href='../scenario_15_archive_mal_gobernado/html/report_pca_gmm_scenario_15_archive_mal_gobernado.html'>Abrir reporte</a></td>
+    </tr>
+    <tr>
+      <td>scenario_17_operacion_24x7</td>
+      <td>7</td>
+      <td>1</td>
+      <td>2</td>
+      <td>1.00000</td>
+      <td>1.00000</td>
+      <td>1</td>
+      <td>0</td>
+      <td>output\probabilistic_characterization\scenario_17_operacion_24x7\html\report_pca_gmm_scenario_17_operacion_24x7.html</td>
+      <td>output\probabilistic_characterization\scenario_17_operacion_24x7\tables</td>
+      <td>output\probabilistic_characterization\scenario_17_operacion_24x7\plots</td>
+      <td><a href='../scenario_17_operacion_24x7/html/report_pca_gmm_scenario_17_operacion_24x7.html'>Abrir reporte</a></td>
+    </tr>
+    <tr>
+      <td>scenario_18_finde_alto</td>
+      <td>7</td>
+      <td>1</td>
+      <td>5</td>
+      <td>0.76024</td>
+      <td>0.94736</td>
+      <td>2</td>
+      <td>0</td>
+      <td>output\probabilistic_characterization\scenario_18_finde_alto\html\report_pca_gmm_scenario_18_finde_alto.html</td>
+      <td>output\probabilistic_characterization\scenario_18_finde_alto\tables</td>
+      <td>output\probabilistic_characterization\scenario_18_finde_alto\plots</td>
+      <td><a href='../scenario_18_finde_alto/html/report_pca_gmm_scenario_18_finde_alto.html'>Abrir reporte</a></td>
+    </tr>
+    <tr>
+      <td>scenario_19_costos_agresivos</td>
+      <td>7</td>
+      <td>1</td>
+      <td>6</td>
+      <td>0.71019</td>
+      <td>0.92887</td>
+      <td>1</td>
+      <td>0</td>
+      <td>output\probabilistic_characterization\scenario_19_costos_agresivos\html\report_pca_gmm_scenario_19_costos_agresivos.html</td>
+      <td>output\probabilistic_characterization\scenario_19_costos_agresivos\tables</td>
+      <td>output\probabilistic_characterization\scenario_19_costos_agresivos\plots</td>
+      <td><a href='../scenario_19_costos_agresivos/html/report_pca_gmm_scenario_19_costos_agresivos.html'>Abrir reporte</a></td>
+    </tr>
+  </tbody>
+</table>
+        </div>
+    </section>
+    
+</main>
+</body>
+</html>

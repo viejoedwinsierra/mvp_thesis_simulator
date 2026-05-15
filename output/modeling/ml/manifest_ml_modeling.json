@@ -1,0 +1,59 @@
+{
+  "generated_at": "2026-05-15T02:40:32",
+  "dataset_dir": "output\\dataset",
+  "output_root": "output\\modeling\\ml",
+  "target_regression": "storage_cost",
+  "target_classification": "has_error",
+  "total_models": 6,
+  "master_report": "output\\modeling\\ml\\html\\report_ml_master.html",
+  "results": [
+    {
+      "technique": "random_forest_regressor",
+      "target": "storage_cost",
+      "task_type": "regression",
+      "report": "output\\modeling\\ml\\random_forest_regressor\\html\\report_random_forest_regressor_storage_cost.html",
+      "model": "output\\modeling\\ml\\random_forest_regressor\\models\\random_forest_regressor_storage_cost.joblib",
+      "output_dir": "output\\modeling\\ml\\random_forest_regressor"
+    },
+    {
+      "technique": "gradient_boosting_regressor",
+      "target": "storage_cost",
+      "task_type": "regression",
+      "report": "output\\modeling\\ml\\gradient_boosting_regressor\\html\\report_gradient_boosting_regressor_storage_cost.html",
+      "model": "output\\modeling\\ml\\gradient_boosting_regressor\\models\\gradient_boosting_regressor_storage_cost.joblib",
+      "output_dir": "output\\modeling\\ml\\gradient_boosting_regressor"
+    },
+    {
+      "technique": "hist_gradient_boosting_regressor",
+      "target": "storage_cost",
+      "task_type": "regression",
+      "report": "output\\modeling\\ml\\hist_gradient_boosting_regressor\\html\\report_hist_gradient_boosting_regressor_storage_cost.html",
+      "model": "output\\modeling\\ml\\hist_gradient_boosting_regressor\\models\\hist_gradient_boosting_regressor_storage_cost.joblib",
+      "output_dir": "output\\modeling\\ml\\hist_gradient_boosting_regressor"
+    },
+    {
+      "technique": "random_forest_classifier",
+      "target": "has_error",
+      "task_type": "classification",
+      "report": "output\\modeling\\ml\\random_forest_classifier\\html\\report_random_forest_classifier_has_error.html",
+      "model": "output\\modeling\\ml\\random_forest_classifier\\models\\random_forest_classifier_has_error.joblib",
+      "output_dir": "output\\modeling\\ml\\random_forest_classifier"
+    },
+    {
+      "technique": "gradient_boosting_classifier",
+      "target": "has_error",
+      "task_type": "classification",
+      "report": "output\\modeling\\ml\\gradient_boosting_classifier\\html\\report_gradient_boosting_classifier_has_error.html",
+      "model": "output\\modeling\\ml\\gradient_boosting_classifier\\models\\gradient_boosting_classifier_has_error.joblib",
+      "output_dir": "output\\modeling\\ml\\gradient_boosting_classifier"
+    },
+    {
+      "technique": "hist_gradient_boosting_classifier",
+      "target": "has_error",
+      "task_type": "classification",
+      "report": "output\\modeling\\ml\\hist_gradient_boosting_classifier\\html\\report_hist_gradient_boosting_classifier_has_error.html",
+      "model": "output\\modeling\\ml\\hist_gradient_boosting_classifier\\models\\hist_gradient_boosting_classifier_has_error.joblib",
+      "output_dir": "output\\modeling\\ml\\hist_gradient_boosting_classifier"
+    }
+  ]
+}

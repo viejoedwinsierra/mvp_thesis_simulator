@@ -1,0 +1,130 @@
+{
+  "simulation": {
+    "simulation_date": "2026-04-04",
+    "max_valid_files_per_day": 1325000,
+    "output_dir": "C:/git_edwin/mvp_thesis_simulator/output/dataset/14_outliers_extremos",
+    "seed": 42
+  },
+  "arrival_process": {
+    "strategy": "poisson",
+    "hourly_noise": 0.18
+  },
+  "capacity": {
+    "enabled": true,
+    "files_per_hour": 36600,
+    "duration_penalty_factor": 0.55,
+    "error_penalty_factor": 0.35
+  },
+  "outliers": {
+    "enabled": true,
+    "probability": 0.038,
+    "size_multiplier_min": 2.0,
+    "size_multiplier_max": 6.0
+  },
+  "file_types": {
+    "distribution": {
+      "json": 0.25,
+      "jpg": 0.25,
+      "pdf": 0.25,
+      "mp4": 0.25
+    },
+    "size_distribution_mb": {
+      "json": {
+        "distribution": "lognormal",
+        "mean": 3,
+        "sigma": 0.5,
+        "min": 1,
+        "max": 20
+      },
+      "jpg": {
+        "distribution": "lognormal",
+        "mean": 8,
+        "sigma": 0.7,
+        "min": 1,
+        "max": 80
+      },
+      "pdf": {
+        "distribution": "lognormal",
+        "mean": 15,
+        "sigma": 0.8,
+        "min": 1,
+        "max": 150
+      },
+      "mp4": {
+        "distribution": "lognormal",
+        "mean": 120,
+        "sigma": 1.0,
+        "min": 10,
+        "max": 900
+      }
+    }
+  },
+  "transfer": {
+    "speed_mbps": {
+      "distribution": "lognormal",
+      "mean": 120,
+      "sigma": 0.7,
+      "min": 5,
+      "max": 400
+    },
+    "duration_strategy": "size_over_speed"
+  },
+  "errors": {
+    "base_error_probability": 0.046,
+    "multipliers": {
+      "peak_hour": 1.6,
+      "congestion": 2.0,
+      "archive_tier": 1.3
+    }
+  },
+  "hash": {
+    "algorithm": "sha256"
+  },
+  "storage_tier": {
+    "strategy": "days_since_last_access",
+    "rules": [],
+    "cost_per_mb_per_month": {
+      "hot": 0.018,
+      "cool": 0.01,
+      "archive": 0.002
+    }
+  },
+  "lifecycle": {
+    "days_stored": {
+      "distribution": "uniform",
+      "min": 1,
+      "max": 365
+    },
+    "days_since_last_access": {
+      "strategy": "beta_scaled_to_days_stored",
+      "profiles": {
+        "low_access": {
+          "alpha": 2,
+          "beta": 6
+        },
+        "high_access": {
+          "alpha": 6,
+          "beta": 2
+        }
+      },
+      "distribution_weights": {
+        "low_access": 0.6,
+        "high_access": 0.4
+      }
+    },
+    "movement_storage_probability": 0.2
+  },
+  "cost_model": {
+    "storage_cost_formula": "tier_size_cost"
+  },
+  "error_families": [],
+  "scenario_execution": {
+    "scenario_name": "14_outliers_extremos",
+    "start_date": "2026-04-01",
+    "end_date": "2026-04-07",
+    "current_simulation_date": "2026-04-04",
+    "expected_dataset_file": "blob_inventory_14_outliers_extremos_2026-04-04.csv",
+    "source_config": "C:/git_edwin/mvp_thesis_simulator/config/escenarios/14_outliers_extremos/simulation_config_14_outliers_extremos.json",
+    "generated_at": "2026-05-14T23:11:21"
+  }
+}

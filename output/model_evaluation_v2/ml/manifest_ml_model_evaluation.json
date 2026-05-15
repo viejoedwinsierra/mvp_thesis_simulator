@@ -1,0 +1,14 @@
+{
+  "metrics_csv": "output\\model_evaluation_v2\\ml\\tables\\ml_evaluation_metrics.csv",
+  "prediction_files": {
+    "gradient_boosting_classifier_has_error": "output\\model_evaluation_v2\\ml\\predictions\\gradient_boosting_classifier_has_error_predictions.csv",
+    "gradient_boosting_regressor_storage_cost": "output\\model_evaluation_v2\\ml\\predictions\\gradient_boosting_regressor_storage_cost_predictions.csv",
+    "hist_gradient_boosting_classifier_has_error": "output\\model_evaluation_v2\\ml\\predictions\\hist_gradient_boosting_classifier_has_error_predictions.csv",
+    "hist_gradient_boosting_regressor_storage_cost": "output\\model_evaluation_v2\\ml\\predictions\\hist_gradient_boosting_regressor_storage_cost_predictions.csv",
+    "random_forest_classifier_has_error": "output\\model_evaluation_v2\\ml\\predictions\\random_forest_classifier_has_error_predictions.csv",
+    "random_forest_regressor_storage_cost": "output\\model_evaluation_v2\\ml\\predictions\\random_forest_regressor_storage_cost_predictions.csv"
+  },
+  "total_models": 6,
+  "ok": 6,
+  "error": 0
+}

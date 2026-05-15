@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Reporte PCA + GMM - scenario_02_carga_media_estable</title>
+<style>
+:root {
+  --bg:#f3f6fa; --card:#fff; --ink:#17212b; --muted:#667085;
+  --primary:#17324d; --accent:#2c7be5; --border:#e5edf3;
+}
+body { font-family: Arial, sans-serif; margin:0; background:var(--bg); color:var(--ink); }
+.page { max-width:1360px; margin:0 auto; padding:32px; }
+.hero { background:linear-gradient(135deg,#17324d,#245a89); color:white; padding:28px; border-radius:18px; margin-bottom:24px; }
+.hero h1 { margin:0 0 8px 0; font-size:30px; }
+.hero p { margin:0; opacity:.92; }
+.card { background:white; padding:22px; margin-bottom:22px; border-radius:16px; border:1px solid var(--border); box-shadow:0 2px 10px rgba(0,0,0,.05); }
+.note { background:#eef6ff; border-left:6px solid var(--accent); padding:16px 18px; border-radius:12px; margin-bottom:22px; line-height:1.5; }
+h2 { color:var(--primary); margin-top:0; border-bottom:1px solid var(--border); padding-bottom:9px; }
+.section-desc,.muted { color:var(--muted); font-size:14px; }
+.metrics-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:16px; margin-bottom:22px; }
+.metric-card { background:white; border:1px solid var(--border); border-radius:14px; padding:18px; box-shadow:0 1px 6px rgba(0,0,0,.05); }
+.metric-label { font-size:13px; color:var(--muted); margin-bottom:8px; }
+.metric-value { font-size:25px; font-weight:700; color:var(--primary); }
+.metric-hint { font-size:12px; color:var(--muted); margin-top:8px; }
+.table-container { overflow-x:auto; }
+table.data-table, table.dataframe { border-collapse:collapse; width:100%; font-size:13px; }
+table.data-table th, table.dataframe th { background-color:var(--primary); color:white; padding:8px; text-align:left; }
+table.data-table td, table.dataframe td { border:1px solid #dde5ed; padding:7px; vertical-align:top; }
+table.data-table tr:nth-child(even), table.dataframe tr:nth-child(even) { background-color:#f8fafc; }
+.plot-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:20px; }
+.plot-card { margin:0; background:#fbfdff; border:1px solid var(--border); border-radius:14px; padding:12px; }
+.plot-card img { width:100%; max-width:100%; display:block; border-radius:10px; border:1px solid #d9e2ec; background:white; }
+.plot-card figcaption { margin-top:8px; font-size:13px; color:var(--muted); text-align:center; }
+</style>
+</head>
+<body>
+<main class="page">
+<section class="hero">
+<h1>Reporte PCA + GMM - scenario_02_carga_media_estable</h1>
+<p>PCA para estructura latente y GMM para composición probabilística del simulador.</p>
+</section>
+
+    <section class="note">
+        <strong>Alcance:</strong> scenario_02_carga_media_estable<br><br>
+        Este análisis aplica PCA antes de GMM. PCA valida si existe estructura latente
+        y GMM modela la composición probabilística como una mezcla de comportamientos gaussianos.
+    </section>
+
+    <section class="metrics-grid">
+        
+    <div class="metric-card">
+        <div class="metric-label">Observaciones</div>
+        <div class="metric-value">7.0000</div>
+        <div class="metric-hint">Días/escenario-día</div>
+    </div>
+    
+    <div class="metric-card">
+        <div class="metric-label">PC1+PC2</div>
+        <div class="metric-value">0.9632</div>
+        <div class="metric-hint">Varianza explicada</div>
+    </div>
+    
+    <div class="metric-card">
+        <div class="metric-label">Clusters GMM</div>
+        <div class="metric-value">4.0000</div>
+        <div class="metric-hint">Componentes encontrados</div>
+    </div>
+    
+    <div class="metric-card">
+        <div class="metric-label">Anomalías</div>
+        <div class="metric-value">1.0000</div>
+        <div class="metric-hint">Baja probabilidad</div>
+    </div>
+    
+    </section>
+    
+    <section class="card">
+        <h2>1. Hallazgos principales</h2>
+        <p class="section-desc">Lectura ejecutiva del análisis PCA/GMM.</p>
+        <div class="table-container">
+            <table class="dataframe data-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>hallazgo</th>
+      <th>valor</th>
+      <th>lectura</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>varianza_pc1</td>
+      <td>0.90130</td>
+      <td>PC1 representa la dirección dominante de variabilidad operacional.</td>
+    </tr>
+    <tr>
+      <td>varianza_pc1_pc2</td>
+      <td>0.96316</td>
+      <td>Varianza acumulada explicada por las dos primeras componentes.</td>
+    </tr>
+    <tr>
+      <td>componentes_gmm</td>
+      <td>4.00000</td>
+      <td>Número de componentes gaussianos seleccionado por BIC.</td>
+    </tr>
+    <tr>
+      <td>anomalias</td>
+      <td>1.00000</td>
+      <td>Observaciones diarias con baja probabilidad bajo la mezcla GMM.</td>
+    </tr>
+    <tr>
+      <td>baja_confianza</td>
+      <td>0.00000</td>
+      <td>Días con pertenencia ambigua a componentes gaussianos.</td>
+    </tr>
+    <tr>
+      <td>cluster_dominante</td>
+      <td>1.00000</td>
+      <td>Cluster con más observaciones: carga normal/baja, incluye anomalías</td>
+    </tr>
+  </tbody>
+</table>
+        </div>
+    </section>
+    
+    <section class="card">
+        <h2>2. Variables utilizadas</h2>
+        <p class="section-desc">Variables agregadas diariamente antes del escalamiento.</p>
+        <div class="table-container">
+            <table class="dataframe data-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>feature</th>
+      <th>explicacion</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>log_total_size_mb</td>
+      <td>Logaritmo del tamaño total diario. Representa carga volumétrica reduciendo efecto de extremos.</td>
+    </tr>
+    <tr>
+      <td>log_file_count</td>
+      <td>Logaritmo de cantidad diaria de archivos. Representa transaccionalidad operativa.</td>
+    </tr>
+    <tr>
+      <td>avg_transfer_speed_mbps</td>
+      <td>Velocidad promedio diaria. Representa rendimiento operativo de transferencia.</td>
+    </tr>
+    <tr>
+      <td>avg_queue_pressure</td>
+      <td>Presión promedio diaria de cola. Representa congestión o saturación.</td>
+    </tr>
+    <tr>
+      <td>log_storage_cost</td>
+      <td>Logaritmo del costo diario total. Representa impacto financiero estabilizando escala.</td>
+    </tr>
+  </tbody>
+</table>
+        </div>
+    </section>
+    
+    <section class="card">
+        <h2>3. Cargas PCA</h2>
+        <p class="section-desc">Variables que más explican PC1 y PC2.</p>
+        <div class="table-container">
+            <table class="dataframe data-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>feature</th>
+      <th>PC1</th>
+      <th>PC2</th>
+      <th>abs_PC1</th>
+      <th>abs_PC2</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>log_file_count</td>
+      <td>0.45778</td>
+      <td>-0.04891</td>
+      <td>0.45778</td>
+      <td>0.04891</td>
+    </tr>
+    <tr>
+      <td>avg_queue_pressure</td>
+      <td>0.45706</td>
+      <td>-0.06993</td>
+      <td>0.45706</td>
+      <td>0.06993</td>
+    </tr>
+    <tr>
+      <td>log_total_size_mb</td>
+      <td>0.45219</td>
+      <td>0.33361</td>
+      <td>0.45219</td>
+      <td>0.33361</td>
+    </tr>
+    <tr>
+      <td>log_storage_cost</td>
+      <td>0.45029</td>
+      <td>0.51406</td>
+      <td>0.45029</td>
+      <td>0.51406</td>
+    </tr>
+    <tr>
+      <td>avg_transfer_speed_mbps</td>
+      <td>-0.41749</td>
+      <td>0.78560</td>
+      <td>0.41749</td>
+      <td>0.78560</td>
+    </tr>
+  </tbody>
+</table>
+        </div>
+    </section>
+    
+    <section class="card">
+        <h2>4. Perfil de clusters GMM</h2>
+        <p class="section-desc">Interpretación operacional de cada componente gaussiano.</p>
+        <div class="table-container">
+            <table class="dataframe data-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>gmm_cluster</th>
+      <th>observations</th>
+      <th>scenarios</th>
+      <th>avg_total_size_mb</th>
+      <th>avg_file_count</th>
+      <th>avg_transfer_speed_mbps</th>
+      <th>avg_storage_cost</th>
+      <th>avg_queue_pressure</th>
+      <th>avg_likelihood</th>
+      <th>avg_cluster_probability</th>
+      <th>anomalies</th>
+      <th>low_confidence</th>
+      <th>interpretation</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>5479.06058</td>
+      <td>154.0</td>
+      <td>50.49327</td>
+      <td>0.19388</td>
+      <td>0.05708</td>
+      <td>27.99817</td>
+      <td>1.0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>alta carga, alto costo, menor velocidad, mayor presión de cola</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>3</td>
+      <td>1</td>
+      <td>1971.39310</td>
+      <td>69.0</td>
+      <td>56.98276</td>
+      <td>0.05868</td>
+      <td>0.02161</td>
+      <td>22.29983</td>
+      <td>1.0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>carga normal/baja, incluye anomalías</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>2</td>
+      <td>1</td>
+      <td>4348.61598</td>
+      <td>112.0</td>
+      <td>53.37969</td>
+      <td>0.14494</td>
+      <td>0.03614</td>
+      <td>21.82753</td>
+      <td>1.0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>alta carga, alto costo, menor velocidad, mayor presión de cola</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>1</td>
+      <td>1</td>
+      <td>5731.87185</td>
+      <td>122.0</td>
+      <td>55.07990</td>
+      <td>0.20685</td>
+      <td>0.04312</td>
+      <td>27.99817</td>
+      <td>1.0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>alta carga, alto costo, mayor presión de cola</td>
+    </tr>
+  </tbody>
+</table>
+        </div>
+    </section>
+    
+    <section class="card">
+        <h2>5. Selección GMM por BIC/AIC</h2>
+        <p class="section-desc">Menor BIC indica mejor equilibrio entre ajuste y complejidad.</p>
+        <div class="table-container">
+            <table class="dataframe data-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>n_components</th>
+      <th>bic</th>
+      <th>aic</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>2</td>
+      <td>-130.66132</td>
+      <td>-128.44364</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>-162.12210</td>
+      <td>-158.76853</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>-171.59126</td>
+      <td>-167.10181</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td>-155.40973</td>
+      <td>-149.78438</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td>-151.50825</td>
+      <td>-144.74702</td>
+    </tr>
+  </tbody>
+</table>
+        </div>
+    </section>
+    
+    <section class="card">
+        <h2>6. Referencia K-Means</h2>
+        <p class="section-desc">Usado solo como referencia explicativa, no como clustering final.</p>
+        <div class="table-container">
+            <table class="dataframe data-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>n_clusters</th>
+      <th>inertia</th>
+      <th>silhouette_score</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>2</td>
+      <td>7.03302</td>
+      <td>0.64851</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>3.01400</td>
+      <td>0.51099</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>1.55810</td>
+      <td>0.40037</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td>0.67383</td>
+      <td>0.35510</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td>0.00000</td>
+      <td>0.28571</td>
+    </tr>
+  </tbody>
+</table>
+        </div>
+    </section>
+    
+    <section class="card">
+        <h2>Gráficos</h2>
+        <div class="plot-grid">
+        <figure class="plot-card">
+            <img src="../plots/pca_gmm_scatter.png" alt="Pca Gmm Scatter">
+            <figcaption>Pca Gmm Scatter</figcaption>
+        </figure>
+        
+        <figure class="plot-card">
+            <img src="../plots/gmm_bic_selection.png" alt="Gmm Bic Selection">
+            <figcaption>Gmm Bic Selection</figcaption>
+        </figure>
+        
+        <figure class="plot-card">
+            <img src="../plots/kmeans_elbow_reference.png" alt="Kmeans Elbow Reference">
+            <figcaption>Kmeans Elbow Reference</figcaption>
+        </figure>
+        
+        <figure class="plot-card">
+            <img src="../plots/kmeans_silhouette_reference.png" alt="Kmeans Silhouette Reference">
+            <figcaption>Kmeans Silhouette Reference</figcaption>
+        </figure>
+        
+        <figure class="plot-card">
+            <img src="../plots/gmm_probability_heatmap.png" alt="Gmm Probability Heatmap">
+            <figcaption>Gmm Probability Heatmap</figcaption>
+        </figure>
+        
+        <figure class="plot-card">
+            <img src="../plots/gmm_cluster_profile_radar.png" alt="Gmm Cluster Profile Radar">
+            <figcaption>Gmm Cluster Profile Radar</figcaption>
+        </figure>
+        
+        <figure class="plot-card">
+            <img src="../plots/pca_gmm_gaussian_ellipses.png" alt="Pca Gmm Gaussian Ellipses">
+            <figcaption>Pca Gmm Gaussian Ellipses</figcaption>
+        </figure>
+        
+        <figure class="plot-card">
+            <img src="../plots/gmm_anomalies.png" alt="Gmm Anomalies">
+            <figcaption>Gmm Anomalies</figcaption>
+        </figure>
+        </div>
+    </section>
+    
+    <section class="card">
+        <h2>7. Observaciones más anómalas</h2>
+        <p class="section-desc">Menor log-likelihood bajo GMM.</p>
+        <div class="table-container">
+            <table class="dataframe data-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>scenario_name</th>
+      <th>simulation_date</th>
+      <th>total_size_mb</th>
+      <th>avg_size_mb</th>
+      <th>median_size_mb</th>
+      <th>max_size_mb</th>
+      <th>file_count</th>
+      <th>avg_transfer_speed_mbps</th>
+      <th>min_transfer_speed_mbps</th>
+      <th>total_storage_cost</th>
+      <th>avg_storage_cost</th>
+      <th>avg_queue_pressure</th>
+      <th>max_queue_pressure</th>
+      <th>log_total_size_mb</th>
+      <th>log_file_count</th>
+      <th>log_storage_cost</th>
+      <th>gmm_cluster</th>
+      <th>gmm_log_likelihood</th>
+      <th>prob_cluster_0</th>
+      <th>prob_cluster_1</th>
+      <th>prob_cluster_2</th>
+      <th>prob_cluster_3</th>
+      <th>max_cluster_probability</th>
+      <th>is_low_confidence</th>
+      <th>is_anomaly</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>02_carga_media_estable</td>
+      <td>2026-04-05</td>
+      <td>2256.46148</td>
+      <td>38.24511</td>
+      <td>4.58857</td>
+      <td>381.48667</td>
+      <td>59</td>
+      <td>55.92301</td>
+      <td>12.46808</td>
+      <td>0.06016</td>
+      <td>0.00102</td>
+      <td>0.01787</td>
+      <td>0.03241</td>
+      <td>7.72200</td>
+      <td>4.09434</td>
+      <td>0.05842</td>
+      <td>1</td>
+      <td>21.79983</td>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>False</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <td>02_carga_media_estable</td>
+      <td>2026-04-01</td>
+      <td>4267.86002</td>
+      <td>34.69805</td>
+      <td>4.77268</td>
+      <td>368.10198</td>
+      <td>123</td>
+      <td>52.28871</td>
+      <td>9.40941</td>
+      <td>0.13428</td>
+      <td>0.00109</td>
+      <td>0.03720</td>
+      <td>0.07125</td>
+      <td>8.35910</td>
+      <td>4.82028</td>
+      <td>0.12599</td>
+      <td>2</td>
+      <td>21.82753</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <td>02_carga_media_estable</td>
+      <td>2026-04-02</td>
+      <td>4429.37194</td>
+      <td>43.85517</td>
+      <td>5.17844</td>
+      <td>713.66044</td>
+      <td>101</td>
+      <td>54.47067</td>
+      <td>9.40854</td>
+      <td>0.15560</td>
+      <td>0.00154</td>
+      <td>0.03507</td>
+      <td>0.06084</td>
+      <td>8.39624</td>
+      <td>4.62497</td>
+      <td>0.14462</td>
+      <td>2</td>
+      <td>21.82753</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <td>02_carga_media_estable</td>
+      <td>2026-04-04</td>
+      <td>1828.85891</td>
+      <td>24.71431</td>
+      <td>5.54882</td>
+      <td>241.23270</td>
+      <td>74</td>
+      <td>57.51263</td>
+      <td>10.45904</td>
+      <td>0.05794</td>
+      <td>0.00078</td>
+      <td>0.02348</td>
+      <td>0.03456</td>
+      <td>7.51199</td>
+      <td>4.31749</td>
+      <td>0.05632</td>
+      <td>1</td>
+      <td>22.54983</td>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <td>02_carga_media_estable</td>
+      <td>2026-04-06</td>
+      <td>1828.85891</td>
+      <td>24.71431</td>
+      <td>5.54882</td>
+      <td>241.23270</td>
+      <td>74</td>
+      <td>57.51263</td>
+      <td>10.45904</td>
+      <td>0.05794</td>
+      <td>0.00078</td>
+      <td>0.02348</td>
+      <td>0.03456</td>
+      <td>7.51199</td>
+      <td>4.31749</td>
+      <td>0.05632</td>
+      <td>1</td>
+      <td>22.54983</td>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <td>02_carga_media_estable</td>
+      <td>2026-04-03</td>
+      <td>5479.06058</td>
+      <td>35.57832</td>
+      <td>5.47260</td>
+      <td>611.86699</td>
+      <td>154</td>
+      <td>50.49327</td>
+      <td>9.40941</td>
+      <td>0.19388</td>
+      <td>0.00126</td>
+      <td>0.05708</td>
+      <td>0.11748</td>
+      <td>8.60887</td>
+      <td>5.04343</td>
+      <td>0.17721</td>
+      <td>0</td>
+      <td>27.99817</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <td>02_carga_media_estable</td>
+      <td>2026-04-07</td>
+      <td>5731.87185</td>
+      <td>46.98256</td>
+      <td>5.30213</td>
+      <td>1500.00000</td>
+      <td>122</td>
+      <td>55.07990</td>
+      <td>9.40941</td>
+      <td>0.20685</td>
+      <td>0.00170</td>
+      <td>0.04312</td>
+      <td>0.07746</td>
+      <td>8.65397</td>
+      <td>4.81218</td>
+      <td>0.18802</td>
+      <td>3</td>
+      <td>27.99817</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>1.0</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+  </tbody>
+</table>
+        </div>
+    </section>
+    
+</main>
+</body>
+</html>
