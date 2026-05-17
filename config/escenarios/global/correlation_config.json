@@ -1,0 +1,145 @@
+{
+  "correlations": {
+    "enabled": true,
+    "version": "1.1",
+    "description": "Reglas de dependencia entre variables simuladas.",
+
+    "execution_controls": {
+      "apply_after": [
+        "noise",
+        "realism"
+      ],
+      "recompute_after_correlations": [
+        "transfer_duration_sec",
+        "queue_pressure",
+        "congestion_factor",
+        "error_probability",
+        "severity"
+      ]
+    },
+
+    "rules": [
+      {
+        "name": "congestion_degrades_network",
+        "enabled": true,
+        "priority": 10,
+        "when": {
+          "variable": "congestion_factor",
+          "operator": ">",
+          "value": 1.20
+        },
+        "effects": {
+          "transfer_speed_mbps": {
+            "operation": "multiply",
+            "value": 0.65
+          },
+          "error_probability": {
+            "operation": "multiply",
+            "value": 1.40
+          }
+        }
+      },
+      {
+        "name": "queue_pressure_increases_errors",
+        "enabled": true,
+        "priority": 20,
+        "when": {
+          "variable": "queue_pressure",
+          "operator": ">",
+          "value": 0.75
+        },
+        "effects": {
+          "transfer_speed_mbps": {
+            "operation": "multiply",
+            "value": 0.75
+          },
+          "error_probability": {
+            "operation": "multiply",
+            "value": 1.50
+          }
+        }
+      },
+      {
+        "name": "large_media_files_are_slower",
+        "enabled": true,
+        "priority": 30,
+        "when": {
+          "variable": "file_type",
+          "operator": "==",
+          "value": "mp4"
+        },
+        "effects": {
+          "transfer_duration_sec": {
+            "operation": "multiply",
+            "value": 1.30
+          },
+          "error_probability": {
+            "operation": "multiply",
+            "value": 1.20
+          }
+        }
+      },
+      {
+        "name": "archive_operations_are_more_fragile",
+        "enabled": true,
+        "priority": 40,
+        "when": {
+          "variable": "storage_tier",
+          "operator": "==",
+          "value": "archive"
+        },
+        "effects": {
+          "transfer_duration_sec": {
+            "operation": "multiply",
+            "value": 1.15
+          },
+          "error_probability": {
+            "operation": "multiply",
+            "value": 1.25
+          }
+        }
+      },
+      {
+        "name": "large_file_low_speed_timeout_risk",
+        "enabled": true,
+        "priority": 50,
+        "when_all": [
+          {
+            "variable": "size_mb",
+            "operator": ">",
+            "value": 100
+          },
+          {
+            "variable": "transfer_speed_mbps",
+            "operator": "<",
+            "value": 5
+          }
+        ],
+        "effects": {
+          "error_probability": {
+            "operation": "multiply",
+            "value": 1.60
+          }
+        }
+      }
+    ],
+
+    "post_processing": {
+      "clamp_error_probability": {
+        "enabled": true,
+        "min": 0,
+        "max": 0.95
+      },
+      "clamp_transfer_speed_mbps": {
+        "enabled": true,
+        "min": 1,
+        "max": 300
+      },
+      "clamp_queue_pressure": {
+        "enabled": true,
+        "min": 0,
+        "max": 1
+      }
+    }
+  }
+}

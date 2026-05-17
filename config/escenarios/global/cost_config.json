@@ -1,6 +1,7 @@
 {
   "storage_tier": {
     "strategy": "by_days_since_last_access",
+
     "rules": [
       {
         "tier": "hot",
@@ -16,18 +17,53 @@
         "min_days_since_last_access": 91
       }
     ],
+
     "cost_per_mb_per_month": {
       "hot": 0.00002,
       "cool": 0.00001,
       "archive": 0.000002
+    },
+
+    "billing_period_days": 30,
+
+    "output_columns": {
+      "storage_tier_original": true,
+      "storage_tier_final": true,
+      "cost_per_mb_per_month": true,
+      "cost_per_mb_per_day": true
     }
   },
 
   "cost_model": {
     "storage_cost_formula": "size_mb * cost_per_mb_per_day * days_stored",
+
+    "recompute_after": [
+      "days_stored_noise",
+      "days_since_last_access_noise",
+      "storage_policy_noise"
+    ],
+
     "non_linear_adjustments": {
-      "large_file_discount_threshold_mb": 1000,
+      "large_file_discount_threshold_mb": 300,
       "discount_factor": 0.85
+    },
+
+    "operational_costs": {
+      "enabled": true,
+
+      "retry_cost_per_attempt": 0.000001,
+      "timeout_penalty_cost": 0.00001,
+      "orphan_penalty_cost": 0.000005,
+      "duplicity_penalty_cost": 0.000003,
+
+      "total_operational_cost_formula": "storage_cost + retry_cost + error_penalty_cost"
+    },
+
+    "output_columns": {
+      "storage_cost": true,
+      "retry_cost": true,
+      "error_penalty_cost": true,
+      "total_operational_cost": true
     }
   }
 }

@@ -5,6 +5,7 @@
       "min": 1,
       "max": 180
     },
+
     "days_since_last_access": {
       "strategy": "beta_scaled_to_days_stored",
       "profiles": {
@@ -25,8 +26,33 @@
         "low_access": 0.50,
         "medium_access": 0.30,
         "high_access": 0.20
+      },
+      "constraint": "days_since_last_access <= days_stored"
+    },
+
+    "movement_storage": {
+      "enabled": true,
+      "default_probability": 0.15,
+      "probability_by_tier": {
+        "hot": 0.20,
+        "cool": 0.12,
+        "archive": 0.05
       }
     },
-    "movement_storage_probability": 0.15
+
+    "policy_execution": {
+      "enabled": true,
+      "delay_probability": 0.08,
+      "manual_override_probability": 0.03
+    },
+
+    "output_columns": {
+      "days_stored": true,
+      "days_since_last_access": true,
+      "access_profile": true,
+      "movement_storage": true,
+      "lifecycle_policy_delayed": true,
+      "lifecycle_manual_override": true
+    }
   }
 }

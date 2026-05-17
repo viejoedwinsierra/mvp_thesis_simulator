@@ -1,0 +1,155 @@
+{
+  "realism": {
+    "enabled": true,
+    "version": "1.2",
+    "description": "Configuracion transversal para simular imperfecciones operacionales del sistema.",
+
+    "modules": {
+      "correlations": {
+        "enabled": true,
+        "config_file": "correlation_config.json"
+      },
+      "dynamic_capacity": {
+        "enabled": true
+      },
+      "incidents": {
+        "enabled": true
+      },
+      "entity_skew": {
+        "enabled": true
+      },
+      "metadata_quality": {
+        "enabled": true
+      },
+      "storage_policy_noise": {
+        "enabled": true
+      },
+      "retries": {
+        "enabled": true
+      },
+      "saturation": {
+        "enabled": true
+      },
+      "daily_drift": {
+        "enabled": true
+      }
+    },
+
+    "execution_controls": {
+      "apply_after": [
+        "time_distribution",
+        "lifecycle",
+        "cost",
+        "noise"
+      ],
+      "recompute_after_realism": [
+        "effective_capacity",
+        "queue_pressure",
+        "congestion_factor",
+        "transfer_duration_sec",
+        "error_probability",
+        "storage_cost"
+      ]
+    },
+
+    "dynamic_capacity": {
+      "base_files_per_hour_source": "capacity.files_per_hour",
+      "min_files_per_hour": 600,
+      "max_files_per_hour": 1100,
+      "capacity_variability_enabled": false,
+      "peak_degradation": {
+        "queue_pressure_threshold": 0.75,
+        "capacity_multiplier": 0.75
+      },
+      "recovery": {
+        "enabled": true,
+        "recovery_rate_per_hour": 0.12
+      }
+    },
+
+    "incidents": {
+      "probability_per_simulated_day": 0.08,
+      "max_incidents_per_day": 2,
+      "max_incident_error_multiplier": 2.5,
+      "types": {
+        "network_degradation": {
+          "weight": 0.45,
+          "duration_hours_min": 1,
+          "duration_hours_max": 3,
+          "speed_multiplier": 0.45,
+          "duration_multiplier": 1.90,
+          "error_multiplier": 2.50
+        },
+        "storage_throttling": {
+          "weight": 0.30,
+          "duration_hours_min": 1,
+          "duration_hours_max": 2,
+          "capacity_multiplier": 0.55,
+          "duration_multiplier": 2.00,
+          "error_multiplier": 1.80
+        },
+        "metadata_service_latency": {
+          "weight": 0.25,
+          "duration_hours_min": 1,
+          "duration_hours_max": 4,
+          "duration_multiplier": 1.45,
+          "error_multiplier": 1.80
+        }
+      }
+    },
+
+    "entity_skew": {
+      "entity_type": "prefix",
+      "strategy": "pareto",
+      "pareto_alpha": 1.40,
+      "top_entities_load_share": 0.70,
+      "min_entities": 8,
+      "max_entities": 30
+    },
+
+    "metadata_quality": {
+      "missing_metadata_probability": 0.030,
+      "wrong_extension_probability": 0.015,
+      "empty_file_probability": 0.010,
+      "invalid_timestamp_probability": 0.005,
+      "malformed_json_probability": 0.020,
+      "unknown_content_type_probability": 0.012
+    },
+
+    "storage_policy_noise": {
+      "wrong_tier_probability": 0.060,
+      "force_hot_large_files_probability": 0.040,
+      "archive_recent_file_probability": 0.020,
+      "cool_recent_file_probability": 0.030
+    },
+
+    "retries": {
+      "max_retries": 3,
+      "retry_probability_after_error": 0.65,
+      "retry_success_probability": 0.55,
+      "retry_delay_sec": {
+        "distribution": "exponential",
+        "lambda": 0.08,
+        "min": 1,
+        "max": 120
+      },
+      "retry_side_effects": {
+        "increase_queue_pressure": 0.04,
+        "increase_duration_multiplier": 1.15
+      }
+    },
+
+    "saturation": {
+      "queue_pressure_threshold": 0.80,
+      "duration_growth": "exponential",
+      "duration_multiplier_max": 4.00,
+      "error_multiplier_max": 3.00,
+      "congestion_multiplier_max": 2.80
+    },
+
+    "daily_drift": {
+      "speed_drift_std": 0.08,
+      "error_drift_std": 0.04
+    }
+  }
+}
