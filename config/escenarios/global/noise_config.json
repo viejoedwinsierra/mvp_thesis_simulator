@@ -1,0 +1,90 @@
+{
+  "noise": {
+    "enabled": true,
+    "active_profile": "medium",
+
+    "profiles": {
+      "low": {
+        "multiplier": 0.5
+      },
+      "medium": {
+        "multiplier": 1.0
+      },
+      "high": {
+        "multiplier": 1.8
+      },
+      "chaotic": {
+        "multiplier": 3.0
+      }
+    },
+
+    "variables": {
+      "size_mb": {
+        "enabled": true,
+        "noise_type": "relative_gaussian",
+        "std_factor": 0.06,
+        "min": 0.001
+      },
+      "transfer_speed_mbps": {
+        "enabled": true,
+        "noise_type": "relative_gaussian",
+        "std_factor": 0.15,
+        "min": 1,
+        "max": 300
+      },
+      "transfer_duration_sec": {
+        "enabled": true,
+        "noise_type": "relative_gaussian",
+        "std_factor": 0.10,
+        "min": 0.01
+      },
+      "days_stored": {
+        "enabled": true,
+        "noise_type": "discrete_jitter",
+        "max_delta": 5,
+        "min": 1,
+        "max": 180
+      },
+      "days_since_last_access": {
+        "enabled": true,
+        "noise_type": "discrete_jitter",
+        "max_delta": 7,
+        "min": 0,
+        "constraint": "days_since_last_access <= days_stored"
+      },
+      "hourly_arrival_count": {
+        "enabled": true,
+        "noise_type": "poisson_resample",
+        "min": 0
+      },
+      "queue_pressure": {
+        "enabled": true,
+        "noise_type": "absolute_gaussian",
+        "std": 0.08,
+        "min": 0,
+        "max": 1
+      },
+      "congestion_factor": {
+        "enabled": true,
+        "noise_type": "absolute_gaussian",
+        "std": 0.08,
+        "min": 0.8,
+        "max": 3.0
+      },
+      "weekday_base_load": {
+        "enabled": true,
+        "noise_type": "absolute_gaussian",
+        "std": 0.03,
+        "min": 0.05,
+        "max": 0.5
+      },
+      "created_hour": {
+        "enabled": true,
+        "noise_type": "discrete_jitter",
+        "max_delta": 1,
+        "min": 0,
+        "max": 23
+      }
+    }
+  }
+}

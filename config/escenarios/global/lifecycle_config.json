@@ -1,0 +1,32 @@
+{
+  "lifecycle": {
+    "days_stored": {
+      "distribution": "uniform",
+      "min": 1,
+      "max": 180
+    },
+    "days_since_last_access": {
+      "strategy": "beta_scaled_to_days_stored",
+      "profiles": {
+        "low_access": {
+          "alpha": 5,
+          "beta": 2
+        },
+        "medium_access": {
+          "alpha": 2,
+          "beta": 2
+        },
+        "high_access": {
+          "alpha": 1.2,
+          "beta": 5
+        }
+      },
+      "distribution_weights": {
+        "low_access": 0.50,
+        "medium_access": 0.30,
+        "high_access": 0.20
+      }
+    },
+    "movement_storage_probability": 0.15
+  }
+}

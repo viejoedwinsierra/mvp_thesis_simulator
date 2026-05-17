@@ -1,0 +1,33 @@
+{
+  "storage_tier": {
+    "strategy": "by_days_since_last_access",
+    "rules": [
+      {
+        "tier": "hot",
+        "max_days_since_last_access": 30
+      },
+      {
+        "tier": "cool",
+        "min_days_since_last_access": 31,
+        "max_days_since_last_access": 90
+      },
+      {
+        "tier": "archive",
+        "min_days_since_last_access": 91
+      }
+    ],
+    "cost_per_mb_per_month": {
+      "hot": 0.00002,
+      "cool": 0.00001,
+      "archive": 0.000002
+    }
+  },
+
+  "cost_model": {
+    "storage_cost_formula": "size_mb * cost_per_mb_per_day * days_stored",
+    "non_linear_adjustments": {
+      "large_file_discount_threshold_mb": 1000,
+      "discount_factor": 0.85
+    }
+  }
+}
