@@ -1,22 +1,55 @@
+# =========================
+# Python
+# =========================
 __pycache__/
 .pytest_cache/
-venv/
-# outputs
-output/*.csv
-output/*.zip
-output/*.png
+*.pyc
 
-# modelos (CRÍTICO)
+# =========================
+# Virtual env
+# =========================
+venv/
+
+# =========================
+# Generated outputs
+# =========================
+output/
+
+# =========================
+# Trained models
+# =========================
 output/models/
 
-# archivos grandes
+# =========================
+# Runtime configs
+# =========================
+output/runtime_configs/
+
+# =========================
+# Generated logs
+# =========================
+logs/
+*.log
+
+# =========================
+# Generated datasets
+# =========================
+*.csv
+
+# =========================
+# Generated artifacts
+# =========================
+*.zip
+*.png
+
+# =========================
+# Serialized models
+# =========================
 *.pkl
 *.joblib
 *.pickle
 
-# generales
-*.pyc
-*.zip
-*.csv
-*.png
-*.log
+# =========================
+# IDE
+# =========================
+.vscode/

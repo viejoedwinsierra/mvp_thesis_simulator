@@ -172,7 +172,7 @@
   <tbody>
     <tr>
       <td>relaciones_multivariadas</td>
-      <td>Se detectaron 4 relaciones con |Spearman| &gt;= 0.5, excluyendo pares target-target.</td>
+      <td>Se detectaron 26 relaciones con |Spearman| &gt;= 0.5, excluyendo pares target-target.</td>
     </tr>
     <tr>
       <td>targets</td>
@@ -180,7 +180,7 @@
     </tr>
     <tr>
       <td>redundancia</td>
-      <td>Se detectaron 2 relaciones redundantes o derivadas que requieren revisión.</td>
+      <td>Se detectaron 9 relaciones redundantes o derivadas que requieren revisión.</td>
     </tr>
     <tr>
       <td>fuga_informacion</td>
@@ -192,11 +192,11 @@
     </tr>
     <tr>
       <td>no_linealidad</td>
-      <td>Se detectaron 1 relaciones con Spearman considerablemente mayor que Pearson.</td>
+      <td>Se detectaron 5 relaciones con Spearman considerablemente mayor que Pearson.</td>
     </tr>
     <tr>
       <td>transformaciones</td>
-      <td>Se identificaron 8 variables continuas para revisar transformación; se excluyen targets y binarias por defecto.</td>
+      <td>Se identificaron 19 variables continuas para revisar transformación; se excluyen targets y binarias por defecto.</td>
     </tr>
   </tbody>
 </table>
@@ -222,244 +222,703 @@
   <tbody>
     <tr>
       <td>has_error</td>
-      <td>movement_storage</td>
-      <td>0.1549</td>
-      <td>0.1549</td>
+      <td>error_penalty_cost</td>
+      <td>0.9035</td>
+      <td>0.9035</td>
       <td>1</td>
-      <td>relación baja; baja prioridad exploratoria</td>
+      <td>relación alta; revisar como variable clave para fase posterior</td>
       <td>spearman</td>
     </tr>
     <tr>
       <td>has_error</td>
-      <td>weekday_base_load</td>
-      <td>-0.0638</td>
-      <td>0.0638</td>
+      <td>retry_cost</td>
+      <td>0.7536</td>
+      <td>0.7536</td>
       <td>2</td>
-      <td>relación baja; baja prioridad exploratoria</td>
+      <td>relación alta; revisar como variable clave para fase posterior</td>
       <td>spearman</td>
     </tr>
     <tr>
       <td>has_error</td>
-      <td>size_mb</td>
-      <td>0.0628</td>
-      <td>0.0628</td>
+      <td>retry_count</td>
+      <td>0.7536</td>
+      <td>0.7536</td>
       <td>3</td>
-      <td>relación baja; baja prioridad exploratoria</td>
+      <td>relación alta; revisar como variable clave para fase posterior</td>
       <td>spearman</td>
     </tr>
     <tr>
       <td>has_error</td>
-      <td>days_since_last_access</td>
-      <td>-0.0526</td>
-      <td>0.0526</td>
+      <td>retry_delay_sec</td>
+      <td>0.7536</td>
+      <td>0.7536</td>
       <td>4</td>
-      <td>relación baja; baja prioridad exploratoria</td>
+      <td>relación alta; revisar como variable clave para fase posterior</td>
       <td>spearman</td>
     </tr>
     <tr>
       <td>has_error</td>
-      <td>created_hour</td>
-      <td>0.0415</td>
-      <td>0.0415</td>
+      <td>retry_success</td>
+      <td>0.6758</td>
+      <td>0.6758</td>
       <td>5</td>
-      <td>relación baja; baja prioridad exploratoria</td>
+      <td>relación moderada; útil para priorización exploratoria</td>
       <td>spearman</td>
     </tr>
     <tr>
       <td>has_error</td>
-      <td>transfer_speed_mbps</td>
-      <td>0.0229</td>
-      <td>0.0229</td>
+      <td>queue_pressure</td>
+      <td>0.1983</td>
+      <td>0.1983</td>
       <td>6</td>
       <td>relación baja; baja prioridad exploratoria</td>
       <td>spearman</td>
     </tr>
     <tr>
       <td>has_error</td>
-      <td>days_stored</td>
-      <td>-0.0164</td>
-      <td>0.0164</td>
+      <td>queue_pressure_raw</td>
+      <td>0.1983</td>
+      <td>0.1983</td>
       <td>7</td>
       <td>relación baja; baja prioridad exploratoria</td>
       <td>spearman</td>
     </tr>
     <tr>
       <td>has_error</td>
-      <td>queue_pressure</td>
-      <td>-0.005</td>
-      <td>0.005</td>
+      <td>movement_storage</td>
+      <td>0.1843</td>
+      <td>0.1843</td>
       <td>8</td>
       <td>relación baja; baja prioridad exploratoria</td>
       <td>spearman</td>
     </tr>
     <tr>
       <td>has_error</td>
-      <td>hourly_arrival_count</td>
-      <td>-0.003</td>
-      <td>0.003</td>
+      <td>congestion_factor</td>
+      <td>-0.1608</td>
+      <td>0.1608</td>
       <td>9</td>
       <td>relación baja; baja prioridad exploratoria</td>
       <td>spearman</td>
     </tr>
     <tr>
-      <td>storage_cost</td>
+      <td>has_error</td>
+      <td>storage_policy_noise_applied</td>
+      <td>0.154</td>
+      <td>0.154</td>
+      <td>10</td>
+      <td>relación baja; baja prioridad exploratoria</td>
+      <td>spearman</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
       <td>size_mb</td>
-      <td>0.7449</td>
-      <td>0.7449</td>
+      <td>0.1349</td>
+      <td>0.1349</td>
+      <td>11</td>
+      <td>relación baja; baja prioridad exploratoria</td>
+      <td>spearman</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>total_operational_cost</td>
+      <td>0.1235</td>
+      <td>0.1235</td>
+      <td>12</td>
+      <td>relación baja; baja prioridad exploratoria</td>
+      <td>spearman</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>hourly_arrival_count</td>
+      <td>-0.0672</td>
+      <td>0.0672</td>
+      <td>13</td>
+      <td>relación baja; baja prioridad exploratoria</td>
+      <td>spearman</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>metadata_quality_score</td>
+      <td>0.0588</td>
+      <td>0.0588</td>
+      <td>14</td>
+      <td>relación baja; baja prioridad exploratoria</td>
+      <td>spearman</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>days_since_last_access</td>
+      <td>-0.0537</td>
+      <td>0.0537</td>
+      <td>15</td>
+      <td>relación baja; baja prioridad exploratoria</td>
+      <td>spearman</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>malformed_json</td>
+      <td>-0.0457</td>
+      <td>0.0457</td>
+      <td>16</td>
+      <td>relación baja; baja prioridad exploratoria</td>
+      <td>spearman</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>weekday_base_load</td>
+      <td>0.0406</td>
+      <td>0.0406</td>
+      <td>17</td>
+      <td>relación baja; baja prioridad exploratoria</td>
+      <td>spearman</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>hourly_capacity</td>
+      <td>0.0289</td>
+      <td>0.0289</td>
+      <td>18</td>
+      <td>relación baja; baja prioridad exploratoria</td>
+      <td>spearman</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>missing_metadata</td>
+      <td>-0.0275</td>
+      <td>0.0275</td>
+      <td>19</td>
+      <td>relación baja; baja prioridad exploratoria</td>
+      <td>spearman</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>error_probability_multiplier</td>
+      <td>0.0263</td>
+      <td>0.0263</td>
+      <td>20</td>
+      <td>relación baja; baja prioridad exploratoria</td>
+      <td>spearman</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>wrong_extension</td>
+      <td>-0.0179</td>
+      <td>0.0179</td>
+      <td>21</td>
+      <td>relación baja; baja prioridad exploratoria</td>
+      <td>spearman</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>error_probability</td>
+      <td>0.0129</td>
+      <td>0.0129</td>
+      <td>22</td>
+      <td>relación baja; baja prioridad exploratoria</td>
+      <td>spearman</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>empty_file</td>
+      <td>-0.0119</td>
+      <td>0.0119</td>
+      <td>23</td>
+      <td>relación baja; baja prioridad exploratoria</td>
+      <td>spearman</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>created_hour</td>
+      <td>-0.0108</td>
+      <td>0.0108</td>
+      <td>24</td>
+      <td>relación baja; baja prioridad exploratoria</td>
+      <td>spearman</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>transfer_speed_mbps</td>
+      <td>-0.0088</td>
+      <td>0.0088</td>
+      <td>25</td>
+      <td>relación baja; baja prioridad exploratoria</td>
+      <td>spearman</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>days_stored</td>
+      <td>0.0076</td>
+      <td>0.0076</td>
+      <td>26</td>
+      <td>relación baja; baja prioridad exploratoria</td>
+      <td>spearman</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>total_operational_cost</td>
+      <td>0.9999</td>
+      <td>0.9999</td>
       <td>1</td>
       <td>relación alta; revisar como variable clave para fase posterior</td>
       <td>spearman</td>
     </tr>
     <tr>
       <td>storage_cost</td>
-      <td>days_stored</td>
-      <td>0.2973</td>
-      <td>0.2973</td>
+      <td>size_mb</td>
+      <td>0.7317</td>
+      <td>0.7317</td>
       <td>2</td>
-      <td>relación baja; baja prioridad exploratoria</td>
+      <td>relación alta; revisar como variable clave para fase posterior</td>
       <td>spearman</td>
     </tr>
     <tr>
       <td>storage_cost</td>
-      <td>weekday_base_load</td>
-      <td>0.0862</td>
-      <td>0.0862</td>
+      <td>days_stored</td>
+      <td>0.2896</td>
+      <td>0.2896</td>
       <td>3</td>
       <td>relación baja; baja prioridad exploratoria</td>
       <td>spearman</td>
     </tr>
     <tr>
       <td>storage_cost</td>
-      <td>created_hour</td>
-      <td>-0.0609</td>
-      <td>0.0609</td>
+      <td>error_probability_multiplier</td>
+      <td>-0.1557</td>
+      <td>0.1557</td>
       <td>4</td>
       <td>relación baja; baja prioridad exploratoria</td>
       <td>spearman</td>
     </tr>
     <tr>
       <td>storage_cost</td>
-      <td>transfer_speed_mbps</td>
-      <td>0.0456</td>
-      <td>0.0456</td>
+      <td>error_probability</td>
+      <td>-0.1553</td>
+      <td>0.1553</td>
       <td>5</td>
       <td>relación baja; baja prioridad exploratoria</td>
       <td>spearman</td>
     </tr>
     <tr>
       <td>storage_cost</td>
-      <td>movement_storage</td>
-      <td>0.0155</td>
-      <td>0.0155</td>
+      <td>wrong_extension</td>
+      <td>-0.1339</td>
+      <td>0.1339</td>
       <td>6</td>
       <td>relación baja; baja prioridad exploratoria</td>
       <td>spearman</td>
     </tr>
     <tr>
       <td>storage_cost</td>
-      <td>queue_pressure</td>
-      <td>0.0119</td>
-      <td>0.0119</td>
+      <td>storage_policy_noise_applied</td>
+      <td>-0.1144</td>
+      <td>0.1144</td>
       <td>7</td>
       <td>relación baja; baja prioridad exploratoria</td>
       <td>spearman</td>
     </tr>
     <tr>
       <td>storage_cost</td>
-      <td>days_since_last_access</td>
-      <td>-0.0029</td>
-      <td>0.0029</td>
+      <td>error_penalty_cost</td>
+      <td>0.1058</td>
+      <td>0.1058</td>
       <td>8</td>
       <td>relación baja; baja prioridad exploratoria</td>
       <td>spearman</td>
     </tr>
     <tr>
       <td>storage_cost</td>
-      <td>hourly_arrival_count</td>
-      <td>0.0</td>
-      <td>0.0</td>
+      <td>malformed_json</td>
+      <td>0.1015</td>
+      <td>0.1015</td>
       <td>9</td>
+      <td>relación baja; baja prioridad exploratoria</td>
+      <td>spearman</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>hourly_arrival_count</td>
+      <td>0.0852</td>
+      <td>0.0852</td>
+      <td>10</td>
+      <td>relación baja; baja prioridad exploratoria</td>
+      <td>spearman</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>days_since_last_access</td>
+      <td>0.0817</td>
+      <td>0.0817</td>
+      <td>11</td>
+      <td>relación baja; baja prioridad exploratoria</td>
+      <td>spearman</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>metadata_quality_score</td>
+      <td>-0.0814</td>
+      <td>0.0814</td>
+      <td>12</td>
+      <td>relación baja; baja prioridad exploratoria</td>
+      <td>spearman</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>queue_pressure</td>
+      <td>0.0772</td>
+      <td>0.0772</td>
+      <td>13</td>
+      <td>relación baja; baja prioridad exploratoria</td>
+      <td>spearman</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>queue_pressure_raw</td>
+      <td>0.0772</td>
+      <td>0.0772</td>
+      <td>14</td>
+      <td>relación baja; baja prioridad exploratoria</td>
+      <td>spearman</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>empty_file</td>
+      <td>0.072</td>
+      <td>0.072</td>
+      <td>15</td>
+      <td>relación baja; baja prioridad exploratoria</td>
+      <td>spearman</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>transfer_speed_mbps</td>
+      <td>-0.059</td>
+      <td>0.059</td>
+      <td>16</td>
+      <td>relación baja; baja prioridad exploratoria</td>
+      <td>spearman</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>missing_metadata</td>
+      <td>0.0567</td>
+      <td>0.0567</td>
+      <td>17</td>
+      <td>relación baja; baja prioridad exploratoria</td>
+      <td>spearman</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>movement_storage</td>
+      <td>-0.0513</td>
+      <td>0.0513</td>
+      <td>18</td>
+      <td>relación baja; baja prioridad exploratoria</td>
+      <td>spearman</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>created_hour</td>
+      <td>-0.0483</td>
+      <td>0.0483</td>
+      <td>19</td>
+      <td>relación baja; baja prioridad exploratoria</td>
+      <td>spearman</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>retry_success</td>
+      <td>0.0475</td>
+      <td>0.0475</td>
+      <td>20</td>
+      <td>relación baja; baja prioridad exploratoria</td>
+      <td>spearman</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>weekday_base_load</td>
+      <td>-0.0385</td>
+      <td>0.0385</td>
+      <td>21</td>
+      <td>relación baja; baja prioridad exploratoria</td>
+      <td>spearman</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>hourly_capacity</td>
+      <td>-0.0184</td>
+      <td>0.0184</td>
+      <td>22</td>
+      <td>relación baja; baja prioridad exploratoria</td>
+      <td>spearman</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>retry_delay_sec</td>
+      <td>-0.0079</td>
+      <td>0.0079</td>
+      <td>23</td>
+      <td>relación baja; baja prioridad exploratoria</td>
+      <td>spearman</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>retry_count</td>
+      <td>-0.0068</td>
+      <td>0.0068</td>
+      <td>24</td>
+      <td>relación baja; baja prioridad exploratoria</td>
+      <td>spearman</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>retry_cost</td>
+      <td>-0.0068</td>
+      <td>0.0068</td>
+      <td>25</td>
+      <td>relación baja; baja prioridad exploratoria</td>
+      <td>spearman</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>congestion_factor</td>
+      <td>-0.0041</td>
+      <td>0.0041</td>
+      <td>26</td>
       <td>relación baja; baja prioridad exploratoria</td>
       <td>spearman</td>
     </tr>
     <tr>
       <td>transfer_duration_sec</td>
       <td>size_mb</td>
-      <td>0.7172</td>
-      <td>0.7172</td>
+      <td>0.7869</td>
+      <td>0.7869</td>
       <td>1</td>
       <td>relación alta; revisar como variable clave para fase posterior</td>
       <td>spearman</td>
     </tr>
     <tr>
       <td>transfer_duration_sec</td>
-      <td>transfer_speed_mbps</td>
-      <td>-0.4804</td>
-      <td>0.4804</td>
+      <td>total_operational_cost</td>
+      <td>0.6209</td>
+      <td>0.6209</td>
       <td>2</td>
+      <td>relación moderada; útil para priorización exploratoria</td>
+      <td>spearman</td>
+    </tr>
+    <tr>
+      <td>transfer_duration_sec</td>
+      <td>transfer_speed_mbps</td>
+      <td>-0.3095</td>
+      <td>0.3095</td>
+      <td>3</td>
       <td>relación débil; puede aportar contexto</td>
       <td>spearman</td>
     </tr>
     <tr>
       <td>transfer_duration_sec</td>
-      <td>days_since_last_access</td>
-      <td>-0.0435</td>
-      <td>0.0435</td>
-      <td>3</td>
-      <td>relación baja; baja prioridad exploratoria</td>
-      <td>spearman</td>
-    </tr>
-    <tr>
-      <td>transfer_duration_sec</td>
-      <td>weekday_base_load</td>
-      <td>0.0322</td>
-      <td>0.0322</td>
+      <td>error_penalty_cost</td>
+      <td>0.2678</td>
+      <td>0.2678</td>
       <td>4</td>
       <td>relación baja; baja prioridad exploratoria</td>
       <td>spearman</td>
     </tr>
     <tr>
       <td>transfer_duration_sec</td>
-      <td>queue_pressure</td>
-      <td>0.0167</td>
-      <td>0.0167</td>
+      <td>retry_delay_sec</td>
+      <td>0.2555</td>
+      <td>0.2555</td>
       <td>5</td>
       <td>relación baja; baja prioridad exploratoria</td>
       <td>spearman</td>
     </tr>
     <tr>
       <td>transfer_duration_sec</td>
-      <td>created_hour</td>
-      <td>-0.0102</td>
-      <td>0.0102</td>
+      <td>retry_count</td>
+      <td>0.2555</td>
+      <td>0.2555</td>
       <td>6</td>
       <td>relación baja; baja prioridad exploratoria</td>
       <td>spearman</td>
     </tr>
     <tr>
       <td>transfer_duration_sec</td>
-      <td>movement_storage</td>
-      <td>0.0067</td>
-      <td>0.0067</td>
+      <td>retry_cost</td>
+      <td>0.2555</td>
+      <td>0.2555</td>
       <td>7</td>
       <td>relación baja; baja prioridad exploratoria</td>
       <td>spearman</td>
     </tr>
     <tr>
       <td>transfer_duration_sec</td>
-      <td>days_stored</td>
-      <td>0.005</td>
-      <td>0.005</td>
+      <td>retry_success</td>
+      <td>0.2276</td>
+      <td>0.2276</td>
       <td>8</td>
       <td>relación baja; baja prioridad exploratoria</td>
       <td>spearman</td>
     </tr>
     <tr>
       <td>transfer_duration_sec</td>
-      <td>hourly_arrival_count</td>
-      <td>0.0045</td>
-      <td>0.0045</td>
+      <td>queue_pressure_raw</td>
+      <td>0.1719</td>
+      <td>0.1719</td>
       <td>9</td>
+      <td>relación baja; baja prioridad exploratoria</td>
+      <td>spearman</td>
+    </tr>
+    <tr>
+      <td>transfer_duration_sec</td>
+      <td>queue_pressure</td>
+      <td>0.1719</td>
+      <td>0.1719</td>
+      <td>10</td>
+      <td>relación baja; baja prioridad exploratoria</td>
+      <td>spearman</td>
+    </tr>
+    <tr>
+      <td>transfer_duration_sec</td>
+      <td>congestion_factor</td>
+      <td>-0.1285</td>
+      <td>0.1285</td>
+      <td>11</td>
+      <td>relación baja; baja prioridad exploratoria</td>
+      <td>spearman</td>
+    </tr>
+    <tr>
+      <td>transfer_duration_sec</td>
+      <td>days_since_last_access</td>
+      <td>0.1071</td>
+      <td>0.1071</td>
+      <td>12</td>
+      <td>relación baja; baja prioridad exploratoria</td>
+      <td>spearman</td>
+    </tr>
+    <tr>
+      <td>transfer_duration_sec</td>
+      <td>created_hour</td>
+      <td>0.1021</td>
+      <td>0.1021</td>
+      <td>13</td>
+      <td>relación baja; baja prioridad exploratoria</td>
+      <td>spearman</td>
+    </tr>
+    <tr>
+      <td>transfer_duration_sec</td>
+      <td>wrong_extension</td>
+      <td>-0.0855</td>
+      <td>0.0855</td>
+      <td>14</td>
+      <td>relación baja; baja prioridad exploratoria</td>
+      <td>spearman</td>
+    </tr>
+    <tr>
+      <td>transfer_duration_sec</td>
+      <td>empty_file</td>
+      <td>0.0833</td>
+      <td>0.0833</td>
+      <td>15</td>
+      <td>relación baja; baja prioridad exploratoria</td>
+      <td>spearman</td>
+    </tr>
+    <tr>
+      <td>transfer_duration_sec</td>
+      <td>malformed_json</td>
+      <td>0.0701</td>
+      <td>0.0701</td>
+      <td>16</td>
+      <td>relación baja; baja prioridad exploratoria</td>
+      <td>spearman</td>
+    </tr>
+    <tr>
+      <td>transfer_duration_sec</td>
+      <td>hourly_capacity</td>
+      <td>-0.0661</td>
+      <td>0.0661</td>
+      <td>17</td>
+      <td>relación baja; baja prioridad exploratoria</td>
+      <td>spearman</td>
+    </tr>
+    <tr>
+      <td>transfer_duration_sec</td>
+      <td>hourly_arrival_count</td>
+      <td>0.0635</td>
+      <td>0.0635</td>
+      <td>18</td>
+      <td>relación baja; baja prioridad exploratoria</td>
+      <td>spearman</td>
+    </tr>
+    <tr>
+      <td>transfer_duration_sec</td>
+      <td>metadata_quality_score</td>
+      <td>-0.0602</td>
+      <td>0.0602</td>
+      <td>19</td>
+      <td>relación baja; baja prioridad exploratoria</td>
+      <td>spearman</td>
+    </tr>
+    <tr>
+      <td>transfer_duration_sec</td>
+      <td>error_probability</td>
+      <td>0.037</td>
+      <td>0.037</td>
+      <td>20</td>
+      <td>relación baja; baja prioridad exploratoria</td>
+      <td>spearman</td>
+    </tr>
+    <tr>
+      <td>transfer_duration_sec</td>
+      <td>storage_policy_noise_applied</td>
+      <td>0.0369</td>
+      <td>0.0369</td>
+      <td>21</td>
+      <td>relación baja; baja prioridad exploratoria</td>
+      <td>spearman</td>
+    </tr>
+    <tr>
+      <td>transfer_duration_sec</td>
+      <td>missing_metadata</td>
+      <td>0.0276</td>
+      <td>0.0276</td>
+      <td>22</td>
+      <td>relación baja; baja prioridad exploratoria</td>
+      <td>spearman</td>
+    </tr>
+    <tr>
+      <td>transfer_duration_sec</td>
+      <td>days_stored</td>
+      <td>-0.0265</td>
+      <td>0.0265</td>
+      <td>23</td>
+      <td>relación baja; baja prioridad exploratoria</td>
+      <td>spearman</td>
+    </tr>
+    <tr>
+      <td>transfer_duration_sec</td>
+      <td>movement_storage</td>
+      <td>0.0199</td>
+      <td>0.0199</td>
+      <td>24</td>
+      <td>relación baja; baja prioridad exploratoria</td>
+      <td>spearman</td>
+    </tr>
+    <tr>
+      <td>transfer_duration_sec</td>
+      <td>weekday_base_load</td>
+      <td>0.0159</td>
+      <td>0.0159</td>
+      <td>25</td>
+      <td>relación baja; baja prioridad exploratoria</td>
+      <td>spearman</td>
+    </tr>
+    <tr>
+      <td>transfer_duration_sec</td>
+      <td>error_probability_multiplier</td>
+      <td>0.0151</td>
+      <td>0.0151</td>
+      <td>26</td>
       <td>relación baja; baja prioridad exploratoria</td>
       <td>spearman</td>
     </tr>
@@ -486,38 +945,236 @@
   </thead>
   <tbody>
     <tr>
-      <td>hourly_arrival_count</td>
+      <td>queue_pressure_raw</td>
       <td>queue_pressure</td>
-      <td>0.9945</td>
-      <td>0.9945</td>
+      <td>1.0</td>
+      <td>1.0</td>
       <td>fuerte</td>
       <td>derived_relation</td>
       <td>spearman</td>
     </tr>
     <tr>
-      <td>size_mb</td>
+      <td>retry_count</td>
+      <td>retry_cost</td>
+      <td>1.0</td>
+      <td>1.0</td>
+      <td>fuerte</td>
+      <td>variable_variable</td>
+      <td>spearman</td>
+    </tr>
+    <tr>
       <td>storage_cost</td>
-      <td>0.7449</td>
-      <td>0.7449</td>
+      <td>total_operational_cost</td>
+      <td>0.9999</td>
+      <td>0.9999</td>
+      <td>fuerte</td>
+      <td>target_variable</td>
+      <td>spearman</td>
+    </tr>
+    <tr>
+      <td>retry_delay_sec</td>
+      <td>retry_cost</td>
+      <td>0.9999</td>
+      <td>0.9999</td>
+      <td>fuerte</td>
+      <td>variable_variable</td>
+      <td>spearman</td>
+    </tr>
+    <tr>
+      <td>retry_count</td>
+      <td>retry_delay_sec</td>
+      <td>0.9999</td>
+      <td>0.9999</td>
+      <td>fuerte</td>
+      <td>variable_variable</td>
+      <td>spearman</td>
+    </tr>
+    <tr>
+      <td>hourly_arrival_count</td>
+      <td>queue_pressure_raw</td>
+      <td>0.913</td>
+      <td>0.913</td>
+      <td>fuerte</td>
+      <td>variable_variable</td>
+      <td>spearman</td>
+    </tr>
+    <tr>
+      <td>hourly_arrival_count</td>
+      <td>queue_pressure</td>
+      <td>0.913</td>
+      <td>0.913</td>
+      <td>fuerte</td>
+      <td>derived_relation</td>
+      <td>spearman</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>error_penalty_cost</td>
+      <td>0.9035</td>
+      <td>0.9035</td>
+      <td>fuerte</td>
+      <td>target_variable</td>
+      <td>spearman</td>
+    </tr>
+    <tr>
+      <td>retry_success</td>
+      <td>retry_cost</td>
+      <td>0.8976</td>
+      <td>0.8976</td>
+      <td>fuerte</td>
+      <td>variable_variable</td>
+      <td>spearman</td>
+    </tr>
+    <tr>
+      <td>retry_count</td>
+      <td>retry_success</td>
+      <td>0.8976</td>
+      <td>0.8976</td>
+      <td>fuerte</td>
+      <td>variable_variable</td>
+      <td>spearman</td>
+    </tr>
+    <tr>
+      <td>retry_success</td>
+      <td>retry_delay_sec</td>
+      <td>0.8927</td>
+      <td>0.8927</td>
+      <td>fuerte</td>
+      <td>variable_variable</td>
+      <td>spearman</td>
+    </tr>
+    <tr>
+      <td>size_mb</td>
+      <td>transfer_duration_sec</td>
+      <td>0.7869</td>
+      <td>0.7869</td>
+      <td>fuerte</td>
+      <td>target_variable</td>
+      <td>spearman</td>
+    </tr>
+    <tr>
+      <td>metadata_quality_score</td>
+      <td>malformed_json</td>
+      <td>-0.7765</td>
+      <td>0.7765</td>
+      <td>fuerte</td>
+      <td>variable_variable</td>
+      <td>spearman</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>retry_cost</td>
+      <td>0.7536</td>
+      <td>0.7536</td>
+      <td>fuerte</td>
+      <td>target_variable</td>
+      <td>spearman</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>retry_count</td>
+      <td>0.7536</td>
+      <td>0.7536</td>
+      <td>fuerte</td>
+      <td>target_variable</td>
+      <td>spearman</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>retry_delay_sec</td>
+      <td>0.7536</td>
+      <td>0.7536</td>
       <td>fuerte</td>
       <td>target_variable</td>
       <td>spearman</td>
     </tr>
     <tr>
       <td>size_mb</td>
-      <td>transfer_duration_sec</td>
-      <td>0.7172</td>
-      <td>0.7172</td>
+      <td>storage_cost</td>
+      <td>0.7317</td>
+      <td>0.7317</td>
       <td>fuerte</td>
+      <td>target_variable</td>
+      <td>spearman</td>
+    </tr>
+    <tr>
+      <td>size_mb</td>
+      <td>total_operational_cost</td>
+      <td>0.7313</td>
+      <td>0.7313</td>
+      <td>fuerte</td>
+      <td>variable_variable</td>
+      <td>spearman</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>retry_success</td>
+      <td>0.6758</td>
+      <td>0.6758</td>
+      <td>moderada</td>
       <td>target_variable</td>
       <td>spearman</td>
     </tr>
     <tr>
       <td>days_stored</td>
       <td>days_since_last_access</td>
-      <td>0.7119</td>
-      <td>0.7119</td>
-      <td>fuerte</td>
+      <td>0.6427</td>
+      <td>0.6427</td>
+      <td>moderada</td>
+      <td>variable_variable</td>
+      <td>spearman</td>
+    </tr>
+    <tr>
+      <td>transfer_duration_sec</td>
+      <td>total_operational_cost</td>
+      <td>0.6209</td>
+      <td>0.6209</td>
+      <td>moderada</td>
+      <td>target_variable</td>
+      <td>spearman</td>
+    </tr>
+    <tr>
+      <td>retry_delay_sec</td>
+      <td>error_penalty_cost</td>
+      <td>0.5712</td>
+      <td>0.5712</td>
+      <td>moderada</td>
+      <td>variable_variable</td>
+      <td>spearman</td>
+    </tr>
+    <tr>
+      <td>retry_count</td>
+      <td>error_penalty_cost</td>
+      <td>0.5701</td>
+      <td>0.5701</td>
+      <td>moderada</td>
+      <td>variable_variable</td>
+      <td>spearman</td>
+    </tr>
+    <tr>
+      <td>retry_cost</td>
+      <td>error_penalty_cost</td>
+      <td>0.5701</td>
+      <td>0.5701</td>
+      <td>moderada</td>
+      <td>variable_variable</td>
+      <td>spearman</td>
+    </tr>
+    <tr>
+      <td>error_probability_multiplier</td>
+      <td>metadata_quality_score</td>
+      <td>-0.5323</td>
+      <td>0.5323</td>
+      <td>moderada</td>
+      <td>variable_variable</td>
+      <td>spearman</td>
+    </tr>
+    <tr>
+      <td>error_probability</td>
+      <td>error_probability_multiplier</td>
+      <td>0.5301</td>
+      <td>0.5301</td>
+      <td>moderada</td>
       <td>variable_variable</td>
       <td>spearman</td>
     </tr>
@@ -542,11 +1199,60 @@
   </thead>
   <tbody>
     <tr>
-      <td>hourly_arrival_count</td>
+      <td>queue_pressure_raw</td>
       <td>queue_pressure</td>
-      <td>0.9945</td>
+      <td>1.0</td>
       <td>variable derivada altamente relacionada con otra variable</td>
       <td>preferir variable original o derivada, pero no ambas</td>
+    </tr>
+    <tr>
+      <td>retry_count</td>
+      <td>retry_cost</td>
+      <td>1.0</td>
+      <td>correlación muy alta</td>
+      <td>revisar si una variable puede excluirse antes del modelado</td>
+    </tr>
+    <tr>
+      <td>storage_cost</td>
+      <td>total_operational_cost</td>
+      <td>0.9999</td>
+      <td>correlación muy alta</td>
+      <td>revisar si una variable puede excluirse antes del modelado</td>
+    </tr>
+    <tr>
+      <td>retry_count</td>
+      <td>retry_delay_sec</td>
+      <td>0.9999</td>
+      <td>correlación muy alta</td>
+      <td>revisar si una variable puede excluirse antes del modelado</td>
+    </tr>
+    <tr>
+      <td>retry_delay_sec</td>
+      <td>retry_cost</td>
+      <td>0.9999</td>
+      <td>correlación muy alta</td>
+      <td>revisar si una variable puede excluirse antes del modelado</td>
+    </tr>
+    <tr>
+      <td>hourly_arrival_count</td>
+      <td>queue_pressure_raw</td>
+      <td>0.913</td>
+      <td>correlación muy alta</td>
+      <td>revisar si una variable puede excluirse antes del modelado</td>
+    </tr>
+    <tr>
+      <td>hourly_arrival_count</td>
+      <td>queue_pressure</td>
+      <td>0.913</td>
+      <td>variable derivada altamente relacionada con otra variable</td>
+      <td>preferir variable original o derivada, pero no ambas</td>
+    </tr>
+    <tr>
+      <td>has_error</td>
+      <td>error_penalty_cost</td>
+      <td>0.9035</td>
+      <td>correlación muy alta</td>
+      <td>revisar si una variable puede excluirse antes del modelado</td>
     </tr>
     <tr>
       <td>size_mb</td>
@@ -630,13 +1336,13 @@
       <td>EXCLUIR</td>
     </tr>
     <tr>
-      <td>congestion_factor</td>
+      <td>queue_pressure</td>
       <td>derived</td>
       <td>variable derivada; revisar redundancia con componentes originales</td>
       <td>REVISAR</td>
     </tr>
     <tr>
-      <td>queue_pressure</td>
+      <td>congestion_factor</td>
       <td>derived</td>
       <td>variable derivada; revisar redundancia con componentes originales</td>
       <td>REVISAR</td>
@@ -724,12 +1430,48 @@
   </thead>
   <tbody>
     <tr>
+      <td>hourly_arrival_count</td>
+      <td>queue_pressure_raw</td>
+      <td>0.4004</td>
+      <td>0.913</td>
+      <td>0.5126</td>
+      <td>variable_variable</td>
+      <td>posible relación monotónica no lineal; evaluar transformación o segmentación</td>
+    </tr>
+    <tr>
+      <td>hourly_arrival_count</td>
+      <td>queue_pressure</td>
+      <td>0.4004</td>
+      <td>0.913</td>
+      <td>0.5126</td>
+      <td>derived_relation</td>
+      <td>posible relación monotónica no lineal; evaluar transformación o segmentación</td>
+    </tr>
+    <tr>
       <td>transfer_duration_sec</td>
-      <td>transfer_speed_mbps</td>
-      <td>-0.1679</td>
-      <td>-0.4804</td>
-      <td>0.3125</td>
+      <td>total_operational_cost</td>
+      <td>0.251</td>
+      <td>0.6209</td>
+      <td>0.3699</td>
       <td>target_variable</td>
+      <td>posible relación monotónica no lineal; evaluar transformación o segmentación</td>
+    </tr>
+    <tr>
+      <td>size_mb</td>
+      <td>transfer_duration_sec</td>
+      <td>0.4221</td>
+      <td>0.7869</td>
+      <td>0.3648</td>
+      <td>target_variable</td>
+      <td>posible relación monotónica no lineal; evaluar transformación o segmentación</td>
+    </tr>
+    <tr>
+      <td>error_probability_multiplier</td>
+      <td>metadata_quality_score</td>
+      <td>-0.2995</td>
+      <td>-0.5323</td>
+      <td>0.2328</td>
+      <td>variable_variable</td>
       <td>posible relación monotónica no lineal; evaluar transformación o segmentación</td>
     </tr>
   </tbody>
@@ -754,16 +1496,40 @@
   </thead>
   <tbody>
     <tr>
+      <td>total_operational_cost</td>
+      <td>16.0133</td>
+      <td>0.5217</td>
+      <td>99.4783</td>
+      <td>log1p</td>
+      <td>asimetría alta y mayoría de valores positivos</td>
+    </tr>
+    <tr>
       <td>size_mb</td>
-      <td>4.6015</td>
+      <td>7.9882</td>
       <td>0.0</td>
       <td>100.0</td>
       <td>log1p</td>
       <td>asimetría alta y mayoría de valores positivos</td>
     </tr>
     <tr>
-      <td>transfer_speed_mbps</td>
-      <td>2.3129</td>
+      <td>retry_delay_sec</td>
+      <td>7.6258</td>
+      <td>97.7391</td>
+      <td>2.2609</td>
+      <td>winsorizar, discretizar o segmentar</td>
+      <td>asimetría alta con ceros o valores no positivos</td>
+    </tr>
+    <tr>
+      <td>retry_count</td>
+      <td>7.2297</td>
+      <td>97.7391</td>
+      <td>2.2609</td>
+      <td>winsorizar, discretizar o segmentar</td>
+      <td>asimetría alta con ceros o valores no positivos</td>
+    </tr>
+    <tr>
+      <td>error_probability</td>
+      <td>7.1501</td>
       <td>0.0</td>
       <td>100.0</td>
       <td>log1p</td>
@@ -771,7 +1537,39 @@
     </tr>
     <tr>
       <td>queue_pressure</td>
-      <td>1.5739</td>
+      <td>5.1265</td>
+      <td>0.0</td>
+      <td>100.0</td>
+      <td>log1p</td>
+      <td>asimetría alta y mayoría de valores positivos</td>
+    </tr>
+    <tr>
+      <td>queue_pressure_raw</td>
+      <td>5.1265</td>
+      <td>0.0</td>
+      <td>100.0</td>
+      <td>log1p</td>
+      <td>asimetría alta y mayoría de valores positivos</td>
+    </tr>
+    <tr>
+      <td>metadata_quality_score</td>
+      <td>-3.1446</td>
+      <td>0.0</td>
+      <td>100.0</td>
+      <td>log1p</td>
+      <td>asimetría alta y mayoría de valores positivos</td>
+    </tr>
+    <tr>
+      <td>error_probability_multiplier</td>
+      <td>2.263</td>
+      <td>0.0</td>
+      <td>100.0</td>
+      <td>log1p</td>
+      <td>asimetría alta y mayoría de valores positivos</td>
+    </tr>
+    <tr>
+      <td>congestion_factor</td>
+      <td>1.3044</td>
       <td>0.0</td>
       <td>100.0</td>
       <td>log1p</td>
@@ -779,7 +1577,15 @@
     </tr>
     <tr>
       <td>hourly_arrival_count</td>
-      <td>1.541</td>
+      <td>1.0708</td>
+      <td>0.0</td>
+      <td>100.0</td>
+      <td>log1p</td>
+      <td>asimetría alta y mayoría de valores positivos</td>
+    </tr>
+    <tr>
+      <td>transfer_speed_mbps</td>
+      <td>1.0261</td>
       <td>0.0</td>
       <td>100.0</td>
       <td>log1p</td>
@@ -787,23 +1593,23 @@
     </tr>
     <tr>
       <td>days_since_last_access</td>
-      <td>0.7691</td>
-      <td>1.7173</td>
-      <td>98.2827</td>
+      <td>0.6987</td>
+      <td>2.3478</td>
+      <td>97.6522</td>
       <td>sin transformación obligatoria</td>
       <td>asimetría controlada</td>
     </tr>
     <tr>
-      <td>created_hour</td>
-      <td>-0.3335</td>
+      <td>hourly_capacity</td>
+      <td>0.3042</td>
       <td>0.0</td>
       <td>100.0</td>
       <td>sin transformación obligatoria</td>
       <td>asimetría controlada</td>
     </tr>
     <tr>
-      <td>weekday_base_load</td>
-      <td>0.1491</td>
+      <td>created_hour</td>
+      <td>-0.1657</td>
       <td>0.0</td>
       <td>100.0</td>
       <td>sin transformación obligatoria</td>
@@ -811,9 +1617,33 @@
     </tr>
     <tr>
       <td>days_stored</td>
-      <td>0.0445</td>
+      <td>0.132</td>
       <td>0.0</td>
       <td>100.0</td>
+      <td>sin transformación obligatoria</td>
+      <td>asimetría controlada</td>
+    </tr>
+    <tr>
+      <td>weekday_base_load</td>
+      <td>-0.0832</td>
+      <td>0.0</td>
+      <td>100.0</td>
+      <td>sin transformación obligatoria</td>
+      <td>asimetría controlada</td>
+    </tr>
+    <tr>
+      <td>error_penalty_cost</td>
+      <td>0.0</td>
+      <td>96.7826</td>
+      <td>3.2174</td>
+      <td>sin transformación obligatoria</td>
+      <td>asimetría controlada</td>
+    </tr>
+    <tr>
+      <td>retry_cost</td>
+      <td>0.0</td>
+      <td>97.7391</td>
+      <td>2.2609</td>
       <td>sin transformación obligatoria</td>
       <td>asimetría controlada</td>
     </tr>
@@ -837,107 +1667,753 @@
       <th>transfer_speed_mbps</th>
       <th>created_hour</th>
       <th>hourly_arrival_count</th>
+      <th>hourly_capacity</th>
+      <th>queue_pressure_raw</th>
       <th>queue_pressure</th>
+      <th>congestion_factor</th>
+      <th>error_probability</th>
+      <th>error_probability_multiplier</th>
+      <th>retry_count</th>
+      <th>retry_success</th>
+      <th>retry_delay_sec</th>
+      <th>retry_cost</th>
+      <th>error_penalty_cost</th>
+      <th>total_operational_cost</th>
+      <th>metadata_quality_score</th>
+      <th>missing_metadata</th>
+      <th>wrong_extension</th>
+      <th>empty_file</th>
+      <th>malformed_json</th>
+      <th>storage_policy_noise_applied</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td>1.0</td>
+      <td>-0.0296</td>
+      <td>-0.081</td>
+      <td>0.0003</td>
+      <td>0.0866</td>
+      <td>-0.0781</td>
+      <td>0.0319</td>
+      <td>0.022</td>
+      <td>0.0364</td>
+      <td>0.0499</td>
+      <td>0.0499</td>
+      <td>-0.0684</td>
+      <td>-0.252</td>
+      <td>0.0081</td>
+      <td>0.061</td>
+      <td>0.0528</td>
+      <td>0.061</td>
+      <td>0.061</td>
+      <td>-0.0058</td>
+      <td>-0.0379</td>
+      <td>-0.0972</td>
+      <td>0.0528</td>
+      <td>0.0183</td>
+      <td>-0.0581</td>
+      <td>0.0968</td>
+      <td>-0.0341</td>
+    </tr>
+    <tr>
+      <td>-0.0296</td>
+      <td>1.0</td>
+      <td>-0.0088</td>
+      <td>0.1494</td>
+      <td>-0.1089</td>
+      <td>-0.0045</td>
+      <td>0.0046</td>
+      <td>0.1205</td>
+      <td>-0.067</td>
+      <td>0.1463</td>
+      <td>0.1463</td>
+      <td>0.0135</td>
+      <td>-0.0687</td>
+      <td>0.0183</td>
+      <td>0.0306</td>
+      <td>0.0888</td>
+      <td>0.0294</td>
+      <td>0.0306</td>
+      <td>0.0843</td>
+      <td>0.7313</td>
+      <td>-0.0613</td>
+      <td>0.0771</td>
+      <td>-0.1181</td>
+      <td>0.0812</td>
+      <td>0.0548</td>
+      <td>-0.0194</td>
+    </tr>
+    <tr>
+      <td>-0.081</td>
+      <td>-0.0088</td>
+      <td>1.0</td>
+      <td>0.6427</td>
+      <td>0.0203</td>
+      <td>0.0528</td>
+      <td>-0.1125</td>
+      <td>-0.0764</td>
+      <td>-0.0882</td>
+      <td>-0.0996</td>
+      <td>-0.0996</td>
+      <td>-0.0048</td>
+      <td>0.2231</td>
+      <td>0.3554</td>
+      <td>-0.0785</td>
+      <td>-0.1176</td>
+      <td>-0.0773</td>
+      <td>-0.0785</td>
       <td>0.0667</td>
-      <td>-0.0499</td>
-      <td>-0.055</td>
-      <td>-0.0208</td>
-      <td>0.0539</td>
-      <td>-0.0223</td>
-      <td>0.2266</td>
-      <td>0.2106</td>
+      <td>0.2902</td>
+      <td>0.028</td>
+      <td>-0.1269</td>
+      <td>0.1183</td>
+      <td>-0.0546</td>
+      <td>0.0105</td>
+      <td>-0.0663</td>
     </tr>
     <tr>
+      <td>0.0003</td>
+      <td>0.1494</td>
+      <td>0.6427</td>
+      <td>1.0</td>
+      <td>0.0412</td>
+      <td>0.165</td>
+      <td>-0.132</td>
+      <td>-0.0655</td>
+      <td>-0.0839</td>
+      <td>-0.0449</td>
+      <td>-0.0449</td>
+      <td>-0.0803</td>
+      <td>0.2058</td>
+      <td>0.42</td>
+      <td>-0.0015</td>
+      <td>-0.0534</td>
+      <td>-0.0001</td>
+      <td>-0.0015</td>
+      <td>-0.0087</td>
+      <td>0.0827</td>
+      <td>0.0235</td>
+      <td>-0.1527</td>
+      <td>0.1521</td>
+      <td>-0.0675</td>
+      <td>0.0218</td>
+      <td>-0.1379</td>
+    </tr>
+    <tr>
+      <td>0.0866</td>
+      <td>-0.1089</td>
+      <td>0.0203</td>
+      <td>0.0412</td>
+      <td>1.0</td>
+      <td>0.0468</td>
+      <td>0.1697</td>
+      <td>0.0525</td>
+      <td>0.0544</td>
+      <td>0.1079</td>
+      <td>0.1079</td>
+      <td>0.0713</td>
+      <td>0.3776</td>
+      <td>0.0563</td>
+      <td>0.1948</td>
+      <td>0.1272</td>
+      <td>0.1954</td>
+      <td>0.1948</td>
+      <td>0.2173</td>
+      <td>-0.0483</td>
+      <td>-0.0095</td>
+      <td>-0.051</td>
+      <td>-0.0332</td>
+      <td>-0.0221</td>
+      <td>0.0632</td>
+      <td>0.0104</td>
+    </tr>
+    <tr>
+      <td>-0.0781</td>
+      <td>-0.0045</td>
+      <td>0.0528</td>
+      <td>0.165</td>
+      <td>0.0468</td>
+      <td>1.0</td>
+      <td>-0.2057</td>
+      <td>0.0524</td>
+      <td>0.0549</td>
+      <td>0.0684</td>
+      <td>0.0684</td>
+      <td>0.2037</td>
+      <td>0.0364</td>
+      <td>0.0993</td>
+      <td>0.0964</td>
+      <td>0.0559</td>
+      <td>0.0968</td>
+      <td>0.0964</td>
+      <td>-0.0119</td>
+      <td>-0.0579</td>
+      <td>-0.0063</td>
+      <td>-0.0392</td>
+      <td>0.1205</td>
+      <td>0.0254</td>
+      <td>-0.0241</td>
+      <td>-0.1806</td>
+    </tr>
+    <tr>
+      <td>0.0319</td>
+      <td>0.0046</td>
+      <td>-0.1125</td>
+      <td>-0.132</td>
+      <td>0.1697</td>
+      <td>-0.2057</td>
+      <td>1.0</td>
+      <td>0.0065</td>
+      <td>0.0851</td>
+      <td>0.0057</td>
+      <td>0.0057</td>
+      <td>-0.0318</td>
+      <td>0.2835</td>
+      <td>0.0898</td>
+      <td>0.0179</td>
+      <td>-0.035</td>
+      <td>0.0191</td>
+      <td>0.0179</td>
+      <td>0.0025</td>
+      <td>-0.0475</td>
+      <td>-0.0998</td>
+      <td>-0.0132</td>
+      <td>-0.0832</td>
+      <td>0.09</td>
+      <td>0.1421</td>
+      <td>-0.0649</td>
+    </tr>
+    <tr>
+      <td>0.022</td>
+      <td>0.1205</td>
+      <td>-0.0764</td>
+      <td>-0.0655</td>
+      <td>0.0525</td>
+      <td>0.0524</td>
+      <td>0.0065</td>
+      <td>1.0</td>
+      <td>-0.03</td>
+      <td>0.913</td>
+      <td>0.913</td>
+      <td>0.0477</td>
+      <td>0.2397</td>
+      <td>-0.0154</td>
+      <td>-0.0923</td>
+      <td>-0.0664</td>
+      <td>-0.0929</td>
+      <td>-0.0923</td>
+      <td>-0.0291</td>
+      <td>0.0844</td>
+      <td>-0.0253</td>
+      <td>0.0406</td>
+      <td>-0.0388</td>
+      <td>-0.0258</td>
+      <td>0.0292</td>
+      <td>-0.0371</td>
+    </tr>
+    <tr>
+      <td>0.0364</td>
+      <td>-0.067</td>
+      <td>-0.0882</td>
+      <td>-0.0839</td>
+      <td>0.0544</td>
+      <td>0.0549</td>
+      <td>0.0851</td>
+      <td>-0.03</td>
+      <td>1.0</td>
+      <td>-0.192</td>
+      <td>-0.192</td>
+      <td>0.0537</td>
+      <td>-0.0313</td>
+      <td>-0.0751</td>
+      <td>0.0329</td>
+      <td>0.0151</td>
+      <td>0.0333</td>
+      <td>0.0329</td>
+      <td>0.0268</td>
+      <td>-0.018</td>
+      <td>0.0481</td>
+      <td>-0.0184</td>
+      <td>-0.0656</td>
+      <td>0.0743</td>
+      <td>-0.0421</td>
+      <td>-0.0882</td>
+    </tr>
+    <tr>
+      <td>0.0499</td>
+      <td>0.1463</td>
+      <td>-0.0996</td>
+      <td>-0.0449</td>
+      <td>0.1079</td>
+      <td>0.0684</td>
+      <td>0.0057</td>
+      <td>0.913</td>
+      <td>-0.192</td>
+      <td>1.0</td>
+      <td>1.0</td>
+      <td>-0.0063</td>
+      <td>0.2354</td>
+      <td>0.0029</td>
+      <td>0.2575</td>
+      <td>0.2315</td>
+      <td>0.2575</td>
+      <td>0.2575</td>
+      <td>0.1512</td>
+      <td>0.079</td>
+      <td>-0.0202</td>
+      <td>0.0372</td>
+      <td>-0.0387</td>
+      <td>-0.0438</td>
+      <td>0.0299</td>
+      <td>-0.023</td>
+    </tr>
+    <tr>
+      <td>0.0499</td>
+      <td>0.1463</td>
+      <td>-0.0996</td>
+      <td>-0.0449</td>
+      <td>0.1079</td>
+      <td>0.0684</td>
+      <td>0.0057</td>
+      <td>0.913</td>
+      <td>-0.192</td>
+      <td>1.0</td>
+      <td>1.0</td>
+      <td>-0.0063</td>
+      <td>0.2354</td>
+      <td>0.0029</td>
+      <td>0.2575</td>
+      <td>0.2315</td>
+      <td>0.2575</td>
+      <td>0.2575</td>
+      <td>0.1512</td>
+      <td>0.079</td>
+      <td>-0.0202</td>
+      <td>0.0372</td>
+      <td>-0.0387</td>
+      <td>-0.0438</td>
+      <td>0.0299</td>
+      <td>-0.023</td>
+    </tr>
+    <tr>
+      <td>-0.0684</td>
+      <td>0.0135</td>
+      <td>-0.0048</td>
+      <td>-0.0803</td>
+      <td>0.0713</td>
+      <td>0.2037</td>
+      <td>-0.0318</td>
+      <td>0.0477</td>
+      <td>0.0537</td>
+      <td>-0.0063</td>
+      <td>-0.0063</td>
+      <td>1.0</td>
+      <td>0.0316</td>
+      <td>0.005</td>
+      <td>-0.14</td>
+      <td>-0.1256</td>
+      <td>-0.14</td>
+      <td>-0.14</td>
+      <td>-0.1404</td>
+      <td>-0.0046</td>
+      <td>0.0903</td>
+      <td>0.1023</td>
+      <td>-0.0818</td>
+      <td>0.0282</td>
+      <td>-0.1506</td>
+      <td>0.0184</td>
+    </tr>
+    <tr>
+      <td>-0.252</td>
+      <td>-0.0687</td>
+      <td>0.2231</td>
+      <td>0.2058</td>
+      <td>0.3776</td>
+      <td>0.0364</td>
+      <td>0.2835</td>
+      <td>0.2397</td>
+      <td>-0.0313</td>
+      <td>0.2354</td>
+      <td>0.2354</td>
+      <td>0.0316</td>
+      <td>1.0</td>
+      <td>0.5301</td>
+      <td>0.0241</td>
+      <td>-0.0283</td>
+      <td>0.025</td>
+      <td>0.0241</td>
+      <td>0.0618</td>
+      <td>-0.1546</td>
+      <td>-0.1395</td>
+      <td>-0.0374</td>
+      <td>0.1257</td>
+      <td>-0.0177</td>
+      <td>0.1507</td>
+      <td>-0.0402</td>
+    </tr>
+    <tr>
+      <td>0.0081</td>
+      <td>0.0183</td>
+      <td>0.3554</td>
+      <td>0.42</td>
+      <td>0.0563</td>
+      <td>0.0993</td>
+      <td>0.0898</td>
+      <td>-0.0154</td>
+      <td>-0.0751</td>
+      <td>0.0029</td>
+      <td>0.0029</td>
+      <td>0.005</td>
+      <td>0.5301</td>
+      <td>1.0</td>
+      <td>0.0016</td>
+      <td>-0.0672</td>
+      <td>0.0033</td>
+      <td>0.0016</td>
+      <td>0.0483</td>
+      <td>-0.1549</td>
+      <td>-0.5323</td>
+      <td>0.227</td>
+      <td>0.2161</td>
+      <td>0.0983</td>
+      <td>0.4076</td>
+      <td>-0.0837</td>
+    </tr>
+    <tr>
+      <td>0.061</td>
+      <td>0.0306</td>
+      <td>-0.0785</td>
+      <td>-0.0015</td>
+      <td>0.1948</td>
+      <td>0.0964</td>
+      <td>0.0179</td>
+      <td>-0.0923</td>
+      <td>0.0329</td>
+      <td>0.2575</td>
+      <td>0.2575</td>
+      <td>-0.14</td>
+      <td>0.0241</td>
+      <td>0.0016</td>
+      <td>1.0</td>
+      <td>0.8976</td>
+      <td>0.9999</td>
+      <td>1.0</td>
+      <td>0.5701</td>
+      <td>0.0003</td>
+      <td>0.0443</td>
+      <td>-0.0207</td>
+      <td>-0.0135</td>
+      <td>-0.009</td>
+      <td>-0.0344</td>
+      <td>-0.0482</td>
+    </tr>
+    <tr>
+      <td>0.0528</td>
+      <td>0.0888</td>
+      <td>-0.1176</td>
+      <td>-0.0534</td>
+      <td>0.1272</td>
+      <td>0.0559</td>
+      <td>-0.035</td>
+      <td>-0.0664</td>
+      <td>0.0151</td>
+      <td>0.2315</td>
+      <td>0.2315</td>
+      <td>-0.1256</td>
+      <td>-0.0283</td>
+      <td>-0.0672</td>
+      <td>0.8976</td>
+      <td>1.0</td>
+      <td>0.8927</td>
+      <td>0.8976</td>
+      <td>0.4536</td>
+      <td>0.0512</td>
+      <td>0.0397</td>
+      <td>-0.0186</td>
+      <td>-0.0121</td>
+      <td>-0.0081</td>
+      <td>-0.0309</td>
+      <td>-0.0432</td>
+    </tr>
+    <tr>
+      <td>0.061</td>
+      <td>0.0294</td>
+      <td>-0.0773</td>
+      <td>-0.0001</td>
+      <td>0.1954</td>
+      <td>0.0968</td>
+      <td>0.0191</td>
+      <td>-0.0929</td>
+      <td>0.0333</td>
+      <td>0.2575</td>
+      <td>0.2575</td>
+      <td>-0.14</td>
+      <td>0.025</td>
+      <td>0.0033</td>
+      <td>0.9999</td>
+      <td>0.8927</td>
+      <td>1.0</td>
+      <td>0.9999</td>
+      <td>0.5712</td>
+      <td>-0.0007</td>
+      <td>0.0443</td>
+      <td>-0.0207</td>
+      <td>-0.0135</td>
+      <td>-0.009</td>
+      <td>-0.0344</td>
+      <td>-0.0482</td>
+    </tr>
+    <tr>
+      <td>0.061</td>
+      <td>0.0306</td>
+      <td>-0.0785</td>
+      <td>-0.0015</td>
+      <td>0.1948</td>
+      <td>0.0964</td>
+      <td>0.0179</td>
+      <td>-0.0923</td>
+      <td>0.0329</td>
+      <td>0.2575</td>
+      <td>0.2575</td>
+      <td>-0.14</td>
+      <td>0.0241</td>
+      <td>0.0016</td>
+      <td>1.0</td>
+      <td>0.8976</td>
+      <td>0.9999</td>
+      <td>1.0</td>
+      <td>0.5701</td>
+      <td>0.0003</td>
+      <td>0.0443</td>
+      <td>-0.0207</td>
+      <td>-0.0135</td>
+      <td>-0.009</td>
+      <td>-0.0344</td>
+      <td>-0.0482</td>
+    </tr>
+    <tr>
+      <td>-0.0058</td>
+      <td>0.0843</td>
       <td>0.0667</td>
+      <td>-0.0087</td>
+      <td>0.2173</td>
+      <td>-0.0119</td>
+      <td>0.0025</td>
+      <td>-0.0291</td>
+      <td>0.0268</td>
+      <td>0.1512</td>
+      <td>0.1512</td>
+      <td>-0.1404</td>
+      <td>0.0618</td>
+      <td>0.0483</td>
+      <td>0.5701</td>
+      <td>0.4536</td>
+      <td>0.5712</td>
+      <td>0.5701</td>
       <td>1.0</td>
-      <td>0.0745</td>
-      <td>0.0193</td>
-      <td>0.0187</td>
-      <td>0.0782</td>
-      <td>-0.075</td>
-      <td>-0.0072</td>
-      <td>0.0068</td>
+      <td>0.1115</td>
+      <td>0.0531</td>
+      <td>-0.0249</td>
+      <td>-0.0162</td>
+      <td>-0.0108</td>
+      <td>-0.0413</td>
+      <td>0.1817</td>
     </tr>
     <tr>
-      <td>-0.0499</td>
-      <td>0.0745</td>
+      <td>-0.0379</td>
+      <td>0.7313</td>
+      <td>0.2902</td>
+      <td>0.0827</td>
+      <td>-0.0483</td>
+      <td>-0.0579</td>
+      <td>-0.0475</td>
+      <td>0.0844</td>
+      <td>-0.018</td>
+      <td>0.079</td>
+      <td>0.079</td>
+      <td>-0.0046</td>
+      <td>-0.1546</td>
+      <td>-0.1549</td>
+      <td>0.0003</td>
+      <td>0.0512</td>
+      <td>-0.0007</td>
+      <td>0.0003</td>
+      <td>0.1115</td>
       <td>1.0</td>
-      <td>0.7119</td>
-      <td>-0.0109</td>
-      <td>0.0147</td>
-      <td>-0.0938</td>
-      <td>-0.0027</td>
-      <td>0.0035</td>
+      <td>-0.0814</td>
+      <td>0.0567</td>
+      <td>-0.1339</td>
+      <td>0.072</td>
+      <td>0.1015</td>
+      <td>-0.1148</td>
     </tr>
     <tr>
-      <td>-0.055</td>
-      <td>0.0193</td>
-      <td>0.7119</td>
+      <td>-0.0972</td>
+      <td>-0.0613</td>
+      <td>0.028</td>
+      <td>0.0235</td>
+      <td>-0.0095</td>
+      <td>-0.0063</td>
+      <td>-0.0998</td>
+      <td>-0.0253</td>
+      <td>0.0481</td>
+      <td>-0.0202</td>
+      <td>-0.0202</td>
+      <td>0.0903</td>
+      <td>-0.1395</td>
+      <td>-0.5323</td>
+      <td>0.0443</td>
+      <td>0.0397</td>
+      <td>0.0443</td>
+      <td>0.0443</td>
+      <td>0.0531</td>
+      <td>-0.0814</td>
       <td>1.0</td>
-      <td>-0.0328</td>
-      <td>0.0696</td>
-      <td>-0.0674</td>
-      <td>0.0166</td>
-      <td>0.0223</td>
+      <td>-0.4681</td>
+      <td>-0.3048</td>
+      <td>-0.2028</td>
+      <td>-0.7765</td>
+      <td>0.0362</td>
     </tr>
     <tr>
-      <td>-0.0208</td>
-      <td>0.0187</td>
-      <td>-0.0109</td>
-      <td>-0.0328</td>
+      <td>0.0528</td>
+      <td>0.0771</td>
+      <td>-0.1269</td>
+      <td>-0.1527</td>
+      <td>-0.051</td>
+      <td>-0.0392</td>
+      <td>-0.0132</td>
+      <td>0.0406</td>
+      <td>-0.0184</td>
+      <td>0.0372</td>
+      <td>0.0372</td>
+      <td>0.1023</td>
+      <td>-0.0374</td>
+      <td>0.227</td>
+      <td>-0.0207</td>
+      <td>-0.0186</td>
+      <td>-0.0207</td>
+      <td>-0.0207</td>
+      <td>-0.0249</td>
+      <td>0.0567</td>
+      <td>-0.4681</td>
       <td>1.0</td>
-      <td>0.0128</td>
-      <td>-0.0429</td>
-      <td>-0.0757</td>
-      <td>-0.0753</td>
+      <td>-0.0121</td>
+      <td>-0.0081</td>
+      <td>-0.0309</td>
+      <td>-0.0432</td>
     </tr>
     <tr>
-      <td>0.0539</td>
-      <td>0.0782</td>
-      <td>0.0147</td>
-      <td>0.0696</td>
-      <td>0.0128</td>
+      <td>0.0183</td>
+      <td>-0.1181</td>
+      <td>0.1183</td>
+      <td>0.1521</td>
+      <td>-0.0332</td>
+      <td>0.1205</td>
+      <td>-0.0832</td>
+      <td>-0.0388</td>
+      <td>-0.0656</td>
+      <td>-0.0387</td>
+      <td>-0.0387</td>
+      <td>-0.0818</td>
+      <td>0.1257</td>
+      <td>0.2161</td>
+      <td>-0.0135</td>
+      <td>-0.0121</td>
+      <td>-0.0135</td>
+      <td>-0.0135</td>
+      <td>-0.0162</td>
+      <td>-0.1339</td>
+      <td>-0.3048</td>
+      <td>-0.0121</td>
       <td>1.0</td>
       <td>-0.0052</td>
-      <td>0.0486</td>
-      <td>0.0464</td>
+      <td>-0.0201</td>
+      <td>-0.0282</td>
     </tr>
     <tr>
-      <td>-0.0223</td>
-      <td>-0.075</td>
-      <td>-0.0938</td>
-      <td>-0.0674</td>
-      <td>-0.0429</td>
+      <td>-0.0581</td>
+      <td>0.0812</td>
+      <td>-0.0546</td>
+      <td>-0.0675</td>
+      <td>-0.0221</td>
+      <td>0.0254</td>
+      <td>0.09</td>
+      <td>-0.0258</td>
+      <td>0.0743</td>
+      <td>-0.0438</td>
+      <td>-0.0438</td>
+      <td>0.0282</td>
+      <td>-0.0177</td>
+      <td>0.0983</td>
+      <td>-0.009</td>
+      <td>-0.0081</td>
+      <td>-0.009</td>
+      <td>-0.009</td>
+      <td>-0.0108</td>
+      <td>0.072</td>
+      <td>-0.2028</td>
+      <td>-0.0081</td>
       <td>-0.0052</td>
       <td>1.0</td>
-      <td>0.2187</td>
-      <td>0.2348</td>
+      <td>-0.0134</td>
+      <td>-0.0187</td>
     </tr>
     <tr>
-      <td>0.2266</td>
-      <td>-0.0072</td>
-      <td>-0.0027</td>
-      <td>0.0166</td>
-      <td>-0.0757</td>
-      <td>0.0486</td>
-      <td>0.2187</td>
+      <td>0.0968</td>
+      <td>0.0548</td>
+      <td>0.0105</td>
+      <td>0.0218</td>
+      <td>0.0632</td>
+      <td>-0.0241</td>
+      <td>0.1421</td>
+      <td>0.0292</td>
+      <td>-0.0421</td>
+      <td>0.0299</td>
+      <td>0.0299</td>
+      <td>-0.1506</td>
+      <td>0.1507</td>
+      <td>0.4076</td>
+      <td>-0.0344</td>
+      <td>-0.0309</td>
+      <td>-0.0344</td>
+      <td>-0.0344</td>
+      <td>-0.0413</td>
+      <td>0.1015</td>
+      <td>-0.7765</td>
+      <td>-0.0309</td>
+      <td>-0.0201</td>
+      <td>-0.0134</td>
       <td>1.0</td>
-      <td>0.9945</td>
+      <td>-0.0016</td>
     </tr>
     <tr>
-      <td>0.2106</td>
-      <td>0.0068</td>
-      <td>0.0035</td>
-      <td>0.0223</td>
-      <td>-0.0753</td>
-      <td>0.0464</td>
-      <td>0.2348</td>
-      <td>0.9945</td>
+      <td>-0.0341</td>
+      <td>-0.0194</td>
+      <td>-0.0663</td>
+      <td>-0.1379</td>
+      <td>0.0104</td>
+      <td>-0.1806</td>
+      <td>-0.0649</td>
+      <td>-0.0371</td>
+      <td>-0.0882</td>
+      <td>-0.023</td>
+      <td>-0.023</td>
+      <td>0.0184</td>
+      <td>-0.0402</td>
+      <td>-0.0837</td>
+      <td>-0.0482</td>
+      <td>-0.0432</td>
+      <td>-0.0482</td>
+      <td>-0.0482</td>
+      <td>0.1817</td>
+      <td>-0.1148</td>
+      <td>0.0362</td>
+      <td>-0.0432</td>
+      <td>-0.0282</td>
+      <td>-0.0187</td>
+      <td>-0.0016</td>
       <td>1.0</td>
     </tr>
   </tbody>
@@ -961,178 +2437,926 @@
       <th>transfer_speed_mbps</th>
       <th>created_hour</th>
       <th>hourly_arrival_count</th>
+      <th>hourly_capacity</th>
+      <th>queue_pressure_raw</th>
       <th>queue_pressure</th>
+      <th>congestion_factor</th>
+      <th>error_probability</th>
+      <th>error_probability_multiplier</th>
       <th>has_error</th>
+      <th>retry_count</th>
+      <th>retry_success</th>
+      <th>retry_delay_sec</th>
+      <th>retry_cost</th>
+      <th>error_penalty_cost</th>
       <th>storage_cost</th>
+      <th>total_operational_cost</th>
+      <th>metadata_quality_score</th>
+      <th>missing_metadata</th>
+      <th>wrong_extension</th>
+      <th>empty_file</th>
+      <th>malformed_json</th>
+      <th>storage_policy_noise_applied</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td>1.0</td>
+      <td>-0.0296</td>
+      <td>-0.081</td>
+      <td>0.0003</td>
+      <td>0.0866</td>
+      <td>0.0159</td>
+      <td>-0.0781</td>
+      <td>0.0319</td>
+      <td>0.022</td>
+      <td>0.0364</td>
+      <td>0.0499</td>
+      <td>0.0499</td>
+      <td>-0.0684</td>
+      <td>-0.252</td>
+      <td>0.0081</td>
+      <td>0.0406</td>
+      <td>0.061</td>
+      <td>0.0528</td>
+      <td>0.061</td>
+      <td>0.061</td>
+      <td>-0.0058</td>
+      <td>-0.0385</td>
+      <td>-0.0379</td>
+      <td>-0.0972</td>
+      <td>0.0528</td>
+      <td>0.0183</td>
+      <td>-0.0581</td>
+      <td>0.0968</td>
+      <td>-0.0341</td>
+    </tr>
+    <tr>
+      <td>-0.0296</td>
+      <td>1.0</td>
+      <td>-0.0088</td>
+      <td>0.1494</td>
+      <td>-0.1089</td>
+      <td>0.7869</td>
+      <td>-0.0045</td>
+      <td>0.0046</td>
+      <td>0.1205</td>
+      <td>-0.067</td>
+      <td>0.1463</td>
+      <td>0.1463</td>
+      <td>0.0135</td>
+      <td>-0.0687</td>
+      <td>0.0183</td>
+      <td>0.1349</td>
+      <td>0.0306</td>
+      <td>0.0888</td>
+      <td>0.0294</td>
+      <td>0.0306</td>
+      <td>0.0843</td>
+      <td>0.7317</td>
+      <td>0.7313</td>
+      <td>-0.0613</td>
+      <td>0.0771</td>
+      <td>-0.1181</td>
+      <td>0.0812</td>
+      <td>0.0548</td>
+      <td>-0.0194</td>
+    </tr>
+    <tr>
+      <td>-0.081</td>
+      <td>-0.0088</td>
+      <td>1.0</td>
+      <td>0.6427</td>
+      <td>0.0203</td>
+      <td>-0.0265</td>
+      <td>0.0528</td>
+      <td>-0.1125</td>
+      <td>-0.0764</td>
+      <td>-0.0882</td>
+      <td>-0.0996</td>
+      <td>-0.0996</td>
+      <td>-0.0048</td>
+      <td>0.2231</td>
+      <td>0.3554</td>
+      <td>0.0076</td>
+      <td>-0.0785</td>
+      <td>-0.1176</td>
+      <td>-0.0773</td>
+      <td>-0.0785</td>
       <td>0.0667</td>
-      <td>-0.0499</td>
-      <td>-0.055</td>
-      <td>-0.0208</td>
-      <td>0.0322</td>
-      <td>0.0539</td>
-      <td>-0.0223</td>
-      <td>0.2266</td>
-      <td>0.2106</td>
-      <td>-0.0638</td>
-      <td>0.0862</td>
+      <td>0.2896</td>
+      <td>0.2902</td>
+      <td>0.028</td>
+      <td>-0.1269</td>
+      <td>0.1183</td>
+      <td>-0.0546</td>
+      <td>0.0105</td>
+      <td>-0.0663</td>
     </tr>
     <tr>
-      <td>0.0667</td>
+      <td>0.0003</td>
+      <td>0.1494</td>
+      <td>0.6427</td>
       <td>1.0</td>
-      <td>0.0745</td>
-      <td>0.0193</td>
-      <td>0.0187</td>
-      <td>0.7172</td>
-      <td>0.0782</td>
-      <td>-0.075</td>
-      <td>-0.0072</td>
-      <td>0.0068</td>
-      <td>0.0628</td>
-      <td>0.7449</td>
+      <td>0.0412</td>
+      <td>0.1071</td>
+      <td>0.165</td>
+      <td>-0.132</td>
+      <td>-0.0655</td>
+      <td>-0.0839</td>
+      <td>-0.0449</td>
+      <td>-0.0449</td>
+      <td>-0.0803</td>
+      <td>0.2058</td>
+      <td>0.42</td>
+      <td>-0.0537</td>
+      <td>-0.0015</td>
+      <td>-0.0534</td>
+      <td>-0.0001</td>
+      <td>-0.0015</td>
+      <td>-0.0087</td>
+      <td>0.0817</td>
+      <td>0.0827</td>
+      <td>0.0235</td>
+      <td>-0.1527</td>
+      <td>0.1521</td>
+      <td>-0.0675</td>
+      <td>0.0218</td>
+      <td>-0.1379</td>
     </tr>
     <tr>
-      <td>-0.0499</td>
-      <td>0.0745</td>
+      <td>0.0866</td>
+      <td>-0.1089</td>
+      <td>0.0203</td>
+      <td>0.0412</td>
       <td>1.0</td>
-      <td>0.7119</td>
-      <td>-0.0109</td>
+      <td>0.0199</td>
+      <td>0.0468</td>
+      <td>0.1697</td>
+      <td>0.0525</td>
+      <td>0.0544</td>
+      <td>0.1079</td>
+      <td>0.1079</td>
+      <td>0.0713</td>
+      <td>0.3776</td>
+      <td>0.0563</td>
+      <td>0.1843</td>
+      <td>0.1948</td>
+      <td>0.1272</td>
+      <td>0.1954</td>
+      <td>0.1948</td>
+      <td>0.2173</td>
+      <td>-0.0513</td>
+      <td>-0.0483</td>
+      <td>-0.0095</td>
+      <td>-0.051</td>
+      <td>-0.0332</td>
+      <td>-0.0221</td>
+      <td>0.0632</td>
+      <td>0.0104</td>
+    </tr>
+    <tr>
+      <td>0.0159</td>
+      <td>0.7869</td>
+      <td>-0.0265</td>
+      <td>0.1071</td>
+      <td>0.0199</td>
+      <td>1.0</td>
+      <td>-0.3095</td>
+      <td>0.1021</td>
+      <td>0.0635</td>
+      <td>-0.0661</td>
+      <td>0.1719</td>
+      <td>0.1719</td>
+      <td>-0.1285</td>
+      <td>0.037</td>
+      <td>0.0151</td>
+      <td>0.3034</td>
+      <td>0.2555</td>
+      <td>0.2276</td>
+      <td>0.2555</td>
+      <td>0.2555</td>
+      <td>0.2678</td>
+      <td>0.6182</td>
+      <td>0.6209</td>
+      <td>-0.0602</td>
+      <td>0.0276</td>
+      <td>-0.0855</td>
+      <td>0.0833</td>
+      <td>0.0701</td>
+      <td>0.0369</td>
+    </tr>
+    <tr>
+      <td>-0.0781</td>
+      <td>-0.0045</td>
+      <td>0.0528</td>
+      <td>0.165</td>
+      <td>0.0468</td>
+      <td>-0.3095</td>
+      <td>1.0</td>
+      <td>-0.2057</td>
+      <td>0.0524</td>
+      <td>0.0549</td>
+      <td>0.0684</td>
+      <td>0.0684</td>
+      <td>0.2037</td>
+      <td>0.0364</td>
+      <td>0.0993</td>
+      <td>-0.0088</td>
+      <td>0.0964</td>
+      <td>0.0559</td>
+      <td>0.0968</td>
+      <td>0.0964</td>
+      <td>-0.0119</td>
+      <td>-0.059</td>
+      <td>-0.0579</td>
+      <td>-0.0063</td>
+      <td>-0.0392</td>
+      <td>0.1205</td>
+      <td>0.0254</td>
+      <td>-0.0241</td>
+      <td>-0.1806</td>
+    </tr>
+    <tr>
+      <td>0.0319</td>
+      <td>0.0046</td>
+      <td>-0.1125</td>
+      <td>-0.132</td>
+      <td>0.1697</td>
+      <td>0.1021</td>
+      <td>-0.2057</td>
+      <td>1.0</td>
+      <td>0.0065</td>
+      <td>0.0851</td>
+      <td>0.0057</td>
+      <td>0.0057</td>
+      <td>-0.0318</td>
+      <td>0.2835</td>
+      <td>0.0898</td>
+      <td>-0.0108</td>
+      <td>0.0179</td>
+      <td>-0.035</td>
+      <td>0.0191</td>
+      <td>0.0179</td>
+      <td>0.0025</td>
+      <td>-0.0483</td>
+      <td>-0.0475</td>
+      <td>-0.0998</td>
+      <td>-0.0132</td>
+      <td>-0.0832</td>
+      <td>0.09</td>
+      <td>0.1421</td>
+      <td>-0.0649</td>
+    </tr>
+    <tr>
+      <td>0.022</td>
+      <td>0.1205</td>
+      <td>-0.0764</td>
+      <td>-0.0655</td>
+      <td>0.0525</td>
+      <td>0.0635</td>
+      <td>0.0524</td>
+      <td>0.0065</td>
+      <td>1.0</td>
+      <td>-0.03</td>
+      <td>0.913</td>
+      <td>0.913</td>
+      <td>0.0477</td>
+      <td>0.2397</td>
+      <td>-0.0154</td>
+      <td>-0.0672</td>
+      <td>-0.0923</td>
+      <td>-0.0664</td>
+      <td>-0.0929</td>
+      <td>-0.0923</td>
+      <td>-0.0291</td>
+      <td>0.0852</td>
+      <td>0.0844</td>
+      <td>-0.0253</td>
+      <td>0.0406</td>
+      <td>-0.0388</td>
+      <td>-0.0258</td>
+      <td>0.0292</td>
+      <td>-0.0371</td>
+    </tr>
+    <tr>
+      <td>0.0364</td>
+      <td>-0.067</td>
+      <td>-0.0882</td>
+      <td>-0.0839</td>
+      <td>0.0544</td>
+      <td>-0.0661</td>
+      <td>0.0549</td>
+      <td>0.0851</td>
+      <td>-0.03</td>
+      <td>1.0</td>
+      <td>-0.192</td>
+      <td>-0.192</td>
+      <td>0.0537</td>
+      <td>-0.0313</td>
+      <td>-0.0751</td>
+      <td>0.0289</td>
+      <td>0.0329</td>
+      <td>0.0151</td>
+      <td>0.0333</td>
+      <td>0.0329</td>
+      <td>0.0268</td>
+      <td>-0.0184</td>
+      <td>-0.018</td>
+      <td>0.0481</td>
+      <td>-0.0184</td>
+      <td>-0.0656</td>
+      <td>0.0743</td>
+      <td>-0.0421</td>
+      <td>-0.0882</td>
+    </tr>
+    <tr>
+      <td>0.0499</td>
+      <td>0.1463</td>
+      <td>-0.0996</td>
+      <td>-0.0449</td>
+      <td>0.1079</td>
+      <td>0.1719</td>
+      <td>0.0684</td>
+      <td>0.0057</td>
+      <td>0.913</td>
+      <td>-0.192</td>
+      <td>1.0</td>
+      <td>1.0</td>
+      <td>-0.0063</td>
+      <td>0.2354</td>
+      <td>0.0029</td>
+      <td>0.1983</td>
+      <td>0.2575</td>
+      <td>0.2315</td>
+      <td>0.2575</td>
+      <td>0.2575</td>
+      <td>0.1512</td>
+      <td>0.0772</td>
+      <td>0.079</td>
+      <td>-0.0202</td>
+      <td>0.0372</td>
+      <td>-0.0387</td>
+      <td>-0.0438</td>
+      <td>0.0299</td>
+      <td>-0.023</td>
+    </tr>
+    <tr>
+      <td>0.0499</td>
+      <td>0.1463</td>
+      <td>-0.0996</td>
+      <td>-0.0449</td>
+      <td>0.1079</td>
+      <td>0.1719</td>
+      <td>0.0684</td>
+      <td>0.0057</td>
+      <td>0.913</td>
+      <td>-0.192</td>
+      <td>1.0</td>
+      <td>1.0</td>
+      <td>-0.0063</td>
+      <td>0.2354</td>
+      <td>0.0029</td>
+      <td>0.1983</td>
+      <td>0.2575</td>
+      <td>0.2315</td>
+      <td>0.2575</td>
+      <td>0.2575</td>
+      <td>0.1512</td>
+      <td>0.0772</td>
+      <td>0.079</td>
+      <td>-0.0202</td>
+      <td>0.0372</td>
+      <td>-0.0387</td>
+      <td>-0.0438</td>
+      <td>0.0299</td>
+      <td>-0.023</td>
+    </tr>
+    <tr>
+      <td>-0.0684</td>
+      <td>0.0135</td>
+      <td>-0.0048</td>
+      <td>-0.0803</td>
+      <td>0.0713</td>
+      <td>-0.1285</td>
+      <td>0.2037</td>
+      <td>-0.0318</td>
+      <td>0.0477</td>
+      <td>0.0537</td>
+      <td>-0.0063</td>
+      <td>-0.0063</td>
+      <td>1.0</td>
+      <td>0.0316</td>
       <td>0.005</td>
-      <td>0.0147</td>
-      <td>-0.0938</td>
-      <td>-0.0027</td>
-      <td>0.0035</td>
-      <td>-0.0164</td>
-      <td>0.2973</td>
+      <td>-0.1608</td>
+      <td>-0.14</td>
+      <td>-0.1256</td>
+      <td>-0.14</td>
+      <td>-0.14</td>
+      <td>-0.1404</td>
+      <td>-0.0041</td>
+      <td>-0.0046</td>
+      <td>0.0903</td>
+      <td>0.1023</td>
+      <td>-0.0818</td>
+      <td>0.0282</td>
+      <td>-0.1506</td>
+      <td>0.0184</td>
     </tr>
     <tr>
-      <td>-0.055</td>
-      <td>0.0193</td>
-      <td>0.7119</td>
+      <td>-0.252</td>
+      <td>-0.0687</td>
+      <td>0.2231</td>
+      <td>0.2058</td>
+      <td>0.3776</td>
+      <td>0.037</td>
+      <td>0.0364</td>
+      <td>0.2835</td>
+      <td>0.2397</td>
+      <td>-0.0313</td>
+      <td>0.2354</td>
+      <td>0.2354</td>
+      <td>0.0316</td>
       <td>1.0</td>
-      <td>-0.0328</td>
-      <td>-0.0435</td>
-      <td>0.0696</td>
-      <td>-0.0674</td>
-      <td>0.0166</td>
-      <td>0.0223</td>
-      <td>-0.0526</td>
-      <td>-0.0029</td>
+      <td>0.5301</td>
+      <td>0.0129</td>
+      <td>0.0241</td>
+      <td>-0.0283</td>
+      <td>0.025</td>
+      <td>0.0241</td>
+      <td>0.0618</td>
+      <td>-0.1553</td>
+      <td>-0.1546</td>
+      <td>-0.1395</td>
+      <td>-0.0374</td>
+      <td>0.1257</td>
+      <td>-0.0177</td>
+      <td>0.1507</td>
+      <td>-0.0402</td>
     </tr>
     <tr>
-      <td>-0.0208</td>
-      <td>0.0187</td>
-      <td>-0.0109</td>
-      <td>-0.0328</td>
-      <td>1.0</td>
-      <td>0.0067</td>
-      <td>0.0128</td>
-      <td>-0.0429</td>
-      <td>-0.0757</td>
-      <td>-0.0753</td>
-      <td>0.1549</td>
-      <td>0.0155</td>
-    </tr>
-    <tr>
-      <td>0.0322</td>
-      <td>0.7172</td>
+      <td>0.0081</td>
+      <td>0.0183</td>
+      <td>0.3554</td>
+      <td>0.42</td>
+      <td>0.0563</td>
+      <td>0.0151</td>
+      <td>0.0993</td>
+      <td>0.0898</td>
+      <td>-0.0154</td>
+      <td>-0.0751</td>
+      <td>0.0029</td>
+      <td>0.0029</td>
       <td>0.005</td>
-      <td>-0.0435</td>
-      <td>0.0067</td>
+      <td>0.5301</td>
       <td>1.0</td>
-      <td>-0.4804</td>
-      <td>-0.0102</td>
-      <td>0.0045</td>
-      <td>0.0167</td>
+      <td>0.0263</td>
+      <td>0.0016</td>
+      <td>-0.0672</td>
+      <td>0.0033</td>
+      <td>0.0016</td>
+      <td>0.0483</td>
+      <td>-0.1557</td>
+      <td>-0.1549</td>
+      <td>-0.5323</td>
+      <td>0.227</td>
+      <td>0.2161</td>
+      <td>0.0983</td>
+      <td>0.4076</td>
+      <td>-0.0837</td>
+    </tr>
+    <tr>
+      <td>0.0406</td>
+      <td>0.1349</td>
+      <td>0.0076</td>
+      <td>-0.0537</td>
+      <td>0.1843</td>
+      <td>0.3034</td>
+      <td>-0.0088</td>
+      <td>-0.0108</td>
+      <td>-0.0672</td>
+      <td>0.0289</td>
+      <td>0.1983</td>
+      <td>0.1983</td>
+      <td>-0.1608</td>
+      <td>0.0129</td>
+      <td>0.0263</td>
+      <td>1.0</td>
+      <td>0.7536</td>
+      <td>0.6758</td>
+      <td>0.7536</td>
+      <td>0.7536</td>
+      <td>0.9035</td>
+      <td>0.118</td>
+      <td>0.1235</td>
+      <td>0.0588</td>
+      <td>-0.0275</td>
+      <td>-0.0179</td>
+      <td>-0.0119</td>
+      <td>-0.0457</td>
+      <td>0.154</td>
+    </tr>
+    <tr>
+      <td>0.061</td>
+      <td>0.0306</td>
+      <td>-0.0785</td>
+      <td>-0.0015</td>
+      <td>0.1948</td>
+      <td>0.2555</td>
+      <td>0.0964</td>
+      <td>0.0179</td>
+      <td>-0.0923</td>
+      <td>0.0329</td>
+      <td>0.2575</td>
+      <td>0.2575</td>
+      <td>-0.14</td>
+      <td>0.0241</td>
+      <td>0.0016</td>
+      <td>0.7536</td>
+      <td>1.0</td>
+      <td>0.8976</td>
+      <td>0.9999</td>
+      <td>1.0</td>
+      <td>0.5701</td>
+      <td>-0.0068</td>
+      <td>0.0003</td>
+      <td>0.0443</td>
+      <td>-0.0207</td>
+      <td>-0.0135</td>
+      <td>-0.009</td>
+      <td>-0.0344</td>
+      <td>-0.0482</td>
+    </tr>
+    <tr>
+      <td>0.0528</td>
+      <td>0.0888</td>
+      <td>-0.1176</td>
+      <td>-0.0534</td>
+      <td>0.1272</td>
+      <td>0.2276</td>
+      <td>0.0559</td>
+      <td>-0.035</td>
+      <td>-0.0664</td>
+      <td>0.0151</td>
+      <td>0.2315</td>
+      <td>0.2315</td>
+      <td>-0.1256</td>
+      <td>-0.0283</td>
+      <td>-0.0672</td>
+      <td>0.6758</td>
+      <td>0.8976</td>
+      <td>1.0</td>
+      <td>0.8927</td>
+      <td>0.8976</td>
+      <td>0.4536</td>
+      <td>0.0475</td>
+      <td>0.0512</td>
       <td>0.0397</td>
-      <td>0.5989</td>
+      <td>-0.0186</td>
+      <td>-0.0121</td>
+      <td>-0.0081</td>
+      <td>-0.0309</td>
+      <td>-0.0432</td>
     </tr>
     <tr>
-      <td>0.0539</td>
-      <td>0.0782</td>
-      <td>0.0147</td>
-      <td>0.0696</td>
-      <td>0.0128</td>
-      <td>-0.4804</td>
+      <td>0.061</td>
+      <td>0.0294</td>
+      <td>-0.0773</td>
+      <td>-0.0001</td>
+      <td>0.1954</td>
+      <td>0.2555</td>
+      <td>0.0968</td>
+      <td>0.0191</td>
+      <td>-0.0929</td>
+      <td>0.0333</td>
+      <td>0.2575</td>
+      <td>0.2575</td>
+      <td>-0.14</td>
+      <td>0.025</td>
+      <td>0.0033</td>
+      <td>0.7536</td>
+      <td>0.9999</td>
+      <td>0.8927</td>
+      <td>1.0</td>
+      <td>0.9999</td>
+      <td>0.5712</td>
+      <td>-0.0079</td>
+      <td>-0.0007</td>
+      <td>0.0443</td>
+      <td>-0.0207</td>
+      <td>-0.0135</td>
+      <td>-0.009</td>
+      <td>-0.0344</td>
+      <td>-0.0482</td>
+    </tr>
+    <tr>
+      <td>0.061</td>
+      <td>0.0306</td>
+      <td>-0.0785</td>
+      <td>-0.0015</td>
+      <td>0.1948</td>
+      <td>0.2555</td>
+      <td>0.0964</td>
+      <td>0.0179</td>
+      <td>-0.0923</td>
+      <td>0.0329</td>
+      <td>0.2575</td>
+      <td>0.2575</td>
+      <td>-0.14</td>
+      <td>0.0241</td>
+      <td>0.0016</td>
+      <td>0.7536</td>
+      <td>1.0</td>
+      <td>0.8976</td>
+      <td>0.9999</td>
+      <td>1.0</td>
+      <td>0.5701</td>
+      <td>-0.0068</td>
+      <td>0.0003</td>
+      <td>0.0443</td>
+      <td>-0.0207</td>
+      <td>-0.0135</td>
+      <td>-0.009</td>
+      <td>-0.0344</td>
+      <td>-0.0482</td>
+    </tr>
+    <tr>
+      <td>-0.0058</td>
+      <td>0.0843</td>
+      <td>0.0667</td>
+      <td>-0.0087</td>
+      <td>0.2173</td>
+      <td>0.2678</td>
+      <td>-0.0119</td>
+      <td>0.0025</td>
+      <td>-0.0291</td>
+      <td>0.0268</td>
+      <td>0.1512</td>
+      <td>0.1512</td>
+      <td>-0.1404</td>
+      <td>0.0618</td>
+      <td>0.0483</td>
+      <td>0.9035</td>
+      <td>0.5701</td>
+      <td>0.4536</td>
+      <td>0.5712</td>
+      <td>0.5701</td>
+      <td>1.0</td>
+      <td>0.1058</td>
+      <td>0.1115</td>
+      <td>0.0531</td>
+      <td>-0.0249</td>
+      <td>-0.0162</td>
+      <td>-0.0108</td>
+      <td>-0.0413</td>
+      <td>0.1817</td>
+    </tr>
+    <tr>
+      <td>-0.0385</td>
+      <td>0.7317</td>
+      <td>0.2896</td>
+      <td>0.0817</td>
+      <td>-0.0513</td>
+      <td>0.6182</td>
+      <td>-0.059</td>
+      <td>-0.0483</td>
+      <td>0.0852</td>
+      <td>-0.0184</td>
+      <td>0.0772</td>
+      <td>0.0772</td>
+      <td>-0.0041</td>
+      <td>-0.1553</td>
+      <td>-0.1557</td>
+      <td>0.118</td>
+      <td>-0.0068</td>
+      <td>0.0475</td>
+      <td>-0.0079</td>
+      <td>-0.0068</td>
+      <td>0.1058</td>
+      <td>1.0</td>
+      <td>0.9999</td>
+      <td>-0.0814</td>
+      <td>0.0567</td>
+      <td>-0.1339</td>
+      <td>0.072</td>
+      <td>0.1015</td>
+      <td>-0.1144</td>
+    </tr>
+    <tr>
+      <td>-0.0379</td>
+      <td>0.7313</td>
+      <td>0.2902</td>
+      <td>0.0827</td>
+      <td>-0.0483</td>
+      <td>0.6209</td>
+      <td>-0.0579</td>
+      <td>-0.0475</td>
+      <td>0.0844</td>
+      <td>-0.018</td>
+      <td>0.079</td>
+      <td>0.079</td>
+      <td>-0.0046</td>
+      <td>-0.1546</td>
+      <td>-0.1549</td>
+      <td>0.1235</td>
+      <td>0.0003</td>
+      <td>0.0512</td>
+      <td>-0.0007</td>
+      <td>0.0003</td>
+      <td>0.1115</td>
+      <td>0.9999</td>
+      <td>1.0</td>
+      <td>-0.0814</td>
+      <td>0.0567</td>
+      <td>-0.1339</td>
+      <td>0.072</td>
+      <td>0.1015</td>
+      <td>-0.1148</td>
+    </tr>
+    <tr>
+      <td>-0.0972</td>
+      <td>-0.0613</td>
+      <td>0.028</td>
+      <td>0.0235</td>
+      <td>-0.0095</td>
+      <td>-0.0602</td>
+      <td>-0.0063</td>
+      <td>-0.0998</td>
+      <td>-0.0253</td>
+      <td>0.0481</td>
+      <td>-0.0202</td>
+      <td>-0.0202</td>
+      <td>0.0903</td>
+      <td>-0.1395</td>
+      <td>-0.5323</td>
+      <td>0.0588</td>
+      <td>0.0443</td>
+      <td>0.0397</td>
+      <td>0.0443</td>
+      <td>0.0443</td>
+      <td>0.0531</td>
+      <td>-0.0814</td>
+      <td>-0.0814</td>
+      <td>1.0</td>
+      <td>-0.4681</td>
+      <td>-0.3048</td>
+      <td>-0.2028</td>
+      <td>-0.7765</td>
+      <td>0.0362</td>
+    </tr>
+    <tr>
+      <td>0.0528</td>
+      <td>0.0771</td>
+      <td>-0.1269</td>
+      <td>-0.1527</td>
+      <td>-0.051</td>
+      <td>0.0276</td>
+      <td>-0.0392</td>
+      <td>-0.0132</td>
+      <td>0.0406</td>
+      <td>-0.0184</td>
+      <td>0.0372</td>
+      <td>0.0372</td>
+      <td>0.1023</td>
+      <td>-0.0374</td>
+      <td>0.227</td>
+      <td>-0.0275</td>
+      <td>-0.0207</td>
+      <td>-0.0186</td>
+      <td>-0.0207</td>
+      <td>-0.0207</td>
+      <td>-0.0249</td>
+      <td>0.0567</td>
+      <td>0.0567</td>
+      <td>-0.4681</td>
+      <td>1.0</td>
+      <td>-0.0121</td>
+      <td>-0.0081</td>
+      <td>-0.0309</td>
+      <td>-0.0432</td>
+    </tr>
+    <tr>
+      <td>0.0183</td>
+      <td>-0.1181</td>
+      <td>0.1183</td>
+      <td>0.1521</td>
+      <td>-0.0332</td>
+      <td>-0.0855</td>
+      <td>0.1205</td>
+      <td>-0.0832</td>
+      <td>-0.0388</td>
+      <td>-0.0656</td>
+      <td>-0.0387</td>
+      <td>-0.0387</td>
+      <td>-0.0818</td>
+      <td>0.1257</td>
+      <td>0.2161</td>
+      <td>-0.0179</td>
+      <td>-0.0135</td>
+      <td>-0.0121</td>
+      <td>-0.0135</td>
+      <td>-0.0135</td>
+      <td>-0.0162</td>
+      <td>-0.1339</td>
+      <td>-0.1339</td>
+      <td>-0.3048</td>
+      <td>-0.0121</td>
       <td>1.0</td>
       <td>-0.0052</td>
-      <td>0.0486</td>
-      <td>0.0464</td>
-      <td>0.0229</td>
-      <td>0.0456</td>
+      <td>-0.0201</td>
+      <td>-0.0282</td>
     </tr>
     <tr>
-      <td>-0.0223</td>
-      <td>-0.075</td>
-      <td>-0.0938</td>
-      <td>-0.0674</td>
-      <td>-0.0429</td>
-      <td>-0.0102</td>
+      <td>-0.0581</td>
+      <td>0.0812</td>
+      <td>-0.0546</td>
+      <td>-0.0675</td>
+      <td>-0.0221</td>
+      <td>0.0833</td>
+      <td>0.0254</td>
+      <td>0.09</td>
+      <td>-0.0258</td>
+      <td>0.0743</td>
+      <td>-0.0438</td>
+      <td>-0.0438</td>
+      <td>0.0282</td>
+      <td>-0.0177</td>
+      <td>0.0983</td>
+      <td>-0.0119</td>
+      <td>-0.009</td>
+      <td>-0.0081</td>
+      <td>-0.009</td>
+      <td>-0.009</td>
+      <td>-0.0108</td>
+      <td>0.072</td>
+      <td>0.072</td>
+      <td>-0.2028</td>
+      <td>-0.0081</td>
       <td>-0.0052</td>
       <td>1.0</td>
-      <td>0.2187</td>
-      <td>0.2348</td>
-      <td>0.0415</td>
-      <td>-0.0609</td>
+      <td>-0.0134</td>
+      <td>-0.0187</td>
     </tr>
     <tr>
-      <td>0.2266</td>
-      <td>-0.0072</td>
-      <td>-0.0027</td>
-      <td>0.0166</td>
-      <td>-0.0757</td>
-      <td>0.0045</td>
-      <td>0.0486</td>
-      <td>0.2187</td>
+      <td>0.0968</td>
+      <td>0.0548</td>
+      <td>0.0105</td>
+      <td>0.0218</td>
+      <td>0.0632</td>
+      <td>0.0701</td>
+      <td>-0.0241</td>
+      <td>0.1421</td>
+      <td>0.0292</td>
+      <td>-0.0421</td>
+      <td>0.0299</td>
+      <td>0.0299</td>
+      <td>-0.1506</td>
+      <td>0.1507</td>
+      <td>0.4076</td>
+      <td>-0.0457</td>
+      <td>-0.0344</td>
+      <td>-0.0309</td>
+      <td>-0.0344</td>
+      <td>-0.0344</td>
+      <td>-0.0413</td>
+      <td>0.1015</td>
+      <td>0.1015</td>
+      <td>-0.7765</td>
+      <td>-0.0309</td>
+      <td>-0.0201</td>
+      <td>-0.0134</td>
       <td>1.0</td>
-      <td>0.9945</td>
-      <td>-0.003</td>
-      <td>0.0</td>
+      <td>-0.0016</td>
     </tr>
     <tr>
-      <td>0.2106</td>
-      <td>0.0068</td>
-      <td>0.0035</td>
-      <td>0.0223</td>
-      <td>-0.0753</td>
-      <td>0.0167</td>
-      <td>0.0464</td>
-      <td>0.2348</td>
-      <td>0.9945</td>
-      <td>1.0</td>
-      <td>-0.005</td>
-      <td>0.0119</td>
-    </tr>
-    <tr>
-      <td>-0.0638</td>
-      <td>0.0628</td>
-      <td>-0.0164</td>
-      <td>-0.0526</td>
-      <td>0.1549</td>
-      <td>0.0397</td>
-      <td>0.0229</td>
-      <td>0.0415</td>
-      <td>-0.003</td>
-      <td>-0.005</td>
-      <td>1.0</td>
-      <td>0.0538</td>
-    </tr>
-    <tr>
-      <td>0.0862</td>
-      <td>0.7449</td>
-      <td>0.2973</td>
-      <td>-0.0029</td>
-      <td>0.0155</td>
-      <td>0.5989</td>
-      <td>0.0456</td>
-      <td>-0.0609</td>
-      <td>0.0</td>
-      <td>0.0119</td>
-      <td>0.0538</td>
+      <td>-0.0341</td>
+      <td>-0.0194</td>
+      <td>-0.0663</td>
+      <td>-0.1379</td>
+      <td>0.0104</td>
+      <td>0.0369</td>
+      <td>-0.1806</td>
+      <td>-0.0649</td>
+      <td>-0.0371</td>
+      <td>-0.0882</td>
+      <td>-0.023</td>
+      <td>-0.023</td>
+      <td>0.0184</td>
+      <td>-0.0402</td>
+      <td>-0.0837</td>
+      <td>0.154</td>
+      <td>-0.0482</td>
+      <td>-0.0432</td>
+      <td>-0.0482</td>
+      <td>-0.0482</td>
+      <td>0.1817</td>
+      <td>-0.1144</td>
+      <td>-0.1148</td>
+      <td>0.0362</td>
+      <td>-0.0432</td>
+      <td>-0.0282</td>
+      <td>-0.0187</td>
+      <td>-0.0016</td>
       <td>1.0</td>
     </tr>
   </tbody>
@@ -1156,178 +3380,926 @@
       <th>transfer_speed_mbps</th>
       <th>created_hour</th>
       <th>hourly_arrival_count</th>
+      <th>hourly_capacity</th>
+      <th>queue_pressure_raw</th>
       <th>queue_pressure</th>
+      <th>congestion_factor</th>
+      <th>error_probability</th>
+      <th>error_probability_multiplier</th>
       <th>has_error</th>
+      <th>retry_count</th>
+      <th>retry_success</th>
+      <th>retry_delay_sec</th>
+      <th>retry_cost</th>
+      <th>error_penalty_cost</th>
       <th>storage_cost</th>
+      <th>total_operational_cost</th>
+      <th>metadata_quality_score</th>
+      <th>missing_metadata</th>
+      <th>wrong_extension</th>
+      <th>empty_file</th>
+      <th>malformed_json</th>
+      <th>storage_policy_noise_applied</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td>1.0</td>
-      <td>0.0797</td>
-      <td>-0.0356</td>
-      <td>-0.0636</td>
-      <td>-0.0156</td>
-      <td>0.0076</td>
-      <td>0.0243</td>
-      <td>-0.0378</td>
-      <td>0.2348</td>
-      <td>0.2157</td>
-      <td>-0.0645</td>
-      <td>0.0802</td>
-    </tr>
-    <tr>
-      <td>0.0797</td>
-      <td>1.0</td>
-      <td>0.016</td>
-      <td>-0.0076</td>
-      <td>0.0327</td>
-      <td>0.704</td>
-      <td>0.0627</td>
-      <td>-0.0079</td>
-      <td>0.0965</td>
-      <td>0.0976</td>
-      <td>0.0733</td>
-      <td>0.8201</td>
-    </tr>
-    <tr>
-      <td>-0.0356</td>
-      <td>0.016</td>
-      <td>1.0</td>
-      <td>0.7036</td>
-      <td>-0.0158</td>
-      <td>0.065</td>
-      <td>0.0085</td>
-      <td>-0.1042</td>
-      <td>-0.0126</td>
-      <td>-0.008</td>
+      <td>-0.0677</td>
+      <td>-0.082</td>
+      <td>-0.0211</td>
+      <td>0.0847</td>
+      <td>0.0638</td>
+      <td>-0.0637</td>
+      <td>0.0356</td>
       <td>-0.0219</td>
-      <td>0.1622</td>
+      <td>0.019</td>
+      <td>0.0514</td>
+      <td>0.0514</td>
+      <td>-0.0739</td>
+      <td>-0.1456</td>
+      <td>-0.032</td>
+      <td>0.0435</td>
+      <td>0.0743</td>
+      <td>0.0449</td>
+      <td>0.0815</td>
+      <td>0.0743</td>
+      <td>0.0022</td>
+      <td>-0.0646</td>
+      <td>-0.0645</td>
+      <td>-0.0812</td>
+      <td>0.0449</td>
+      <td>0.0268</td>
+      <td>-0.0746</td>
+      <td>0.0829</td>
+      <td>-0.0372</td>
     </tr>
     <tr>
-      <td>-0.0636</td>
-      <td>-0.0076</td>
-      <td>0.7036</td>
+      <td>-0.0677</td>
       <td>1.0</td>
-      <td>-0.0205</td>
-      <td>0.0241</td>
-      <td>0.0157</td>
-      <td>-0.0794</td>
-      <td>-0.0115</td>
-      <td>-0.0093</td>
-      <td>-0.053</td>
-      <td>-0.0548</td>
-    </tr>
-    <tr>
-      <td>-0.0156</td>
-      <td>0.0327</td>
+      <td>0.001</td>
+      <td>0.0285</td>
+      <td>0.0285</td>
+      <td>0.4221</td>
+      <td>-0.0129</td>
+      <td>0.1329</td>
+      <td>0.1243</td>
+      <td>0.0862</td>
+      <td>0.0414</td>
+      <td>0.0414</td>
+      <td>0.0394</td>
+      <td>0.6597</td>
+      <td>0.2946</td>
+      <td>0.1771</td>
+      <td>-0.0062</td>
+      <td>0.0152</td>
       <td>-0.0158</td>
-      <td>-0.0205</td>
-      <td>1.0</td>
-      <td>0.0084</td>
-      <td>-0.0255</td>
-      <td>-0.0461</td>
-      <td>-0.0584</td>
-      <td>-0.057</td>
-      <td>0.1549</td>
-      <td>0.0419</td>
-    </tr>
-    <tr>
-      <td>0.0076</td>
-      <td>0.704</td>
-      <td>0.065</td>
-      <td>0.0241</td>
-      <td>0.0084</td>
-      <td>1.0</td>
-      <td>-0.1679</td>
-      <td>-0.0239</td>
-      <td>0.0282</td>
-      <td>0.0301</td>
-      <td>0.0853</td>
-      <td>0.5674</td>
-    </tr>
-    <tr>
-      <td>0.0243</td>
-      <td>0.0627</td>
-      <td>0.0085</td>
-      <td>0.0157</td>
-      <td>-0.0255</td>
-      <td>-0.1679</td>
-      <td>1.0</td>
-      <td>-0.0139</td>
-      <td>-0.0148</td>
-      <td>-0.0165</td>
-      <td>0.0472</td>
-      <td>0.0801</td>
-    </tr>
-    <tr>
-      <td>-0.0378</td>
-      <td>-0.0079</td>
-      <td>-0.1042</td>
-      <td>-0.0794</td>
-      <td>-0.0461</td>
-      <td>-0.0239</td>
-      <td>-0.0139</td>
-      <td>1.0</td>
-      <td>0.2093</td>
-      <td>0.2107</td>
-      <td>0.0349</td>
-      <td>0.0083</td>
-    </tr>
-    <tr>
-      <td>0.2348</td>
-      <td>0.0965</td>
-      <td>-0.0126</td>
-      <td>-0.0115</td>
-      <td>-0.0584</td>
-      <td>0.0282</td>
-      <td>-0.0148</td>
-      <td>0.2093</td>
-      <td>1.0</td>
-      <td>0.9981</td>
-      <td>0.01</td>
-      <td>0.0831</td>
-    </tr>
-    <tr>
-      <td>0.2157</td>
-      <td>0.0976</td>
-      <td>-0.008</td>
+      <td>-0.0062</td>
+      <td>0.1771</td>
+      <td>0.5332</td>
+      <td>0.5333</td>
+      <td>0.0321</td>
       <td>-0.0093</td>
-      <td>-0.057</td>
-      <td>0.0301</td>
-      <td>-0.0165</td>
-      <td>0.2107</td>
-      <td>0.9981</td>
+      <td>-0.0318</td>
+      <td>0.0143</td>
+      <td>-0.0251</td>
+      <td>0.0392</td>
+    </tr>
+    <tr>
+      <td>-0.082</td>
+      <td>0.001</td>
       <td>1.0</td>
-      <td>0.0117</td>
-      <td>0.0858</td>
+      <td>0.6558</td>
+      <td>0.0098</td>
+      <td>-0.0546</td>
+      <td>0.0664</td>
+      <td>-0.1144</td>
+      <td>-0.1065</td>
+      <td>-0.0503</td>
+      <td>-0.1203</td>
+      <td>-0.1203</td>
+      <td>-0.023</td>
+      <td>0.2058</td>
+      <td>0.4466</td>
+      <td>0.0111</td>
+      <td>-0.0849</td>
+      <td>-0.1158</td>
+      <td>-0.057</td>
+      <td>-0.0849</td>
+      <td>0.0664</td>
+      <td>0.1628</td>
+      <td>0.1628</td>
+      <td>0.0219</td>
+      <td>-0.1256</td>
+      <td>0.1255</td>
+      <td>-0.0534</td>
+      <td>0.014</td>
+      <td>-0.0716</td>
+    </tr>
+    <tr>
+      <td>-0.0211</td>
+      <td>0.0285</td>
+      <td>0.6558</td>
+      <td>1.0</td>
+      <td>0.0231</td>
+      <td>0.0168</td>
+      <td>0.1787</td>
+      <td>-0.1165</td>
+      <td>-0.0638</td>
+      <td>-0.1104</td>
+      <td>-0.0315</td>
+      <td>-0.0315</td>
+      <td>-0.088</td>
+      <td>0.2931</td>
+      <td>0.6391</td>
+      <td>-0.0219</td>
+      <td>-0.0085</td>
+      <td>-0.0564</td>
+      <td>0.0248</td>
+      <td>-0.0085</td>
+      <td>0.019</td>
+      <td>0.0207</td>
+      <td>0.0208</td>
+      <td>-0.0088</td>
+      <td>-0.1361</td>
+      <td>0.2274</td>
+      <td>-0.0594</td>
+      <td>0.0187</td>
+      <td>-0.1447</td>
+    </tr>
+    <tr>
+      <td>0.0847</td>
+      <td>0.0285</td>
+      <td>0.0098</td>
+      <td>0.0231</td>
+      <td>1.0</td>
+      <td>0.2211</td>
+      <td>0.0294</td>
+      <td>0.1917</td>
+      <td>0.0541</td>
+      <td>0.0564</td>
+      <td>0.2323</td>
+      <td>0.2323</td>
+      <td>0.0912</td>
+      <td>0.299</td>
+      <td>0.069</td>
+      <td>0.1843</td>
+      <td>0.2329</td>
+      <td>0.1272</td>
+      <td>0.2615</td>
+      <td>0.2329</td>
+      <td>0.2173</td>
+      <td>-0.0301</td>
+      <td>-0.0297</td>
+      <td>-0.0095</td>
+      <td>-0.051</td>
+      <td>-0.0332</td>
+      <td>-0.0221</td>
+      <td>0.0632</td>
+      <td>0.0104</td>
+    </tr>
+    <tr>
+      <td>0.0638</td>
+      <td>0.4221</td>
+      <td>-0.0546</td>
+      <td>0.0168</td>
+      <td>0.2211</td>
+      <td>1.0</td>
+      <td>0.066</td>
+      <td>0.1396</td>
+      <td>-0.0002</td>
+      <td>0.0458</td>
+      <td>0.7803</td>
+      <td>0.7803</td>
+      <td>-0.0717</td>
+      <td>0.2843</td>
+      <td>0.1468</td>
+      <td>0.6519</td>
+      <td>0.857</td>
+      <td>0.6554</td>
+      <td>0.881</td>
+      <td>0.857</td>
+      <td>0.5517</td>
+      <td>0.2498</td>
+      <td>0.251</td>
+      <td>0.0445</td>
+      <td>-0.0255</td>
+      <td>-0.0229</td>
+      <td>-0.0009</td>
+      <td>-0.0301</td>
+      <td>-0.0182</td>
+    </tr>
+    <tr>
+      <td>-0.0637</td>
+      <td>-0.0129</td>
+      <td>0.0664</td>
+      <td>0.1787</td>
+      <td>0.0294</td>
+      <td>0.066</td>
+      <td>1.0</td>
+      <td>-0.2535</td>
+      <td>0.0252</td>
+      <td>0.0597</td>
+      <td>0.1209</td>
+      <td>0.1209</td>
+      <td>0.1464</td>
+      <td>0.0556</td>
+      <td>0.1012</td>
+      <td>0.0034</td>
+      <td>0.1255</td>
+      <td>0.0492</td>
+      <td>0.1503</td>
+      <td>0.1255</td>
+      <td>0.0107</td>
+      <td>-0.0438</td>
+      <td>-0.0437</td>
+      <td>0.0093</td>
+      <td>-0.0483</td>
+      <td>0.1162</td>
+      <td>0.0039</td>
+      <td>-0.0303</td>
+      <td>-0.17</td>
+    </tr>
+    <tr>
+      <td>0.0356</td>
+      <td>0.1329</td>
+      <td>-0.1144</td>
+      <td>-0.1165</td>
+      <td>0.1917</td>
+      <td>0.1396</td>
+      <td>-0.2535</td>
+      <td>1.0</td>
+      <td>0.0775</td>
+      <td>0.0908</td>
+      <td>0.0725</td>
+      <td>0.0725</td>
+      <td>-0.0489</td>
+      <td>0.2406</td>
+      <td>0.0604</td>
+      <td>0.019</td>
+      <td>0.0442</td>
+      <td>-0.0017</td>
+      <td>0.0674</td>
+      <td>0.0442</td>
+      <td>0.0337</td>
+      <td>0.1019</td>
+      <td>0.102</td>
+      <td>-0.0902</td>
+      <td>-0.0324</td>
+      <td>-0.0738</td>
+      <td>0.0904</td>
+      <td>0.1382</td>
+      <td>-0.0655</td>
+    </tr>
+    <tr>
+      <td>-0.0219</td>
+      <td>0.1243</td>
+      <td>-0.1065</td>
+      <td>-0.0638</td>
+      <td>0.0541</td>
+      <td>-0.0002</td>
+      <td>0.0252</td>
+      <td>0.0775</td>
+      <td>1.0</td>
+      <td>-0.0062</td>
+      <td>0.4004</td>
+      <td>0.4004</td>
+      <td>0.0381</td>
+      <td>0.1667</td>
+      <td>-0.0172</td>
+      <td>-0.0772</td>
+      <td>-0.0705</td>
+      <td>-0.063</td>
+      <td>-0.0712</td>
+      <td>-0.0705</td>
+      <td>-0.0504</td>
+      <td>0.0546</td>
+      <td>0.0545</td>
+      <td>0.0104</td>
+      <td>-0.0006</td>
+      <td>-0.0349</td>
+      <td>-0.0232</td>
+      <td>0.008</td>
+      <td>-0.0551</td>
+    </tr>
+    <tr>
+      <td>0.019</td>
+      <td>0.0862</td>
+      <td>-0.0503</td>
+      <td>-0.1104</td>
+      <td>0.0564</td>
+      <td>0.0458</td>
+      <td>0.0597</td>
+      <td>0.0908</td>
+      <td>-0.0062</td>
+      <td>1.0</td>
+      <td>-0.0544</td>
+      <td>-0.0544</td>
+      <td>0.0585</td>
+      <td>0.0455</td>
+      <td>-0.0803</td>
+      <td>0.0142</td>
+      <td>0.0167</td>
+      <td>0.0084</td>
+      <td>0.0208</td>
+      <td>0.0167</td>
+      <td>0.013</td>
+      <td>0.0066</td>
+      <td>0.0066</td>
+      <td>0.0486</td>
+      <td>-0.0316</td>
+      <td>-0.053</td>
+      <td>0.0623</td>
+      <td>-0.0363</td>
+      <td>-0.102</td>
+    </tr>
+    <tr>
+      <td>0.0514</td>
+      <td>0.0414</td>
+      <td>-0.1203</td>
+      <td>-0.0315</td>
+      <td>0.2323</td>
+      <td>0.7803</td>
+      <td>0.1209</td>
+      <td>0.0725</td>
+      <td>0.4004</td>
+      <td>-0.0544</td>
+      <td>1.0</td>
+      <td>1.0</td>
+      <td>-0.0859</td>
+      <td>0.11</td>
+      <td>-0.0015</td>
+      <td>0.6222</td>
+      <td>0.8825</td>
+      <td>0.7707</td>
+      <td>0.8514</td>
+      <td>0.8825</td>
+      <td>0.4937</td>
+      <td>0.0066</td>
+      <td>0.0077</td>
+      <td>0.0401</td>
+      <td>-0.0157</td>
+      <td>-0.0256</td>
+      <td>-0.0222</td>
+      <td>-0.0237</td>
+      <td>-0.0633</td>
+    </tr>
+    <tr>
+      <td>0.0514</td>
+      <td>0.0414</td>
+      <td>-0.1203</td>
+      <td>-0.0315</td>
+      <td>0.2323</td>
+      <td>0.7803</td>
+      <td>0.1209</td>
+      <td>0.0725</td>
+      <td>0.4004</td>
+      <td>-0.0544</td>
+      <td>1.0</td>
+      <td>1.0</td>
+      <td>-0.0859</td>
+      <td>0.11</td>
+      <td>-0.0015</td>
+      <td>0.6222</td>
+      <td>0.8825</td>
+      <td>0.7707</td>
+      <td>0.8514</td>
+      <td>0.8825</td>
+      <td>0.4937</td>
+      <td>0.0066</td>
+      <td>0.0077</td>
+      <td>0.0401</td>
+      <td>-0.0157</td>
+      <td>-0.0256</td>
+      <td>-0.0222</td>
+      <td>-0.0237</td>
+      <td>-0.0633</td>
+    </tr>
+    <tr>
+      <td>-0.0739</td>
+      <td>0.0394</td>
+      <td>-0.023</td>
+      <td>-0.088</td>
+      <td>0.0912</td>
+      <td>-0.0717</td>
+      <td>0.1464</td>
+      <td>-0.0489</td>
+      <td>0.0381</td>
+      <td>0.0585</td>
+      <td>-0.0859</td>
+      <td>-0.0859</td>
+      <td>1.0</td>
+      <td>0.0267</td>
+      <td>-0.0022</td>
+      <td>-0.1394</td>
+      <td>-0.1042</td>
+      <td>-0.0979</td>
+      <td>-0.0992</td>
+      <td>-0.1042</td>
+      <td>-0.1249</td>
+      <td>-0.0275</td>
+      <td>-0.0277</td>
+      <td>0.0946</td>
+      <td>0.0962</td>
+      <td>-0.0638</td>
+      <td>-0.008</td>
+      <td>-0.1495</td>
+      <td>0.0315</td>
+    </tr>
+    <tr>
+      <td>-0.1456</td>
+      <td>0.6597</td>
+      <td>0.2058</td>
+      <td>0.2931</td>
+      <td>0.299</td>
+      <td>0.2843</td>
+      <td>0.0556</td>
+      <td>0.2406</td>
+      <td>0.1667</td>
+      <td>0.0455</td>
+      <td>0.11</td>
+      <td>0.11</td>
+      <td>0.0267</td>
+      <td>1.0</td>
+      <td>0.6628</td>
+      <td>0.2542</td>
+      <td>0.0418</td>
+      <td>-0.0238</td>
+      <td>0.0737</td>
+      <td>0.0418</td>
+      <td>0.301</td>
+      <td>0.2195</td>
+      <td>0.2199</td>
+      <td>-0.0835</td>
+      <td>-0.036</td>
+      <td>0.0596</td>
+      <td>-0.0137</td>
+      <td>0.1059</td>
+      <td>-0.0063</td>
+    </tr>
+    <tr>
+      <td>-0.032</td>
+      <td>0.2946</td>
+      <td>0.4466</td>
+      <td>0.6391</td>
+      <td>0.069</td>
+      <td>0.1468</td>
+      <td>0.1012</td>
+      <td>0.0604</td>
+      <td>-0.0172</td>
+      <td>-0.0803</td>
+      <td>-0.0015</td>
+      <td>-0.0015</td>
+      <td>-0.0022</td>
+      <td>0.6628</td>
+      <td>1.0</td>
+      <td>0.0915</td>
+      <td>0.0045</td>
+      <td>-0.0598</td>
+      <td>0.0429</td>
+      <td>0.0045</td>
+      <td>0.1178</td>
+      <td>0.1062</td>
+      <td>0.1063</td>
+      <td>-0.2995</td>
+      <td>0.057</td>
+      <td>0.2938</td>
+      <td>0.0247</td>
+      <td>0.2113</td>
+      <td>-0.0567</td>
+    </tr>
+    <tr>
+      <td>0.0435</td>
+      <td>0.1771</td>
+      <td>0.0111</td>
+      <td>-0.0219</td>
+      <td>0.1843</td>
+      <td>0.6519</td>
+      <td>0.0034</td>
+      <td>0.019</td>
+      <td>-0.0772</td>
+      <td>0.0142</td>
+      <td>0.6222</td>
+      <td>0.6222</td>
+      <td>-0.1394</td>
+      <td>0.2542</td>
+      <td>0.0915</td>
+      <td>1.0</td>
+      <td>0.7191</td>
+      <td>0.6758</td>
+      <td>0.6846</td>
+      <td>0.7191</td>
+      <td>0.9035</td>
+      <td>0.0554</td>
+      <td>0.0569</td>
+      <td>0.0588</td>
+      <td>-0.0275</td>
+      <td>-0.0179</td>
+      <td>-0.0119</td>
+      <td>-0.0457</td>
+      <td>0.154</td>
+    </tr>
+    <tr>
+      <td>0.0743</td>
+      <td>-0.0062</td>
+      <td>-0.0849</td>
+      <td>-0.0085</td>
+      <td>0.2329</td>
+      <td>0.857</td>
+      <td>0.1255</td>
+      <td>0.0442</td>
+      <td>-0.0705</td>
+      <td>0.0167</td>
+      <td>0.8825</td>
+      <td>0.8825</td>
+      <td>-0.1042</td>
+      <td>0.0418</td>
+      <td>0.0045</td>
+      <td>0.7191</td>
+      <td>1.0</td>
+      <td>0.8738</td>
+      <td>0.9665</td>
+      <td>1.0</td>
+      <td>0.565</td>
+      <td>-0.0218</td>
+      <td>-0.0205</td>
+      <td>0.0423</td>
+      <td>-0.0198</td>
+      <td>-0.0129</td>
+      <td>-0.0086</td>
+      <td>-0.0328</td>
+      <td>-0.046</td>
+    </tr>
+    <tr>
+      <td>0.0449</td>
+      <td>0.0152</td>
+      <td>-0.1158</td>
+      <td>-0.0564</td>
+      <td>0.1272</td>
+      <td>0.6554</td>
+      <td>0.0492</td>
+      <td>-0.0017</td>
+      <td>-0.063</td>
+      <td>0.0084</td>
+      <td>0.7707</td>
+      <td>0.7707</td>
+      <td>-0.0979</td>
+      <td>-0.0238</td>
+      <td>-0.0598</td>
+      <td>0.6758</td>
+      <td>0.8738</td>
+      <td>1.0</td>
+      <td>0.7241</td>
+      <td>0.8738</td>
+      <td>0.4536</td>
+      <td>-0.0061</td>
+      <td>-0.0051</td>
+      <td>0.0397</td>
+      <td>-0.0186</td>
+      <td>-0.0121</td>
+      <td>-0.0081</td>
+      <td>-0.0309</td>
+      <td>-0.0432</td>
+    </tr>
+    <tr>
+      <td>0.0815</td>
+      <td>-0.0158</td>
+      <td>-0.057</td>
+      <td>0.0248</td>
+      <td>0.2615</td>
+      <td>0.881</td>
+      <td>0.1503</td>
+      <td>0.0674</td>
+      <td>-0.0712</td>
+      <td>0.0208</td>
+      <td>0.8514</td>
+      <td>0.8514</td>
+      <td>-0.0992</td>
+      <td>0.0737</td>
+      <td>0.0429</td>
+      <td>0.6846</td>
+      <td>0.9665</td>
+      <td>0.7241</td>
+      <td>1.0</td>
+      <td>0.9665</td>
+      <td>0.5761</td>
+      <td>-0.0274</td>
+      <td>-0.0261</td>
+      <td>0.0403</td>
+      <td>-0.0188</td>
+      <td>-0.0123</td>
+      <td>-0.0082</td>
+      <td>-0.0313</td>
+      <td>-0.0438</td>
+    </tr>
+    <tr>
+      <td>0.0743</td>
+      <td>-0.0062</td>
+      <td>-0.0849</td>
+      <td>-0.0085</td>
+      <td>0.2329</td>
+      <td>0.857</td>
+      <td>0.1255</td>
+      <td>0.0442</td>
+      <td>-0.0705</td>
+      <td>0.0167</td>
+      <td>0.8825</td>
+      <td>0.8825</td>
+      <td>-0.1042</td>
+      <td>0.0418</td>
+      <td>0.0045</td>
+      <td>0.7191</td>
+      <td>1.0</td>
+      <td>0.8738</td>
+      <td>0.9665</td>
+      <td>1.0</td>
+      <td>0.565</td>
+      <td>-0.0218</td>
+      <td>-0.0205</td>
+      <td>0.0423</td>
+      <td>-0.0198</td>
+      <td>-0.0129</td>
+      <td>-0.0086</td>
+      <td>-0.0328</td>
+      <td>-0.046</td>
+    </tr>
+    <tr>
+      <td>0.0022</td>
+      <td>0.1771</td>
+      <td>0.0664</td>
+      <td>0.019</td>
+      <td>0.2173</td>
+      <td>0.5517</td>
+      <td>0.0107</td>
+      <td>0.0337</td>
+      <td>-0.0504</td>
+      <td>0.013</td>
+      <td>0.4937</td>
+      <td>0.4937</td>
+      <td>-0.1249</td>
+      <td>0.301</td>
+      <td>0.1178</td>
+      <td>0.9035</td>
+      <td>0.565</td>
+      <td>0.4536</td>
+      <td>0.5761</td>
+      <td>0.565</td>
+      <td>1.0</td>
+      <td>0.0623</td>
+      <td>0.0637</td>
+      <td>0.0531</td>
+      <td>-0.0249</td>
+      <td>-0.0162</td>
+      <td>-0.0108</td>
+      <td>-0.0413</td>
+      <td>0.1817</td>
+    </tr>
+    <tr>
+      <td>-0.0646</td>
+      <td>0.5332</td>
+      <td>0.1628</td>
+      <td>0.0207</td>
+      <td>-0.0301</td>
+      <td>0.2498</td>
+      <td>-0.0438</td>
+      <td>0.1019</td>
+      <td>0.0546</td>
+      <td>0.0066</td>
+      <td>0.0066</td>
+      <td>0.0066</td>
+      <td>-0.0275</td>
+      <td>0.2195</td>
+      <td>0.1062</td>
+      <td>0.0554</td>
+      <td>-0.0218</td>
+      <td>-0.0061</td>
+      <td>-0.0274</td>
+      <td>-0.0218</td>
+      <td>0.0623</td>
+      <td>1.0</td>
+      <td>1.0</td>
+      <td>0.0082</td>
+      <td>-0.0096</td>
+      <td>-0.0323</td>
+      <td>0.0134</td>
+      <td>0.0053</td>
+      <td>0.0965</td>
     </tr>
     <tr>
       <td>-0.0645</td>
-      <td>0.0733</td>
-      <td>-0.0219</td>
-      <td>-0.053</td>
-      <td>0.1549</td>
-      <td>0.0853</td>
-      <td>0.0472</td>
-      <td>0.0349</td>
-      <td>0.01</td>
-      <td>0.0117</td>
+      <td>0.5333</td>
+      <td>0.1628</td>
+      <td>0.0208</td>
+      <td>-0.0297</td>
+      <td>0.251</td>
+      <td>-0.0437</td>
+      <td>0.102</td>
+      <td>0.0545</td>
+      <td>0.0066</td>
+      <td>0.0077</td>
+      <td>0.0077</td>
+      <td>-0.0277</td>
+      <td>0.2199</td>
+      <td>0.1063</td>
+      <td>0.0569</td>
+      <td>-0.0205</td>
+      <td>-0.0051</td>
+      <td>-0.0261</td>
+      <td>-0.0205</td>
+      <td>0.0637</td>
       <td>1.0</td>
-      <td>0.0717</td>
+      <td>1.0</td>
+      <td>0.0083</td>
+      <td>-0.0096</td>
+      <td>-0.0323</td>
+      <td>0.0134</td>
+      <td>0.0052</td>
+      <td>0.0967</td>
     </tr>
     <tr>
-      <td>0.0802</td>
-      <td>0.8201</td>
-      <td>0.1622</td>
-      <td>-0.0548</td>
-      <td>0.0419</td>
-      <td>0.5674</td>
-      <td>0.0801</td>
+      <td>-0.0812</td>
+      <td>0.0321</td>
+      <td>0.0219</td>
+      <td>-0.0088</td>
+      <td>-0.0095</td>
+      <td>0.0445</td>
+      <td>0.0093</td>
+      <td>-0.0902</td>
+      <td>0.0104</td>
+      <td>0.0486</td>
+      <td>0.0401</td>
+      <td>0.0401</td>
+      <td>0.0946</td>
+      <td>-0.0835</td>
+      <td>-0.2995</td>
+      <td>0.0588</td>
+      <td>0.0423</td>
+      <td>0.0397</td>
+      <td>0.0403</td>
+      <td>0.0423</td>
+      <td>0.0531</td>
+      <td>0.0082</td>
       <td>0.0083</td>
-      <td>0.0831</td>
-      <td>0.0858</td>
-      <td>0.0717</td>
+      <td>1.0</td>
+      <td>-0.4681</td>
+      <td>-0.3048</td>
+      <td>-0.2028</td>
+      <td>-0.7765</td>
+      <td>0.0362</td>
+    </tr>
+    <tr>
+      <td>0.0449</td>
+      <td>-0.0093</td>
+      <td>-0.1256</td>
+      <td>-0.1361</td>
+      <td>-0.051</td>
+      <td>-0.0255</td>
+      <td>-0.0483</td>
+      <td>-0.0324</td>
+      <td>-0.0006</td>
+      <td>-0.0316</td>
+      <td>-0.0157</td>
+      <td>-0.0157</td>
+      <td>0.0962</td>
+      <td>-0.036</td>
+      <td>0.057</td>
+      <td>-0.0275</td>
+      <td>-0.0198</td>
+      <td>-0.0186</td>
+      <td>-0.0188</td>
+      <td>-0.0198</td>
+      <td>-0.0249</td>
+      <td>-0.0096</td>
+      <td>-0.0096</td>
+      <td>-0.4681</td>
+      <td>1.0</td>
+      <td>-0.0121</td>
+      <td>-0.0081</td>
+      <td>-0.0309</td>
+      <td>-0.0432</td>
+    </tr>
+    <tr>
+      <td>0.0268</td>
+      <td>-0.0318</td>
+      <td>0.1255</td>
+      <td>0.2274</td>
+      <td>-0.0332</td>
+      <td>-0.0229</td>
+      <td>0.1162</td>
+      <td>-0.0738</td>
+      <td>-0.0349</td>
+      <td>-0.053</td>
+      <td>-0.0256</td>
+      <td>-0.0256</td>
+      <td>-0.0638</td>
+      <td>0.0596</td>
+      <td>0.2938</td>
+      <td>-0.0179</td>
+      <td>-0.0129</td>
+      <td>-0.0121</td>
+      <td>-0.0123</td>
+      <td>-0.0129</td>
+      <td>-0.0162</td>
+      <td>-0.0323</td>
+      <td>-0.0323</td>
+      <td>-0.3048</td>
+      <td>-0.0121</td>
+      <td>1.0</td>
+      <td>-0.0052</td>
+      <td>-0.0201</td>
+      <td>-0.0282</td>
+    </tr>
+    <tr>
+      <td>-0.0746</td>
+      <td>0.0143</td>
+      <td>-0.0534</td>
+      <td>-0.0594</td>
+      <td>-0.0221</td>
+      <td>-0.0009</td>
+      <td>0.0039</td>
+      <td>0.0904</td>
+      <td>-0.0232</td>
+      <td>0.0623</td>
+      <td>-0.0222</td>
+      <td>-0.0222</td>
+      <td>-0.008</td>
+      <td>-0.0137</td>
+      <td>0.0247</td>
+      <td>-0.0119</td>
+      <td>-0.0086</td>
+      <td>-0.0081</td>
+      <td>-0.0082</td>
+      <td>-0.0086</td>
+      <td>-0.0108</td>
+      <td>0.0134</td>
+      <td>0.0134</td>
+      <td>-0.2028</td>
+      <td>-0.0081</td>
+      <td>-0.0052</td>
+      <td>1.0</td>
+      <td>-0.0134</td>
+      <td>-0.0187</td>
+    </tr>
+    <tr>
+      <td>0.0829</td>
+      <td>-0.0251</td>
+      <td>0.014</td>
+      <td>0.0187</td>
+      <td>0.0632</td>
+      <td>-0.0301</td>
+      <td>-0.0303</td>
+      <td>0.1382</td>
+      <td>0.008</td>
+      <td>-0.0363</td>
+      <td>-0.0237</td>
+      <td>-0.0237</td>
+      <td>-0.1495</td>
+      <td>0.1059</td>
+      <td>0.2113</td>
+      <td>-0.0457</td>
+      <td>-0.0328</td>
+      <td>-0.0309</td>
+      <td>-0.0313</td>
+      <td>-0.0328</td>
+      <td>-0.0413</td>
+      <td>0.0053</td>
+      <td>0.0052</td>
+      <td>-0.7765</td>
+      <td>-0.0309</td>
+      <td>-0.0201</td>
+      <td>-0.0134</td>
+      <td>1.0</td>
+      <td>-0.0016</td>
+    </tr>
+    <tr>
+      <td>-0.0372</td>
+      <td>0.0392</td>
+      <td>-0.0716</td>
+      <td>-0.1447</td>
+      <td>0.0104</td>
+      <td>-0.0182</td>
+      <td>-0.17</td>
+      <td>-0.0655</td>
+      <td>-0.0551</td>
+      <td>-0.102</td>
+      <td>-0.0633</td>
+      <td>-0.0633</td>
+      <td>0.0315</td>
+      <td>-0.0063</td>
+      <td>-0.0567</td>
+      <td>0.154</td>
+      <td>-0.046</td>
+      <td>-0.0432</td>
+      <td>-0.0438</td>
+      <td>-0.046</td>
+      <td>0.1817</td>
+      <td>0.0965</td>
+      <td>0.0967</td>
+      <td>0.0362</td>
+      <td>-0.0432</td>
+      <td>-0.0282</td>
+      <td>-0.0187</td>
+      <td>-0.0016</td>
       <td>1.0</td>
     </tr>
   </tbody>
@@ -1353,13 +4325,33 @@
         </div>
         
         <div class="plot-card">
-            <h3>Log Scatter Transfer Duration Sec Vs Transfer Speed Mbps</h3>
-            <img src="../plots/advanced/log_scatter_transfer_duration_sec_vs_transfer_speed_mbps.png" alt="Log Scatter Transfer Duration Sec Vs Transfer Speed Mbps">
+            <h3>Log Scatter Error Probability Multiplier Vs Metadata Quality Score</h3>
+            <img src="../plots/advanced/log_scatter_error_probability_multiplier_vs_metadata_quality_score.png" alt="Log Scatter Error Probability Multiplier Vs Metadata Quality Score">
         </div>
         
         <div class="plot-card">
-            <h3>Scatter Days Stored Vs Days Since Last Access</h3>
-            <img src="../plots/advanced/scatter_days_stored_vs_days_since_last_access.png" alt="Scatter Days Stored Vs Days Since Last Access">
+            <h3>Log Scatter Hourly Arrival Count Vs Queue Pressure</h3>
+            <img src="../plots/advanced/log_scatter_hourly_arrival_count_vs_queue_pressure.png" alt="Log Scatter Hourly Arrival Count Vs Queue Pressure">
+        </div>
+        
+        <div class="plot-card">
+            <h3>Log Scatter Hourly Arrival Count Vs Queue Pressure Raw</h3>
+            <img src="../plots/advanced/log_scatter_hourly_arrival_count_vs_queue_pressure_raw.png" alt="Log Scatter Hourly Arrival Count Vs Queue Pressure Raw">
+        </div>
+        
+        <div class="plot-card">
+            <h3>Log Scatter Size Mb Vs Transfer Duration Sec</h3>
+            <img src="../plots/advanced/log_scatter_size_mb_vs_transfer_duration_sec.png" alt="Log Scatter Size Mb Vs Transfer Duration Sec">
+        </div>
+        
+        <div class="plot-card">
+            <h3>Log Scatter Transfer Duration Sec Vs Total Operational Cost</h3>
+            <img src="../plots/advanced/log_scatter_transfer_duration_sec_vs_total_operational_cost.png" alt="Log Scatter Transfer Duration Sec Vs Total Operational Cost">
+        </div>
+        
+        <div class="plot-card">
+            <h3>Scatter Has Error Vs Error Penalty Cost</h3>
+            <img src="../plots/advanced/scatter_has_error_vs_error_penalty_cost.png" alt="Scatter Has Error Vs Error Penalty Cost">
         </div>
         
         <div class="plot-card">
@@ -1368,13 +4360,33 @@
         </div>
         
         <div class="plot-card">
-            <h3>Scatter Size Mb Vs Storage Cost</h3>
-            <img src="../plots/advanced/scatter_size_mb_vs_storage_cost.png" alt="Scatter Size Mb Vs Storage Cost">
+            <h3>Scatter Hourly Arrival Count Vs Queue Pressure Raw</h3>
+            <img src="../plots/advanced/scatter_hourly_arrival_count_vs_queue_pressure_raw.png" alt="Scatter Hourly Arrival Count Vs Queue Pressure Raw">
         </div>
         
         <div class="plot-card">
-            <h3>Scatter Size Mb Vs Transfer Duration Sec</h3>
-            <img src="../plots/advanced/scatter_size_mb_vs_transfer_duration_sec.png" alt="Scatter Size Mb Vs Transfer Duration Sec">
+            <h3>Scatter Queue Pressure Raw Vs Queue Pressure</h3>
+            <img src="../plots/advanced/scatter_queue_pressure_raw_vs_queue_pressure.png" alt="Scatter Queue Pressure Raw Vs Queue Pressure">
+        </div>
+        
+        <div class="plot-card">
+            <h3>Scatter Retry Count Vs Retry Cost</h3>
+            <img src="../plots/advanced/scatter_retry_count_vs_retry_cost.png" alt="Scatter Retry Count Vs Retry Cost">
+        </div>
+        
+        <div class="plot-card">
+            <h3>Scatter Retry Count Vs Retry Delay Sec</h3>
+            <img src="../plots/advanced/scatter_retry_count_vs_retry_delay_sec.png" alt="Scatter Retry Count Vs Retry Delay Sec">
+        </div>
+        
+        <div class="plot-card">
+            <h3>Scatter Retry Delay Sec Vs Retry Cost</h3>
+            <img src="../plots/advanced/scatter_retry_delay_sec_vs_retry_cost.png" alt="Scatter Retry Delay Sec Vs Retry Cost">
+        </div>
+        
+        <div class="plot-card">
+            <h3>Scatter Storage Cost Vs Total Operational Cost</h3>
+            <img src="../plots/advanced/scatter_storage_cost_vs_total_operational_cost.png" alt="Scatter Storage Cost Vs Total Operational Cost">
         </div>
         
         <div class="plot-card">

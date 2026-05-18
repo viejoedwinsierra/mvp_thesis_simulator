@@ -132,8 +132,73 @@
 
         
     <section class="card summary-card">
-        <h2>A. Configuracion del escenario</h2>
-        <p class='section-desc'>Parametros principales usados para generar este caso.</p>
+        <h2>A. Resumen maestro del escenario</h2>
+        <p class='section-desc'>Metricas clave agregadas por escenario: errores, retries, costos, tamanos, colas y validaciones.</p>
+        <div class="table-container">
+            <table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>scenario</th>
+      <th>total_rows</th>
+      <th>simulation_dates</th>
+      <th>avg_rows_per_day</th>
+      <th>error_rate</th>
+      <th>retry_rate</th>
+      <th>avg_queue_pressure</th>
+      <th>max_queue_pressure</th>
+      <th>avg_queue_pressure_raw</th>
+      <th>max_queue_pressure_raw</th>
+      <th>avg_error_probability</th>
+      <th>max_error_probability</th>
+      <th>avg_size_mb</th>
+      <th>p95_size_mb</th>
+      <th>max_size_mb</th>
+      <th>avg_transfer_duration_sec</th>
+      <th>p95_transfer_duration_sec</th>
+      <th>storage_cost_total</th>
+      <th>total_operational_cost</th>
+      <th>hot_pct</th>
+      <th>cool_pct</th>
+      <th>archive_pct</th>
+      <th>validation_failures</th>
+      <th>integrity_failures</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>02_carga_media_estable</td>
+      <td>1101</td>
+      <td>31</td>
+      <td>35.5161</td>
+      <td>0.0118</td>
+      <td>0.0082</td>
+      <td>0.014</td>
+      <td>0.0863</td>
+      <td>0.014</td>
+      <td>0.0863</td>
+      <td>0.0301</td>
+      <td>0.1334</td>
+      <td>15.7749</td>
+      <td>77.6116</td>
+      <td>273.5259</td>
+      <td>2.383</td>
+      <td>7.8842</td>
+      <td>0.7072</td>
+      <td>0.7072</td>
+      <td>42.3252</td>
+      <td>41.6894</td>
+      <td>15.9855</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+        </div>
+    </section>
+    
+    <section class="card summary-card">
+        <h2>B. Configuracion del escenario y globales</h2>
+        <p class='section-desc'>Parametros principales usados para generar este caso, incluyendo archivos globales.</p>
         <div class="table-container">
             <table class="dataframe">
   <thead>
@@ -142,24 +207,40 @@
       <th>config_status</th>
       <th>simulation_config</th>
       <th>time_distribution_config</th>
+      <th>lifecycle_config</th>
+      <th>cost_config</th>
+      <th>error_config</th>
+      <th>noise_config</th>
+      <th>realism_config</th>
+      <th>correlation_config</th>
       <th>max_valid_files_per_day</th>
       <th>base_simulation_date_in_config</th>
+      <th>seed</th>
       <th>arrival_strategy</th>
       <th>hourly_noise</th>
       <th>capacity_enabled</th>
       <th>files_per_hour</th>
       <th>duration_penalty_factor</th>
       <th>error_penalty_factor</th>
+      <th>min_capacity</th>
+      <th>max_capacity</th>
       <th>outliers_enabled</th>
       <th>outlier_probability</th>
       <th>outlier_multiplier_min</th>
       <th>outlier_multiplier_max</th>
+      <th>outlier_max_size_mb</th>
       <th>transfer_mean_mbps</th>
       <th>transfer_sigma</th>
+      <th>transfer_min_mbps</th>
+      <th>transfer_max_mbps</th>
       <th>base_error_probability</th>
       <th>movement_storage_probability</th>
       <th>storage_strategy</th>
-      <th>weekly_base_load_sum</th>
+      <th>storage_cost_formula</th>
+      <th>time_slot_count</th>
+      <th>weekly_percentage_sum</th>
+      <th>daily_charge_json</th>
+      <th>base_load_profiles_json</th>
       <th>file_type_distribution_json</th>
       <th>tier_cost_json</th>
     </tr>
@@ -169,26 +250,42 @@
       <td>02_carga_media_estable</td>
       <td>OK</td>
       <td>config\escenarios\02_carga_media_estable\simulation_config_02_carga_media_estable.json</td>
-      <td>config\escenarios\02_carga_media_estable\time_distribution_config_02_carga_media_estable.json</td>
+      <td>config\global\time_distribution_config.json</td>
+      <td>config\global\lifecycle_config.json</td>
+      <td>config\global\cost_config.json</td>
+      <td>config\global\error_config.json</td>
+      <td>config\global\noise_config.json</td>
+      <td>config\global\realism_config.json</td>
+      <td>config\global\correlation_config.json</td>
       <td>100</td>
-      <td>2026-04-01</td>
+      <td></td>
+      <td>9002</td>
       <td>poisson</td>
-      <td>0.092</td>
+      <td>0.05</td>
       <td>True</td>
-      <td>19</td>
-      <td>0.38</td>
-      <td>0.224</td>
+      <td>45</td>
+      <td>0.2</td>
+      <td>0.1</td>
+      <td></td>
+      <td></td>
       <td>True</td>
-      <td>0.014</td>
-      <td>2</td>
-      <td>7</td>
-      <td>3.84</td>
-      <td>0.58</td>
+      <td>0.005</td>
+      <td>1.5</td>
+      <td>4</td>
+      <td>650</td>
+      <td>4.4</td>
+      <td>0.35</td>
+      <td>5</td>
+      <td>300</td>
       <td>0.02</td>
-      <td>0.104</td>
+      <td>0.15</td>
       <td>by_days_since_last_access</td>
-      <td>1.0</td>
-      <td>{"json": 0.25, "jpg": 0.3, "pdf": 0.25, "mp4": 0.2}</td>
+      <td>size_mb * cost_per_mb_per_day * days_stored</td>
+      <td>28</td>
+      <td>7.0</td>
+      <td>{"monday": "medium", "tuesday": "medium", "wednesday": "medium", "thursday": "medium", "friday": "medium", "saturday": "medium", "sunday": "medium"}</td>
+      <td>{"low": {"min": 0.12, "max": 0.22}, "medium": {"min": 0.3, "max": 0.5}, "high": {"min": 0.55, "max": 0.8}}</td>
+      <td>{"json": 0.3, "jpg": 0.35, "pdf": 0.25, "mp4": 0.1}</td>
       <td>{"hot": 2e-05, "cool": 1e-05, "archive": 2e-06}</td>
     </tr>
   </tbody>
@@ -197,8 +294,8 @@
     </section>
     
     <section class="card ">
-        <h2>B. Configuraciones runtime por fecha</h2>
-        <p class='section-desc'>Copias runtime que documentan la fecha ejecutada, semilla y salida usada por cada dia.</p>
+        <h2>C. Configuraciones runtime por fecha</h2>
+        <p class='section-desc'>Copias runtime que documentan fecha ejecutada, semilla y salida usada por cada dia.</p>
         <div class="table-container">
             <table class="dataframe">
   <thead>
@@ -206,6 +303,7 @@
       <th>runtime_date</th>
       <th>runtime_config</th>
       <th>simulation_date</th>
+      <th>selected_day</th>
       <th>max_valid_files_per_day</th>
       <th>output_dir</th>
       <th>seed</th>
@@ -213,57 +311,343 @@
   </thead>
   <tbody>
     <tr>
+      <td>2026-01-01</td>
+      <td>output\runtime_configs\02_carga_media_estable\simulation_config_02_carga_media_estable_2026-01-01.json</td>
+      <td></td>
+      <td></td>
+      <td>100</td>
+      <td>C:/git_edwin/mvp_thesis_simulator/output/dataset/02_carga_media_estable</td>
+      <td>9002</td>
+    </tr>
+    <tr>
+      <td>2026-01-02</td>
+      <td>output\runtime_configs\02_carga_media_estable\simulation_config_02_carga_media_estable_2026-01-02.json</td>
+      <td></td>
+      <td></td>
+      <td>100</td>
+      <td>C:/git_edwin/mvp_thesis_simulator/output/dataset/02_carga_media_estable</td>
+      <td>9002</td>
+    </tr>
+    <tr>
+      <td>2026-01-03</td>
+      <td>output\runtime_configs\02_carga_media_estable\simulation_config_02_carga_media_estable_2026-01-03.json</td>
+      <td></td>
+      <td></td>
+      <td>100</td>
+      <td>C:/git_edwin/mvp_thesis_simulator/output/dataset/02_carga_media_estable</td>
+      <td>9002</td>
+    </tr>
+    <tr>
+      <td>2026-01-04</td>
+      <td>output\runtime_configs\02_carga_media_estable\simulation_config_02_carga_media_estable_2026-01-04.json</td>
+      <td></td>
+      <td></td>
+      <td>100</td>
+      <td>C:/git_edwin/mvp_thesis_simulator/output/dataset/02_carga_media_estable</td>
+      <td>9002</td>
+    </tr>
+    <tr>
+      <td>2026-01-05</td>
+      <td>output\runtime_configs\02_carga_media_estable\simulation_config_02_carga_media_estable_2026-01-05.json</td>
+      <td></td>
+      <td></td>
+      <td>100</td>
+      <td>C:/git_edwin/mvp_thesis_simulator/output/dataset/02_carga_media_estable</td>
+      <td>9002</td>
+    </tr>
+    <tr>
+      <td>2026-01-06</td>
+      <td>output\runtime_configs\02_carga_media_estable\simulation_config_02_carga_media_estable_2026-01-06.json</td>
+      <td></td>
+      <td></td>
+      <td>100</td>
+      <td>C:/git_edwin/mvp_thesis_simulator/output/dataset/02_carga_media_estable</td>
+      <td>9002</td>
+    </tr>
+    <tr>
+      <td>2026-01-07</td>
+      <td>output\runtime_configs\02_carga_media_estable\simulation_config_02_carga_media_estable_2026-01-07.json</td>
+      <td></td>
+      <td></td>
+      <td>100</td>
+      <td>C:/git_edwin/mvp_thesis_simulator/output/dataset/02_carga_media_estable</td>
+      <td>9002</td>
+    </tr>
+    <tr>
+      <td>2026-01-08</td>
+      <td>output\runtime_configs\02_carga_media_estable\simulation_config_02_carga_media_estable_2026-01-08.json</td>
+      <td></td>
+      <td></td>
+      <td>100</td>
+      <td>C:/git_edwin/mvp_thesis_simulator/output/dataset/02_carga_media_estable</td>
+      <td>9002</td>
+    </tr>
+    <tr>
+      <td>2026-01-09</td>
+      <td>output\runtime_configs\02_carga_media_estable\simulation_config_02_carga_media_estable_2026-01-09.json</td>
+      <td></td>
+      <td></td>
+      <td>100</td>
+      <td>C:/git_edwin/mvp_thesis_simulator/output/dataset/02_carga_media_estable</td>
+      <td>9002</td>
+    </tr>
+    <tr>
+      <td>2026-01-10</td>
+      <td>output\runtime_configs\02_carga_media_estable\simulation_config_02_carga_media_estable_2026-01-10.json</td>
+      <td></td>
+      <td></td>
+      <td>100</td>
+      <td>C:/git_edwin/mvp_thesis_simulator/output/dataset/02_carga_media_estable</td>
+      <td>9002</td>
+    </tr>
+    <tr>
+      <td>2026-01-11</td>
+      <td>output\runtime_configs\02_carga_media_estable\simulation_config_02_carga_media_estable_2026-01-11.json</td>
+      <td></td>
+      <td></td>
+      <td>100</td>
+      <td>C:/git_edwin/mvp_thesis_simulator/output/dataset/02_carga_media_estable</td>
+      <td>9002</td>
+    </tr>
+    <tr>
+      <td>2026-01-12</td>
+      <td>output\runtime_configs\02_carga_media_estable\simulation_config_02_carga_media_estable_2026-01-12.json</td>
+      <td></td>
+      <td></td>
+      <td>100</td>
+      <td>C:/git_edwin/mvp_thesis_simulator/output/dataset/02_carga_media_estable</td>
+      <td>9002</td>
+    </tr>
+    <tr>
+      <td>2026-01-13</td>
+      <td>output\runtime_configs\02_carga_media_estable\simulation_config_02_carga_media_estable_2026-01-13.json</td>
+      <td></td>
+      <td></td>
+      <td>100</td>
+      <td>C:/git_edwin/mvp_thesis_simulator/output/dataset/02_carga_media_estable</td>
+      <td>9002</td>
+    </tr>
+    <tr>
+      <td>2026-01-14</td>
+      <td>output\runtime_configs\02_carga_media_estable\simulation_config_02_carga_media_estable_2026-01-14.json</td>
+      <td></td>
+      <td></td>
+      <td>100</td>
+      <td>C:/git_edwin/mvp_thesis_simulator/output/dataset/02_carga_media_estable</td>
+      <td>9002</td>
+    </tr>
+    <tr>
+      <td>2026-01-15</td>
+      <td>output\runtime_configs\02_carga_media_estable\simulation_config_02_carga_media_estable_2026-01-15.json</td>
+      <td></td>
+      <td></td>
+      <td>100</td>
+      <td>C:/git_edwin/mvp_thesis_simulator/output/dataset/02_carga_media_estable</td>
+      <td>9002</td>
+    </tr>
+    <tr>
+      <td>2026-01-16</td>
+      <td>output\runtime_configs\02_carga_media_estable\simulation_config_02_carga_media_estable_2026-01-16.json</td>
+      <td></td>
+      <td></td>
+      <td>100</td>
+      <td>C:/git_edwin/mvp_thesis_simulator/output/dataset/02_carga_media_estable</td>
+      <td>9002</td>
+    </tr>
+    <tr>
+      <td>2026-01-17</td>
+      <td>output\runtime_configs\02_carga_media_estable\simulation_config_02_carga_media_estable_2026-01-17.json</td>
+      <td></td>
+      <td></td>
+      <td>100</td>
+      <td>C:/git_edwin/mvp_thesis_simulator/output/dataset/02_carga_media_estable</td>
+      <td>9002</td>
+    </tr>
+    <tr>
+      <td>2026-01-18</td>
+      <td>output\runtime_configs\02_carga_media_estable\simulation_config_02_carga_media_estable_2026-01-18.json</td>
+      <td></td>
+      <td></td>
+      <td>100</td>
+      <td>C:/git_edwin/mvp_thesis_simulator/output/dataset/02_carga_media_estable</td>
+      <td>9002</td>
+    </tr>
+    <tr>
+      <td>2026-01-19</td>
+      <td>output\runtime_configs\02_carga_media_estable\simulation_config_02_carga_media_estable_2026-01-19.json</td>
+      <td></td>
+      <td></td>
+      <td>100</td>
+      <td>C:/git_edwin/mvp_thesis_simulator/output/dataset/02_carga_media_estable</td>
+      <td>9002</td>
+    </tr>
+    <tr>
+      <td>2026-01-20</td>
+      <td>output\runtime_configs\02_carga_media_estable\simulation_config_02_carga_media_estable_2026-01-20.json</td>
+      <td></td>
+      <td></td>
+      <td>100</td>
+      <td>C:/git_edwin/mvp_thesis_simulator/output/dataset/02_carga_media_estable</td>
+      <td>9002</td>
+    </tr>
+    <tr>
+      <td>2026-01-21</td>
+      <td>output\runtime_configs\02_carga_media_estable\simulation_config_02_carga_media_estable_2026-01-21.json</td>
+      <td></td>
+      <td></td>
+      <td>100</td>
+      <td>C:/git_edwin/mvp_thesis_simulator/output/dataset/02_carga_media_estable</td>
+      <td>9002</td>
+    </tr>
+    <tr>
+      <td>2026-01-22</td>
+      <td>output\runtime_configs\02_carga_media_estable\simulation_config_02_carga_media_estable_2026-01-22.json</td>
+      <td></td>
+      <td></td>
+      <td>100</td>
+      <td>C:/git_edwin/mvp_thesis_simulator/output/dataset/02_carga_media_estable</td>
+      <td>9002</td>
+    </tr>
+    <tr>
+      <td>2026-01-23</td>
+      <td>output\runtime_configs\02_carga_media_estable\simulation_config_02_carga_media_estable_2026-01-23.json</td>
+      <td></td>
+      <td></td>
+      <td>100</td>
+      <td>C:/git_edwin/mvp_thesis_simulator/output/dataset/02_carga_media_estable</td>
+      <td>9002</td>
+    </tr>
+    <tr>
+      <td>2026-01-24</td>
+      <td>output\runtime_configs\02_carga_media_estable\simulation_config_02_carga_media_estable_2026-01-24.json</td>
+      <td></td>
+      <td></td>
+      <td>100</td>
+      <td>C:/git_edwin/mvp_thesis_simulator/output/dataset/02_carga_media_estable</td>
+      <td>9002</td>
+    </tr>
+    <tr>
+      <td>2026-01-25</td>
+      <td>output\runtime_configs\02_carga_media_estable\simulation_config_02_carga_media_estable_2026-01-25.json</td>
+      <td></td>
+      <td></td>
+      <td>100</td>
+      <td>C:/git_edwin/mvp_thesis_simulator/output/dataset/02_carga_media_estable</td>
+      <td>9002</td>
+    </tr>
+    <tr>
+      <td>2026-01-26</td>
+      <td>output\runtime_configs\02_carga_media_estable\simulation_config_02_carga_media_estable_2026-01-26.json</td>
+      <td></td>
+      <td></td>
+      <td>100</td>
+      <td>C:/git_edwin/mvp_thesis_simulator/output/dataset/02_carga_media_estable</td>
+      <td>9002</td>
+    </tr>
+    <tr>
+      <td>2026-01-27</td>
+      <td>output\runtime_configs\02_carga_media_estable\simulation_config_02_carga_media_estable_2026-01-27.json</td>
+      <td></td>
+      <td></td>
+      <td>100</td>
+      <td>C:/git_edwin/mvp_thesis_simulator/output/dataset/02_carga_media_estable</td>
+      <td>9002</td>
+    </tr>
+    <tr>
+      <td>2026-01-28</td>
+      <td>output\runtime_configs\02_carga_media_estable\simulation_config_02_carga_media_estable_2026-01-28.json</td>
+      <td></td>
+      <td></td>
+      <td>100</td>
+      <td>C:/git_edwin/mvp_thesis_simulator/output/dataset/02_carga_media_estable</td>
+      <td>9002</td>
+    </tr>
+    <tr>
+      <td>2026-01-29</td>
+      <td>output\runtime_configs\02_carga_media_estable\simulation_config_02_carga_media_estable_2026-01-29.json</td>
+      <td></td>
+      <td></td>
+      <td>100</td>
+      <td>C:/git_edwin/mvp_thesis_simulator/output/dataset/02_carga_media_estable</td>
+      <td>9002</td>
+    </tr>
+    <tr>
+      <td>2026-01-30</td>
+      <td>output\runtime_configs\02_carga_media_estable\simulation_config_02_carga_media_estable_2026-01-30.json</td>
+      <td></td>
+      <td></td>
+      <td>100</td>
+      <td>C:/git_edwin/mvp_thesis_simulator/output/dataset/02_carga_media_estable</td>
+      <td>9002</td>
+    </tr>
+    <tr>
+      <td>2026-01-31</td>
+      <td>output\runtime_configs\02_carga_media_estable\simulation_config_02_carga_media_estable_2026-01-31.json</td>
+      <td></td>
+      <td></td>
+      <td>100</td>
+      <td>C:/git_edwin/mvp_thesis_simulator/output/dataset/02_carga_media_estable</td>
+      <td>9002</td>
+    </tr>
+    <tr>
       <td>2026-04-01</td>
-      <td>output\runtime_configs\02_carga_media_estable\2026-04-01\simulation_config_02_carga_media_estable.json</td>
-      <td>2026-04-01</td>
+      <td>output\runtime_configs\02_carga_media_estable\simulation_config_02_carga_media_estable_2026-04-01.json</td>
+      <td></td>
+      <td></td>
       <td>100</td>
       <td>C:/git_edwin/mvp_thesis_simulator/output/dataset/02_carga_media_estable</td>
       <td>9002</td>
     </tr>
     <tr>
       <td>2026-04-02</td>
-      <td>output\runtime_configs\02_carga_media_estable\2026-04-02\simulation_config_02_carga_media_estable.json</td>
-      <td>2026-04-02</td>
+      <td>output\runtime_configs\02_carga_media_estable\simulation_config_02_carga_media_estable_2026-04-02.json</td>
+      <td></td>
+      <td></td>
       <td>100</td>
       <td>C:/git_edwin/mvp_thesis_simulator/output/dataset/02_carga_media_estable</td>
       <td>9002</td>
     </tr>
     <tr>
       <td>2026-04-03</td>
-      <td>output\runtime_configs\02_carga_media_estable\2026-04-03\simulation_config_02_carga_media_estable.json</td>
-      <td>2026-04-03</td>
+      <td>output\runtime_configs\02_carga_media_estable\simulation_config_02_carga_media_estable_2026-04-03.json</td>
+      <td></td>
+      <td></td>
       <td>100</td>
       <td>C:/git_edwin/mvp_thesis_simulator/output/dataset/02_carga_media_estable</td>
       <td>9002</td>
     </tr>
     <tr>
       <td>2026-04-04</td>
-      <td>output\runtime_configs\02_carga_media_estable\2026-04-04\simulation_config_02_carga_media_estable.json</td>
-      <td>2026-04-04</td>
+      <td>output\runtime_configs\02_carga_media_estable\simulation_config_02_carga_media_estable_2026-04-04.json</td>
+      <td></td>
+      <td></td>
       <td>100</td>
       <td>C:/git_edwin/mvp_thesis_simulator/output/dataset/02_carga_media_estable</td>
       <td>9002</td>
     </tr>
     <tr>
       <td>2026-04-05</td>
-      <td>output\runtime_configs\02_carga_media_estable\2026-04-05\simulation_config_02_carga_media_estable.json</td>
-      <td>2026-04-05</td>
+      <td>output\runtime_configs\02_carga_media_estable\simulation_config_02_carga_media_estable_2026-04-05.json</td>
+      <td></td>
+      <td></td>
       <td>100</td>
       <td>C:/git_edwin/mvp_thesis_simulator/output/dataset/02_carga_media_estable</td>
       <td>9002</td>
     </tr>
     <tr>
       <td>2026-04-06</td>
-      <td>output\runtime_configs\02_carga_media_estable\2026-04-06\simulation_config_02_carga_media_estable.json</td>
-      <td>2026-04-06</td>
+      <td>output\runtime_configs\02_carga_media_estable\simulation_config_02_carga_media_estable_2026-04-06.json</td>
+      <td></td>
+      <td></td>
       <td>100</td>
       <td>C:/git_edwin/mvp_thesis_simulator/output/dataset/02_carga_media_estable</td>
       <td>9002</td>
     </tr>
     <tr>
       <td>2026-04-07</td>
-      <td>output\runtime_configs\02_carga_media_estable\2026-04-07\simulation_config_02_carga_media_estable.json</td>
-      <td>2026-04-07</td>
+      <td>output\runtime_configs\02_carga_media_estable\simulation_config_02_carga_media_estable_2026-04-07.json</td>
+      <td></td>
+      <td></td>
       <td>100</td>
       <td>C:/git_edwin/mvp_thesis_simulator/output/dataset/02_carga_media_estable</td>
       <td>9002</td>
@@ -274,7 +658,7 @@
     </section>
     
     <section class="card ">
-        <h2>C. Inventario de archivos CSV del escenario</h2>
+        <h2>D. Inventario de archivos CSV del escenario</h2>
         <p class='section-desc'>Archivos encontrados dentro de output/dataset/<escenario>.</p>
         <div class="table-container">
             <table class="dataframe">
@@ -289,52 +673,227 @@
   </thead>
   <tbody>
     <tr>
-      <td>blob_inventory_02_carga_media_estable_2026-04-01.csv</td>
-      <td>output\dataset\02_carga_media_estable\blob_inventory_02_carga_media_estable_2026-04-01.csv</td>
-      <td>123</td>
-      <td>2026-04-01</td>
+      <td>blob_inventory.csv</td>
+      <td>output\dataset\02_carga_media_estable\blob_inventory.csv</td>
+      <td>54</td>
+      <td>2026-01-31</td>
       <td></td>
     </tr>
     <tr>
-      <td>blob_inventory_02_carga_media_estable_2026-04-02.csv</td>
-      <td>output\dataset\02_carga_media_estable\blob_inventory_02_carga_media_estable_2026-04-02.csv</td>
-      <td>101</td>
-      <td>2026-04-02</td>
+      <td>blob_inventory_02_carga_media_estable_2026-01-01.csv</td>
+      <td>output\dataset\02_carga_media_estable\blob_inventory_02_carga_media_estable_2026-01-01.csv</td>
+      <td>49</td>
+      <td>2026-01-01</td>
       <td></td>
     </tr>
     <tr>
-      <td>blob_inventory_02_carga_media_estable_2026-04-03.csv</td>
-      <td>output\dataset\02_carga_media_estable\blob_inventory_02_carga_media_estable_2026-04-03.csv</td>
-      <td>154</td>
-      <td>2026-04-03</td>
+      <td>blob_inventory_02_carga_media_estable_2026-01-02.csv</td>
+      <td>output\dataset\02_carga_media_estable\blob_inventory_02_carga_media_estable_2026-01-02.csv</td>
+      <td>20</td>
+      <td>2026-01-02</td>
       <td></td>
     </tr>
     <tr>
-      <td>blob_inventory_02_carga_media_estable_2026-04-04.csv</td>
-      <td>output\dataset\02_carga_media_estable\blob_inventory_02_carga_media_estable_2026-04-04.csv</td>
-      <td>74</td>
-      <td>2026-04-04</td>
+      <td>blob_inventory_02_carga_media_estable_2026-01-03.csv</td>
+      <td>output\dataset\02_carga_media_estable\blob_inventory_02_carga_media_estable_2026-01-03.csv</td>
+      <td>54</td>
+      <td>2026-01-03</td>
       <td></td>
     </tr>
     <tr>
-      <td>blob_inventory_02_carga_media_estable_2026-04-05.csv</td>
-      <td>output\dataset\02_carga_media_estable\blob_inventory_02_carga_media_estable_2026-04-05.csv</td>
-      <td>59</td>
-      <td>2026-04-05</td>
+      <td>blob_inventory_02_carga_media_estable_2026-01-04.csv</td>
+      <td>output\dataset\02_carga_media_estable\blob_inventory_02_carga_media_estable_2026-01-04.csv</td>
+      <td>24</td>
+      <td>2026-01-04</td>
       <td></td>
     </tr>
     <tr>
-      <td>blob_inventory_02_carga_media_estable_2026-04-06.csv</td>
-      <td>output\dataset\02_carga_media_estable\blob_inventory_02_carga_media_estable_2026-04-06.csv</td>
-      <td>74</td>
-      <td>2026-04-06</td>
+      <td>blob_inventory_02_carga_media_estable_2026-01-05.csv</td>
+      <td>output\dataset\02_carga_media_estable\blob_inventory_02_carga_media_estable_2026-01-05.csv</td>
+      <td>20</td>
+      <td>2026-01-05</td>
       <td></td>
     </tr>
     <tr>
-      <td>blob_inventory_02_carga_media_estable_2026-04-07.csv</td>
-      <td>output\dataset\02_carga_media_estable\blob_inventory_02_carga_media_estable_2026-04-07.csv</td>
-      <td>122</td>
-      <td>2026-04-07</td>
+      <td>blob_inventory_02_carga_media_estable_2026-01-06.csv</td>
+      <td>output\dataset\02_carga_media_estable\blob_inventory_02_carga_media_estable_2026-01-06.csv</td>
+      <td>22</td>
+      <td>2026-01-06</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>blob_inventory_02_carga_media_estable_2026-01-07.csv</td>
+      <td>output\dataset\02_carga_media_estable\blob_inventory_02_carga_media_estable_2026-01-07.csv</td>
+      <td>42</td>
+      <td>2026-01-07</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>blob_inventory_02_carga_media_estable_2026-01-08.csv</td>
+      <td>output\dataset\02_carga_media_estable\blob_inventory_02_carga_media_estable_2026-01-08.csv</td>
+      <td>49</td>
+      <td>2026-01-08</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>blob_inventory_02_carga_media_estable_2026-01-09.csv</td>
+      <td>output\dataset\02_carga_media_estable\blob_inventory_02_carga_media_estable_2026-01-09.csv</td>
+      <td>20</td>
+      <td>2026-01-09</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>blob_inventory_02_carga_media_estable_2026-01-10.csv</td>
+      <td>output\dataset\02_carga_media_estable\blob_inventory_02_carga_media_estable_2026-01-10.csv</td>
+      <td>54</td>
+      <td>2026-01-10</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>blob_inventory_02_carga_media_estable_2026-01-11.csv</td>
+      <td>output\dataset\02_carga_media_estable\blob_inventory_02_carga_media_estable_2026-01-11.csv</td>
+      <td>24</td>
+      <td>2026-01-11</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>blob_inventory_02_carga_media_estable_2026-01-12.csv</td>
+      <td>output\dataset\02_carga_media_estable\blob_inventory_02_carga_media_estable_2026-01-12.csv</td>
+      <td>20</td>
+      <td>2026-01-12</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>blob_inventory_02_carga_media_estable_2026-01-13.csv</td>
+      <td>output\dataset\02_carga_media_estable\blob_inventory_02_carga_media_estable_2026-01-13.csv</td>
+      <td>22</td>
+      <td>2026-01-13</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>blob_inventory_02_carga_media_estable_2026-01-14.csv</td>
+      <td>output\dataset\02_carga_media_estable\blob_inventory_02_carga_media_estable_2026-01-14.csv</td>
+      <td>42</td>
+      <td>2026-01-14</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>blob_inventory_02_carga_media_estable_2026-01-15.csv</td>
+      <td>output\dataset\02_carga_media_estable\blob_inventory_02_carga_media_estable_2026-01-15.csv</td>
+      <td>49</td>
+      <td>2026-01-15</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>blob_inventory_02_carga_media_estable_2026-01-16.csv</td>
+      <td>output\dataset\02_carga_media_estable\blob_inventory_02_carga_media_estable_2026-01-16.csv</td>
+      <td>20</td>
+      <td>2026-01-16</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>blob_inventory_02_carga_media_estable_2026-01-17.csv</td>
+      <td>output\dataset\02_carga_media_estable\blob_inventory_02_carga_media_estable_2026-01-17.csv</td>
+      <td>54</td>
+      <td>2026-01-17</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>blob_inventory_02_carga_media_estable_2026-01-18.csv</td>
+      <td>output\dataset\02_carga_media_estable\blob_inventory_02_carga_media_estable_2026-01-18.csv</td>
+      <td>24</td>
+      <td>2026-01-18</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>blob_inventory_02_carga_media_estable_2026-01-19.csv</td>
+      <td>output\dataset\02_carga_media_estable\blob_inventory_02_carga_media_estable_2026-01-19.csv</td>
+      <td>20</td>
+      <td>2026-01-19</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>blob_inventory_02_carga_media_estable_2026-01-20.csv</td>
+      <td>output\dataset\02_carga_media_estable\blob_inventory_02_carga_media_estable_2026-01-20.csv</td>
+      <td>22</td>
+      <td>2026-01-20</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>blob_inventory_02_carga_media_estable_2026-01-21.csv</td>
+      <td>output\dataset\02_carga_media_estable\blob_inventory_02_carga_media_estable_2026-01-21.csv</td>
+      <td>42</td>
+      <td>2026-01-21</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>blob_inventory_02_carga_media_estable_2026-01-22.csv</td>
+      <td>output\dataset\02_carga_media_estable\blob_inventory_02_carga_media_estable_2026-01-22.csv</td>
+      <td>49</td>
+      <td>2026-01-22</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>blob_inventory_02_carga_media_estable_2026-01-23.csv</td>
+      <td>output\dataset\02_carga_media_estable\blob_inventory_02_carga_media_estable_2026-01-23.csv</td>
+      <td>20</td>
+      <td>2026-01-23</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>blob_inventory_02_carga_media_estable_2026-01-24.csv</td>
+      <td>output\dataset\02_carga_media_estable\blob_inventory_02_carga_media_estable_2026-01-24.csv</td>
+      <td>54</td>
+      <td>2026-01-24</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>blob_inventory_02_carga_media_estable_2026-01-25.csv</td>
+      <td>output\dataset\02_carga_media_estable\blob_inventory_02_carga_media_estable_2026-01-25.csv</td>
+      <td>24</td>
+      <td>2026-01-25</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>blob_inventory_02_carga_media_estable_2026-01-26.csv</td>
+      <td>output\dataset\02_carga_media_estable\blob_inventory_02_carga_media_estable_2026-01-26.csv</td>
+      <td>20</td>
+      <td>2026-01-26</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>blob_inventory_02_carga_media_estable_2026-01-27.csv</td>
+      <td>output\dataset\02_carga_media_estable\blob_inventory_02_carga_media_estable_2026-01-27.csv</td>
+      <td>22</td>
+      <td>2026-01-27</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>blob_inventory_02_carga_media_estable_2026-01-28.csv</td>
+      <td>output\dataset\02_carga_media_estable\blob_inventory_02_carga_media_estable_2026-01-28.csv</td>
+      <td>42</td>
+      <td>2026-01-28</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>blob_inventory_02_carga_media_estable_2026-01-29.csv</td>
+      <td>output\dataset\02_carga_media_estable\blob_inventory_02_carga_media_estable_2026-01-29.csv</td>
+      <td>49</td>
+      <td>2026-01-29</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>blob_inventory_02_carga_media_estable_2026-01-30.csv</td>
+      <td>output\dataset\02_carga_media_estable\blob_inventory_02_carga_media_estable_2026-01-30.csv</td>
+      <td>20</td>
+      <td>2026-01-30</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>blob_inventory_02_carga_media_estable_2026-01-31.csv</td>
+      <td>output\dataset\02_carga_media_estable\blob_inventory_02_carga_media_estable_2026-01-31.csv</td>
+      <td>54</td>
+      <td>2026-01-31</td>
       <td></td>
     </tr>
   </tbody>
@@ -343,84 +902,423 @@
     </section>
     
     <section class="card summary-card">
-        <h2>D. Validacion de ejecucion esperada vs generada</h2>
-        <p class='section-desc'>Compara filas generadas por fecha contra max_valid_files_per_day del JSON.</p>
+        <h2>E. Validacion de ejecucion esperada vs generada</h2>
+        <p class='section-desc'>Compara filas generadas por fecha contra max_valid_files_per_day como limite superior.</p>
         <div class="table-container">
             <table class="dataframe">
   <thead>
     <tr style="text-align: right;">
       <th>scenario</th>
       <th>simulation_date</th>
-      <th>expected_rows_from_config</th>
+      <th>expected_max_rows_from_config</th>
       <th>generated_rows</th>
-      <th>difference</th>
-      <th>generated_pct_vs_expected</th>
+      <th>difference_vs_max</th>
+      <th>generated_pct_vs_max</th>
       <th>validation_status</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td>02_carga_media_estable</td>
-      <td>2026-04-01</td>
+      <td>2026-01-01</td>
       <td>100</td>
-      <td>123</td>
-      <td>23</td>
-      <td>123.0</td>
+      <td>49</td>
+      <td>-51</td>
+      <td>49.0</td>
       <td>OK</td>
     </tr>
     <tr>
       <td>02_carga_media_estable</td>
-      <td>2026-04-02</td>
+      <td>2026-01-02</td>
       <td>100</td>
-      <td>101</td>
-      <td>1</td>
-      <td>101.0</td>
+      <td>20</td>
+      <td>-80</td>
+      <td>20.0</td>
       <td>OK</td>
     </tr>
     <tr>
       <td>02_carga_media_estable</td>
-      <td>2026-04-03</td>
+      <td>2026-01-03</td>
       <td>100</td>
-      <td>154</td>
       <td>54</td>
-      <td>154.0</td>
+      <td>-46</td>
+      <td>54.0</td>
       <td>OK</td>
     </tr>
     <tr>
       <td>02_carga_media_estable</td>
-      <td>2026-04-04</td>
+      <td>2026-01-04</td>
       <td>100</td>
-      <td>74</td>
-      <td>-26</td>
-      <td>74.0</td>
-      <td>LOW_ROWS</td>
+      <td>24</td>
+      <td>-76</td>
+      <td>24.0</td>
+      <td>OK</td>
     </tr>
     <tr>
       <td>02_carga_media_estable</td>
-      <td>2026-04-05</td>
+      <td>2026-01-05</td>
       <td>100</td>
-      <td>59</td>
-      <td>-41</td>
-      <td>59.0</td>
-      <td>LOW_ROWS</td>
+      <td>20</td>
+      <td>-80</td>
+      <td>20.0</td>
+      <td>OK</td>
     </tr>
     <tr>
       <td>02_carga_media_estable</td>
-      <td>2026-04-06</td>
+      <td>2026-01-06</td>
       <td>100</td>
-      <td>74</td>
-      <td>-26</td>
-      <td>74.0</td>
-      <td>LOW_ROWS</td>
-    </tr>
-    <tr>
-      <td>02_carga_media_estable</td>
-      <td>2026-04-07</td>
-      <td>100</td>
-      <td>122</td>
       <td>22</td>
-      <td>122.0</td>
+      <td>-78</td>
+      <td>22.0</td>
       <td>OK</td>
+    </tr>
+    <tr>
+      <td>02_carga_media_estable</td>
+      <td>2026-01-07</td>
+      <td>100</td>
+      <td>42</td>
+      <td>-58</td>
+      <td>42.0</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>02_carga_media_estable</td>
+      <td>2026-01-08</td>
+      <td>100</td>
+      <td>49</td>
+      <td>-51</td>
+      <td>49.0</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>02_carga_media_estable</td>
+      <td>2026-01-09</td>
+      <td>100</td>
+      <td>20</td>
+      <td>-80</td>
+      <td>20.0</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>02_carga_media_estable</td>
+      <td>2026-01-10</td>
+      <td>100</td>
+      <td>54</td>
+      <td>-46</td>
+      <td>54.0</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>02_carga_media_estable</td>
+      <td>2026-01-11</td>
+      <td>100</td>
+      <td>24</td>
+      <td>-76</td>
+      <td>24.0</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>02_carga_media_estable</td>
+      <td>2026-01-12</td>
+      <td>100</td>
+      <td>20</td>
+      <td>-80</td>
+      <td>20.0</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>02_carga_media_estable</td>
+      <td>2026-01-13</td>
+      <td>100</td>
+      <td>22</td>
+      <td>-78</td>
+      <td>22.0</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>02_carga_media_estable</td>
+      <td>2026-01-14</td>
+      <td>100</td>
+      <td>42</td>
+      <td>-58</td>
+      <td>42.0</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>02_carga_media_estable</td>
+      <td>2026-01-15</td>
+      <td>100</td>
+      <td>49</td>
+      <td>-51</td>
+      <td>49.0</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>02_carga_media_estable</td>
+      <td>2026-01-16</td>
+      <td>100</td>
+      <td>20</td>
+      <td>-80</td>
+      <td>20.0</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>02_carga_media_estable</td>
+      <td>2026-01-17</td>
+      <td>100</td>
+      <td>54</td>
+      <td>-46</td>
+      <td>54.0</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>02_carga_media_estable</td>
+      <td>2026-01-18</td>
+      <td>100</td>
+      <td>24</td>
+      <td>-76</td>
+      <td>24.0</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>02_carga_media_estable</td>
+      <td>2026-01-19</td>
+      <td>100</td>
+      <td>20</td>
+      <td>-80</td>
+      <td>20.0</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>02_carga_media_estable</td>
+      <td>2026-01-20</td>
+      <td>100</td>
+      <td>22</td>
+      <td>-78</td>
+      <td>22.0</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>02_carga_media_estable</td>
+      <td>2026-01-21</td>
+      <td>100</td>
+      <td>42</td>
+      <td>-58</td>
+      <td>42.0</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>02_carga_media_estable</td>
+      <td>2026-01-22</td>
+      <td>100</td>
+      <td>49</td>
+      <td>-51</td>
+      <td>49.0</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>02_carga_media_estable</td>
+      <td>2026-01-23</td>
+      <td>100</td>
+      <td>20</td>
+      <td>-80</td>
+      <td>20.0</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>02_carga_media_estable</td>
+      <td>2026-01-24</td>
+      <td>100</td>
+      <td>54</td>
+      <td>-46</td>
+      <td>54.0</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>02_carga_media_estable</td>
+      <td>2026-01-25</td>
+      <td>100</td>
+      <td>24</td>
+      <td>-76</td>
+      <td>24.0</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>02_carga_media_estable</td>
+      <td>2026-01-26</td>
+      <td>100</td>
+      <td>20</td>
+      <td>-80</td>
+      <td>20.0</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>02_carga_media_estable</td>
+      <td>2026-01-27</td>
+      <td>100</td>
+      <td>22</td>
+      <td>-78</td>
+      <td>22.0</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>02_carga_media_estable</td>
+      <td>2026-01-28</td>
+      <td>100</td>
+      <td>42</td>
+      <td>-58</td>
+      <td>42.0</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>02_carga_media_estable</td>
+      <td>2026-01-29</td>
+      <td>100</td>
+      <td>49</td>
+      <td>-51</td>
+      <td>49.0</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>02_carga_media_estable</td>
+      <td>2026-01-30</td>
+      <td>100</td>
+      <td>20</td>
+      <td>-80</td>
+      <td>20.0</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>02_carga_media_estable</td>
+      <td>2026-01-31</td>
+      <td>100</td>
+      <td>108</td>
+      <td>8</td>
+      <td>108.0</td>
+      <td>ABOVE_MAX_VALID_FILES</td>
+    </tr>
+  </tbody>
+</table>
+        </div>
+    </section>
+    
+    <section class="card summary-card">
+        <h2>F. Validaciones de integridad del dataset</h2>
+        <p class='section-desc'>Reglas criticas sobre rangos, costos, colas, errores, lifecycle y transferencia.</p>
+        <div class="table-container">
+            <table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>scenario</th>
+      <th>check</th>
+      <th>passed_count</th>
+      <th>failed_count</th>
+      <th>total_count</th>
+      <th>pass_rate_pct</th>
+      <th>status</th>
+      <th>severity</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>02_carga_media_estable</td>
+      <td>queue_pressure entre 0 y 1</td>
+      <td>1101</td>
+      <td>0</td>
+      <td>1101</td>
+      <td>100.0</td>
+      <td>OK</td>
+      <td>ERROR</td>
+    </tr>
+    <tr>
+      <td>02_carga_media_estable</td>
+      <td>queue_pressure_raw no negativa</td>
+      <td>1101</td>
+      <td>0</td>
+      <td>1101</td>
+      <td>100.0</td>
+      <td>OK</td>
+      <td>ERROR</td>
+    </tr>
+    <tr>
+      <td>02_carga_media_estable</td>
+      <td>error_probability entre 0 y 0.95</td>
+      <td>1101</td>
+      <td>0</td>
+      <td>1101</td>
+      <td>100.0</td>
+      <td>OK</td>
+      <td>ERROR</td>
+    </tr>
+    <tr>
+      <td>02_carga_media_estable</td>
+      <td>days_since_last_access &lt;= days_stored</td>
+      <td>1101</td>
+      <td>0</td>
+      <td>1101</td>
+      <td>100.0</td>
+      <td>OK</td>
+      <td>ERROR</td>
+    </tr>
+    <tr>
+      <td>02_carga_media_estable</td>
+      <td>storage_cost no negativo</td>
+      <td>1101</td>
+      <td>0</td>
+      <td>1101</td>
+      <td>100.0</td>
+      <td>OK</td>
+      <td>ERROR</td>
+    </tr>
+    <tr>
+      <td>02_carga_media_estable</td>
+      <td>total_operational_cost no negativo</td>
+      <td>1101</td>
+      <td>0</td>
+      <td>1101</td>
+      <td>100.0</td>
+      <td>OK</td>
+      <td>ERROR</td>
+    </tr>
+    <tr>
+      <td>02_carga_media_estable</td>
+      <td>transfer_duration_sec positivo</td>
+      <td>1101</td>
+      <td>0</td>
+      <td>1101</td>
+      <td>100.0</td>
+      <td>OK</td>
+      <td>ERROR</td>
+    </tr>
+    <tr>
+      <td>02_carga_media_estable</td>
+      <td>transfer_speed_mbps positivo</td>
+      <td>1101</td>
+      <td>0</td>
+      <td>1101</td>
+      <td>100.0</td>
+      <td>OK</td>
+      <td>ERROR</td>
+    </tr>
+    <tr>
+      <td>02_carga_media_estable</td>
+      <td>retry_count no negativo</td>
+      <td>1101</td>
+      <td>0</td>
+      <td>1101</td>
+      <td>100.0</td>
+      <td>OK</td>
+      <td>ERROR</td>
+    </tr>
+    <tr>
+      <td>02_carga_media_estable</td>
+      <td>size_mb positivo</td>
+      <td>1101</td>
+      <td>0</td>
+      <td>1101</td>
+      <td>100.0</td>
+      <td>OK</td>
+      <td>ERROR</td>
     </tr>
   </tbody>
 </table>
@@ -428,8 +1326,85 @@
     </section>
     
     <section class="card ">
-        <h2>E. Parametros observados en el dataset</h2>
-        <p class='section-desc'>Distribuciones empiricas generadas por tipo de archivo, tier, franja horaria, caso y errores.</p>
+        <h2>G. Comparacion config vs observado</h2>
+        <p class='section-desc'>Contrasta parametros configurados contra distribuciones empiricas observadas.</p>
+        <div class="table-container">
+            <table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>scenario</th>
+      <th>metric</th>
+      <th>key</th>
+      <th>configured_value</th>
+      <th>observed_value</th>
+      <th>absolute_difference</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>02_carga_media_estable</td>
+      <td>file_type_distribution</td>
+      <td>json</td>
+      <td>0.3</td>
+      <td>0.2897</td>
+      <td>0.0103</td>
+    </tr>
+    <tr>
+      <td>02_carga_media_estable</td>
+      <td>file_type_distribution</td>
+      <td>jpg</td>
+      <td>0.35</td>
+      <td>0.3233</td>
+      <td>0.0267</td>
+    </tr>
+    <tr>
+      <td>02_carga_media_estable</td>
+      <td>file_type_distribution</td>
+      <td>pdf</td>
+      <td>0.25</td>
+      <td>0.2861</td>
+      <td>0.0361</td>
+    </tr>
+    <tr>
+      <td>02_carga_media_estable</td>
+      <td>file_type_distribution</td>
+      <td>mp4</td>
+      <td>0.1</td>
+      <td>0.1008</td>
+      <td>0.0008</td>
+    </tr>
+    <tr>
+      <td>02_carga_media_estable</td>
+      <td>error_rate_vs_base_probability</td>
+      <td>has_error</td>
+      <td>0.02</td>
+      <td>0.0118</td>
+      <td>0.0082</td>
+    </tr>
+    <tr>
+      <td>02_carga_media_estable</td>
+      <td>capacity_vs_queue_pressure</td>
+      <td>mean_queue_pressure</td>
+      <td>45.0</td>
+      <td>0.014</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>02_carga_media_estable</td>
+      <td>outlier_probability_proxy</td>
+      <td>size_mb_gt_p95</td>
+      <td>0.005</td>
+      <td>0.049</td>
+      <td>0.044</td>
+    </tr>
+  </tbody>
+</table>
+        </div>
+    </section>
+    
+    <section class="card ">
+        <h2>H. Parametros observados en el dataset</h2>
+        <p class='section-desc'>Distribuciones empiricas por tipo de archivo, tier, franja horaria, caso, errores y retries.</p>
         <div class="table-container">
             <table class="dataframe">
   <thead>
@@ -446,155 +1421,232 @@
       <td>Distribucion observada por tipo de archivo</td>
       <td>file_type</td>
       <td>jpg</td>
-      <td>225</td>
-      <td>31.8246</td>
+      <td>356</td>
+      <td>32.3342</td>
     </tr>
     <tr>
       <td>Distribucion observada por tipo de archivo</td>
       <td>file_type</td>
       <td>json</td>
-      <td>172</td>
-      <td>24.3281</td>
+      <td>319</td>
+      <td>28.9737</td>
     </tr>
     <tr>
       <td>Distribucion observada por tipo de archivo</td>
       <td>file_type</td>
       <td>pdf</td>
-      <td>160</td>
-      <td>22.6308</td>
+      <td>315</td>
+      <td>28.6104</td>
     </tr>
     <tr>
       <td>Distribucion observada por tipo de archivo</td>
       <td>file_type</td>
       <td>mp4</td>
-      <td>150</td>
-      <td>21.2164</td>
-    </tr>
-    <tr>
-      <td>Distribucion observada por tier</td>
-      <td>storage_tier</td>
-      <td>cool</td>
-      <td>318</td>
-      <td>44.9788</td>
+      <td>111</td>
+      <td>10.0817</td>
     </tr>
     <tr>
       <td>Distribucion observada por tier</td>
       <td>storage_tier</td>
       <td>hot</td>
-      <td>287</td>
-      <td>40.5941</td>
+      <td>466</td>
+      <td>42.3252</td>
+    </tr>
+    <tr>
+      <td>Distribucion observada por tier</td>
+      <td>storage_tier</td>
+      <td>cool</td>
+      <td>459</td>
+      <td>41.6894</td>
     </tr>
     <tr>
       <td>Distribucion observada por tier</td>
       <td>storage_tier</td>
       <td>archive</td>
-      <td>102</td>
-      <td>14.4272</td>
+      <td>176</td>
+      <td>15.9855</td>
+    </tr>
+    <tr>
+      <td>Distribucion observada por tier final</td>
+      <td>storage_tier_final</td>
+      <td>hot</td>
+      <td>466</td>
+      <td>42.3252</td>
+    </tr>
+    <tr>
+      <td>Distribucion observada por tier final</td>
+      <td>storage_tier_final</td>
+      <td>cool</td>
+      <td>459</td>
+      <td>41.6894</td>
+    </tr>
+    <tr>
+      <td>Distribucion observada por tier final</td>
+      <td>storage_tier_final</td>
+      <td>archive</td>
+      <td>176</td>
+      <td>15.9855</td>
     </tr>
     <tr>
       <td>Distribucion observada por franja horaria</td>
       <td>time_slot</td>
       <td>tarde</td>
-      <td>328</td>
-      <td>46.3932</td>
+      <td>473</td>
+      <td>42.9609</td>
     </tr>
     <tr>
       <td>Distribucion observada por franja horaria</td>
       <td>time_slot</td>
       <td>mañana</td>
-      <td>165</td>
-      <td>23.338</td>
+      <td>287</td>
+      <td>26.0672</td>
     </tr>
     <tr>
       <td>Distribucion observada por franja horaria</td>
       <td>time_slot</td>
       <td>noche</td>
-      <td>148</td>
-      <td>20.9335</td>
+      <td>192</td>
+      <td>17.4387</td>
     </tr>
     <tr>
       <td>Distribucion observada por franja horaria</td>
       <td>time_slot</td>
       <td>madrugada</td>
-      <td>66</td>
-      <td>9.3352</td>
+      <td>149</td>
+      <td>13.5332</td>
     </tr>
     <tr>
       <td>Distribucion observada por tipo de caso</td>
       <td>case_type</td>
       <td>UNIQUE_VALID</td>
-      <td>695</td>
-      <td>98.3027</td>
+      <td>1088</td>
+      <td>98.8193</td>
     </tr>
     <tr>
       <td>Distribucion observada por tipo de caso</td>
       <td>case_type</td>
-      <td>JSON_WITHOUT_PDF</td>
-      <td>6</td>
-      <td>0.8487</td>
+      <td>NULL_JSON</td>
+      <td>5</td>
+      <td>0.4541</td>
     </tr>
     <tr>
       <td>Distribucion observada por tipo de caso</td>
       <td>case_type</td>
       <td>DUP_SAME_CONTENT_DIFFERENT_NAME_AND_ROUTE</td>
-      <td>3</td>
-      <td>0.4243</td>
-    </tr>
-    <tr>
-      <td>Distribucion observada por tipo de caso</td>
-      <td>case_type</td>
-      <td>BLOB_TIMEOUT</td>
-      <td>2</td>
-      <td>0.2829</td>
+      <td>4</td>
+      <td>0.3633</td>
     </tr>
     <tr>
       <td>Distribucion observada por tipo de caso</td>
       <td>case_type</td>
       <td>DUP_SAME_CONTENT_DIFFERENT_NAME</td>
-      <td>1</td>
-      <td>0.1414</td>
+      <td>4</td>
+      <td>0.3633</td>
     </tr>
     <tr>
       <td>Distribucion observada por grupo de caso</td>
       <td>case_group</td>
       <td>CORRECT</td>
-      <td>695</td>
-      <td>98.3027</td>
-    </tr>
-    <tr>
-      <td>Distribucion observada por grupo de caso</td>
-      <td>case_group</td>
-      <td>ORPHAN_ERRORS</td>
-      <td>6</td>
-      <td>0.8487</td>
+      <td>1088</td>
+      <td>98.8193</td>
     </tr>
     <tr>
       <td>Distribucion observada por grupo de caso</td>
       <td>case_group</td>
       <td>DUPLICITY_ERRORS</td>
-      <td>4</td>
-      <td>0.5658</td>
+      <td>8</td>
+      <td>0.7266</td>
     </tr>
     <tr>
       <td>Distribucion observada por grupo de caso</td>
       <td>case_group</td>
-      <td>BLOB_STORAGE_ERRORS</td>
-      <td>2</td>
-      <td>0.2829</td>
+      <td>NULL_ERRORS</td>
+      <td>5</td>
+      <td>0.4541</td>
+    </tr>
+    <tr>
+      <td>Distribucion observada por familia de error</td>
+      <td>error_family</td>
+      <td>NULL</td>
+      <td>1088</td>
+      <td>98.8193</td>
+    </tr>
+    <tr>
+      <td>Distribucion observada por familia de error</td>
+      <td>error_family</td>
+      <td>DUPLICITY_ERRORS</td>
+      <td>8</td>
+      <td>0.7266</td>
+    </tr>
+    <tr>
+      <td>Distribucion observada por familia de error</td>
+      <td>error_family</td>
+      <td>NULL_ERRORS</td>
+      <td>5</td>
+      <td>0.4541</td>
+    </tr>
+    <tr>
+      <td>Distribucion observada por tipo de error</td>
+      <td>error_type</td>
+      <td>NULL</td>
+      <td>1088</td>
+      <td>98.8193</td>
+    </tr>
+    <tr>
+      <td>Distribucion observada por tipo de error</td>
+      <td>error_type</td>
+      <td>NULL_JSON</td>
+      <td>5</td>
+      <td>0.4541</td>
+    </tr>
+    <tr>
+      <td>Distribucion observada por tipo de error</td>
+      <td>error_type</td>
+      <td>DUP_SAME_CONTENT_DIFFERENT_NAME_AND_ROUTE</td>
+      <td>4</td>
+      <td>0.3633</td>
+    </tr>
+    <tr>
+      <td>Distribucion observada por tipo de error</td>
+      <td>error_type</td>
+      <td>DUP_SAME_CONTENT_DIFFERENT_NAME</td>
+      <td>4</td>
+      <td>0.3633</td>
     </tr>
     <tr>
       <td>Distribucion observada de errores</td>
       <td>has_error</td>
       <td>0</td>
-      <td>695</td>
-      <td>98.3027</td>
+      <td>1088</td>
+      <td>98.8193</td>
     </tr>
     <tr>
       <td>Distribucion observada de errores</td>
       <td>has_error</td>
       <td>1</td>
-      <td>12</td>
-      <td>1.6973</td>
+      <td>13</td>
+      <td>1.1807</td>
+    </tr>
+    <tr>
+      <td>Distribucion observada de exito en retries</td>
+      <td>retry_success</td>
+      <td>0</td>
+      <td>1101</td>
+      <td>100.0</td>
+    </tr>
+    <tr>
+      <td>Distribucion observada de ruido de politica de storage</td>
+      <td>storage_policy_noise_applied</td>
+      <td>0</td>
+      <td>1034</td>
+      <td>93.9146</td>
+    </tr>
+    <tr>
+      <td>Distribucion observada de ruido de politica de storage</td>
+      <td>storage_policy_noise_applied</td>
+      <td>1</td>
+      <td>67</td>
+      <td>6.0854</td>
     </tr>
   </tbody>
 </table>
@@ -602,7 +1654,7 @@
     </section>
     
     <section class="card summary-card">
-        <h2>F. Conclusiones automaticas del escenario</h2>
+        <h2>I. Conclusiones automaticas del escenario</h2>
         <p class='section-desc'>Lectura ejecutiva del comportamiento observado.</p>
         <div class="table-container">
             <table class="dataframe">
@@ -616,22 +1668,28 @@
       <td>El escenario 02_carga_media_estable fue analizado de forma independiente para validar comportamiento, configuracion y datos generados.</td>
     </tr>
     <tr>
-      <td>Validacion de volumen por fecha: OK=4, LOW_ROWS=3.</td>
+      <td>Validacion de volumen por fecha: OK=30, ABOVE_MAX_VALID_FILES=1.</td>
     </tr>
     <tr>
-      <td>Tasa observada de error: 1.70%.</td>
+      <td>Validaciones de integridad fallidas: 0.</td>
     </tr>
     <tr>
-      <td>Costo total simulado observado: 0.866644.</td>
+      <td>Tasa observada de error: 1.18%.</td>
     </tr>
     <tr>
-      <td>Tamaño promedio observado: 36.5238 MB; p95=190.6234 MB.</td>
+      <td>Tasa observada de retries: 0.82%.</td>
     </tr>
     <tr>
-      <td>Presion de cola promedio observada: 0.0378; maxima=0.1175.</td>
+      <td>Costo operacional total simulado observado: 0.707236.</td>
     </tr>
     <tr>
-      <td>La distribucion semanal base_load suma correctamente 1.0.</td>
+      <td>Tamaño promedio observado: 15.7749 MB; p95=77.6116 MB.</td>
+    </tr>
+    <tr>
+      <td>Presion de cola promedio observada: 0.0140; maxima=0.0863.</td>
+    </tr>
+    <tr>
+      <td>El dataset no presenta fallas de integridad en las reglas criticas evaluadas.</td>
     </tr>
   </tbody>
 </table>
@@ -656,14 +1714,14 @@
   </thead>
   <tbody>
     <tr>
-      <td>707</td>
+      <td>1101</td>
+      <td>63</td>
       <td>40</td>
-      <td>22</td>
-      <td>15</td>
+      <td>20</td>
       <td>0</td>
-      <td>707</td>
-      <td>28280</td>
-      <td>2.5</td>
+      <td>3277</td>
+      <td>69363</td>
+      <td>4.7244</td>
     </tr>
   </tbody>
 </table>
@@ -684,11 +1742,11 @@
   <tbody>
     <tr>
       <td>Variables numéricas a transformar</td>
-      <td>size_mb, transfer_duration_sec, transfer_speed_mbps, storage_cost, hourly_arrival_count, queue_pressure</td>
+      <td>size_mb, transfer_duration_sec, transfer_speed_mbps, storage_cost, queue_pressure, congestion_factor</td>
     </tr>
     <tr>
       <td>Variables con outliers altos</td>
-      <td>size_mb, transfer_duration_sec, storage_cost</td>
+      <td>size_mb, transfer_duration_sec, transfer_speed_mbps, storage_cost</td>
     </tr>
     <tr>
       <td>Variables con colas pesadas</td>
@@ -700,11 +1758,11 @@
     </tr>
     <tr>
       <td>Variables críticas de calidad</td>
-      <td>hourly_capacity, congestion_factor, content_hash, error_null, scenario_name</td>
+      <td>error_family, error_type, error_orphan, error_blob_timeout, retry_success, has_incident, incident_type, empty_file, invalid_timestamp, scenario_name</td>
     </tr>
     <tr>
       <td>Variables con advertencia</td>
-      <td>file_id, hash_head, hash_tail</td>
+      <td>file_id, content_hash, hash_head, hash_tail</td>
     </tr>
   </tbody>
 </table>
@@ -731,63 +1789,47 @@
       <td>file_id</td>
       <td>Identificador único del archivo</td>
       <td>object</td>
-      <td>707</td>
+      <td>1101</td>
       <td>0</td>
-      <td>707</td>
+      <td>1047</td>
     </tr>
     <tr>
       <td>run_id</td>
       <td>Identificador de la corrida de simulación</td>
       <td>object</td>
-      <td>707</td>
+      <td>1101</td>
       <td>0</td>
-      <td>7</td>
+      <td>31</td>
     </tr>
     <tr>
       <td>simulation_date</td>
       <td>Fecha lógica de simulación</td>
       <td>datetime64[ns]</td>
-      <td>707</td>
+      <td>1101</td>
       <td>0</td>
-      <td>7</td>
+      <td>31</td>
     </tr>
     <tr>
       <td>weekday_base_load</td>
       <td>Peso de carga semanal asociado al día</td>
       <td>float64</td>
-      <td>707</td>
+      <td>1101</td>
       <td>0</td>
-      <td>6</td>
+      <td>7</td>
     </tr>
     <tr>
       <td>sequence</td>
       <td>Número secuencial del registro</td>
       <td>int64</td>
-      <td>707</td>
+      <td>1101</td>
       <td>0</td>
-      <td>154</td>
-    </tr>
-    <tr>
-      <td>case_type</td>
-      <td>Tipo de caso asociado</td>
-      <td>object</td>
-      <td>707</td>
-      <td>0</td>
-      <td>5</td>
-    </tr>
-    <tr>
-      <td>case_group</td>
-      <td>Grupo de casos</td>
-      <td>object</td>
-      <td>707</td>
-      <td>0</td>
-      <td>4</td>
+      <td>54</td>
     </tr>
     <tr>
       <td>file_type</td>
       <td>Tipo de archivo</td>
       <td>object</td>
-      <td>707</td>
+      <td>1101</td>
       <td>0</td>
       <td>4</td>
     </tr>
@@ -795,15 +1837,31 @@
       <td>size_mb</td>
       <td>Tamaño del archivo en MB</td>
       <td>float64</td>
-      <td>707</td>
+      <td>1101</td>
       <td>0</td>
-      <td>416</td>
+      <td>154</td>
+    </tr>
+    <tr>
+      <td>storage_tier_original</td>
+      <td>Sin descripción</td>
+      <td>object</td>
+      <td>1101</td>
+      <td>0</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td>storage_tier_final</td>
+      <td>Sin descripción</td>
+      <td>object</td>
+      <td>1101</td>
+      <td>0</td>
+      <td>3</td>
     </tr>
     <tr>
       <td>storage_tier</td>
       <td>Nivel de almacenamiento</td>
       <td>object</td>
-      <td>707</td>
+      <td>1101</td>
       <td>0</td>
       <td>3</td>
     </tr>
@@ -811,23 +1869,23 @@
       <td>days_stored</td>
       <td>Días almacenado</td>
       <td>int64</td>
-      <td>707</td>
+      <td>1101</td>
       <td>0</td>
-      <td>164</td>
+      <td>97</td>
     </tr>
     <tr>
       <td>days_since_last_access</td>
       <td>Días desde último acceso</td>
       <td>int64</td>
-      <td>707</td>
+      <td>1101</td>
       <td>0</td>
-      <td>119</td>
+      <td>85</td>
     </tr>
     <tr>
       <td>movement_storage</td>
       <td>Indicador de movimiento de almacenamiento</td>
       <td>int64</td>
-      <td>707</td>
+      <td>1101</td>
       <td>0</td>
       <td>2</td>
     </tr>
@@ -835,23 +1893,23 @@
       <td>transfer_duration_sec</td>
       <td>Duración de transferencia en segundos</td>
       <td>float64</td>
-      <td>707</td>
+      <td>1101</td>
       <td>0</td>
-      <td>707</td>
+      <td>154</td>
     </tr>
     <tr>
       <td>transfer_speed_mbps</td>
       <td>Velocidad de transferencia</td>
       <td>float64</td>
-      <td>707</td>
+      <td>1101</td>
       <td>0</td>
-      <td>398</td>
+      <td>149</td>
     </tr>
     <tr>
       <td>day_of_week</td>
       <td>Día de la semana</td>
       <td>object</td>
-      <td>707</td>
+      <td>1101</td>
       <td>0</td>
       <td>7</td>
     </tr>
@@ -859,7 +1917,7 @@
       <td>time_slot</td>
       <td>Franja horaria</td>
       <td>object</td>
-      <td>707</td>
+      <td>1101</td>
       <td>0</td>
       <td>4</td>
     </tr>
@@ -867,15 +1925,15 @@
       <td>created_at</td>
       <td>Fecha de creación</td>
       <td>datetime64[ns]</td>
-      <td>707</td>
+      <td>1101</td>
       <td>0</td>
-      <td>704</td>
+      <td>1047</td>
     </tr>
     <tr>
       <td>created_hour</td>
       <td>Hora de creación</td>
       <td>int32</td>
-      <td>707</td>
+      <td>1101</td>
       <td>0</td>
       <td>16</td>
     </tr>
@@ -883,63 +1941,119 @@
       <td>hourly_arrival_count</td>
       <td>Sin descripción</td>
       <td>int64</td>
-      <td>707</td>
+      <td>1101</td>
       <td>0</td>
-      <td>20</td>
+      <td>10</td>
     </tr>
     <tr>
       <td>hourly_capacity</td>
       <td>Sin descripción</td>
       <td>int64</td>
-      <td>707</td>
+      <td>1101</td>
       <td>0</td>
-      <td>1</td>
+      <td>74</td>
     </tr>
     <tr>
-      <td>congestion_factor</td>
+      <td>queue_pressure_raw</td>
       <td>Sin descripción</td>
       <td>float64</td>
-      <td>707</td>
+      <td>1101</td>
       <td>0</td>
-      <td>1</td>
+      <td>144</td>
     </tr>
     <tr>
       <td>queue_pressure</td>
       <td>Sin descripción</td>
       <td>float64</td>
-      <td>707</td>
+      <td>1101</td>
       <td>0</td>
-      <td>75</td>
+      <td>144</td>
+    </tr>
+    <tr>
+      <td>congestion_factor</td>
+      <td>Sin descripción</td>
+      <td>float64</td>
+      <td>1101</td>
+      <td>0</td>
+      <td>81</td>
     </tr>
     <tr>
       <td>content_hash</td>
       <td>Hash completo del contenido si está habilitado</td>
-      <td>float64</td>
+      <td>object</td>
+      <td>1101</td>
       <td>0</td>
-      <td>707</td>
-      <td>0</td>
+      <td>1047</td>
     </tr>
     <tr>
       <td>hash_head</td>
       <td>Hash inicial</td>
       <td>object</td>
-      <td>707</td>
+      <td>1101</td>
       <td>0</td>
-      <td>707</td>
+      <td>1047</td>
     </tr>
     <tr>
       <td>hash_tail</td>
       <td>Hash final</td>
       <td>object</td>
-      <td>707</td>
+      <td>1101</td>
       <td>0</td>
-      <td>707</td>
+      <td>1047</td>
+    </tr>
+    <tr>
+      <td>error_probability</td>
+      <td>Sin descripción</td>
+      <td>float64</td>
+      <td>1101</td>
+      <td>0</td>
+      <td>46</td>
+    </tr>
+    <tr>
+      <td>error_probability_multiplier</td>
+      <td>Sin descripción</td>
+      <td>float64</td>
+      <td>1101</td>
+      <td>0</td>
+      <td>7</td>
+    </tr>
+    <tr>
+      <td>case_type</td>
+      <td>Tipo de caso asociado</td>
+      <td>object</td>
+      <td>1101</td>
+      <td>0</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <td>case_group</td>
+      <td>Grupo de casos</td>
+      <td>object</td>
+      <td>1101</td>
+      <td>0</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td>error_family</td>
+      <td>Sin descripción</td>
+      <td>object</td>
+      <td>13</td>
+      <td>1088</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>error_type</td>
+      <td>Sin descripción</td>
+      <td>object</td>
+      <td>13</td>
+      <td>1088</td>
+      <td>3</td>
     </tr>
     <tr>
       <td>error_duplicado</td>
       <td>Error por duplicado</td>
       <td>int64</td>
-      <td>707</td>
+      <td>1101</td>
       <td>0</td>
       <td>2</td>
     </tr>
@@ -947,31 +2061,31 @@
       <td>error_orphan</td>
       <td>Error de archivo huérfano</td>
       <td>int64</td>
-      <td>707</td>
+      <td>1101</td>
       <td>0</td>
-      <td>2</td>
+      <td>1</td>
     </tr>
     <tr>
       <td>error_null</td>
       <td>Error por datos nulos</td>
       <td>int64</td>
-      <td>707</td>
+      <td>1101</td>
       <td>0</td>
-      <td>1</td>
+      <td>2</td>
     </tr>
     <tr>
       <td>error_blob_timeout</td>
       <td>Error por timeout</td>
       <td>int64</td>
-      <td>707</td>
+      <td>1101</td>
       <td>0</td>
-      <td>2</td>
+      <td>1</td>
     </tr>
     <tr>
       <td>has_error</td>
       <td>Indicador de error</td>
       <td>int64</td>
-      <td>707</td>
+      <td>1101</td>
       <td>0</td>
       <td>2</td>
     </tr>
@@ -979,7 +2093,7 @@
       <td>is_duplicate</td>
       <td>Indicador de duplicado</td>
       <td>int64</td>
-      <td>707</td>
+      <td>1101</td>
       <td>0</td>
       <td>2</td>
     </tr>
@@ -987,7 +2101,47 @@
       <td>severity</td>
       <td>Severidad del error</td>
       <td>float64</td>
-      <td>707</td>
+      <td>1101</td>
+      <td>0</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>retry_count</td>
+      <td>Sin descripción</td>
+      <td>int64</td>
+      <td>1101</td>
+      <td>0</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td>retry_success</td>
+      <td>Sin descripción</td>
+      <td>int64</td>
+      <td>1101</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>retry_delay_sec</td>
+      <td>Sin descripción</td>
+      <td>float64</td>
+      <td>1101</td>
+      <td>0</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td>retry_cost</td>
+      <td>Sin descripción</td>
+      <td>float64</td>
+      <td>1101</td>
+      <td>0</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td>error_penalty_cost</td>
+      <td>Sin descripción</td>
+      <td>float64</td>
+      <td>1101</td>
       <td>0</td>
       <td>2</td>
     </tr>
@@ -995,31 +2149,119 @@
       <td>storage_cost</td>
       <td>Costo de almacenamiento</td>
       <td>float64</td>
-      <td>707</td>
+      <td>1101</td>
       <td>0</td>
-      <td>416</td>
+      <td>121</td>
+    </tr>
+    <tr>
+      <td>total_operational_cost</td>
+      <td>Sin descripción</td>
+      <td>float64</td>
+      <td>1101</td>
+      <td>0</td>
+      <td>122</td>
+    </tr>
+    <tr>
+      <td>has_incident</td>
+      <td>Sin descripción</td>
+      <td>int64</td>
+      <td>1101</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>incident_type</td>
+      <td>Sin descripción</td>
+      <td>float64</td>
+      <td>0</td>
+      <td>1101</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>metadata_quality_score</td>
+      <td>Sin descripción</td>
+      <td>float64</td>
+      <td>1101</td>
+      <td>0</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>missing_metadata</td>
+      <td>Sin descripción</td>
+      <td>int64</td>
+      <td>1101</td>
+      <td>0</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>wrong_extension</td>
+      <td>Sin descripción</td>
+      <td>int64</td>
+      <td>1101</td>
+      <td>0</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>empty_file</td>
+      <td>Sin descripción</td>
+      <td>int64</td>
+      <td>1101</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>invalid_timestamp</td>
+      <td>Sin descripción</td>
+      <td>int64</td>
+      <td>1101</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>malformed_json</td>
+      <td>Sin descripción</td>
+      <td>int64</td>
+      <td>1101</td>
+      <td>0</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>unknown_content_type</td>
+      <td>Sin descripción</td>
+      <td>int64</td>
+      <td>1101</td>
+      <td>0</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>storage_policy_noise_applied</td>
+      <td>Sin descripción</td>
+      <td>int64</td>
+      <td>1101</td>
+      <td>0</td>
+      <td>2</td>
     </tr>
     <tr>
       <td>source_file</td>
       <td>Archivo CSV origen del registro</td>
       <td>object</td>
-      <td>707</td>
+      <td>1101</td>
       <td>0</td>
-      <td>7</td>
+      <td>32</td>
     </tr>
     <tr>
       <td>source_path</td>
       <td>Sin descripción</td>
       <td>object</td>
-      <td>707</td>
+      <td>1101</td>
       <td>0</td>
-      <td>7</td>
+      <td>32</td>
     </tr>
     <tr>
       <td>scenario_name</td>
       <td>Sin descripción</td>
       <td>object</td>
-      <td>707</td>
+      <td>1101</td>
       <td>0</td>
       <td>1</td>
     </tr>
@@ -1027,25 +2269,25 @@
       <td>created_date</td>
       <td>Fecha derivada desde created_at</td>
       <td>object</td>
-      <td>707</td>
+      <td>1101</td>
       <td>0</td>
-      <td>7</td>
+      <td>31</td>
     </tr>
     <tr>
       <td>simulation_datetime</td>
       <td>Fecha-hora lógica reconstruida desde simulation_date y created_hour</td>
       <td>datetime64[ns]</td>
-      <td>707</td>
+      <td>1101</td>
       <td>0</td>
-      <td>109</td>
+      <td>400</td>
     </tr>
     <tr>
       <td>size_range</td>
       <td>Rango de tamaño calculado desde size_mb</td>
       <td>category</td>
-      <td>707</td>
+      <td>1101</td>
       <td>0</td>
-      <td>5</td>
+      <td>4</td>
     </tr>
   </tbody>
 </table>
@@ -1072,7 +2314,7 @@
       <td>file_id</td>
       <td>0</td>
       <td>0.0</td>
-      <td>707</td>
+      <td>1047</td>
       <td>HIGH_CARDINALITY, IDENTIFIER</td>
       <td>WARNING</td>
     </tr>
@@ -1080,7 +2322,7 @@
       <td>run_id</td>
       <td>0</td>
       <td>0.0</td>
-      <td>7</td>
+      <td>31</td>
       <td>OK</td>
       <td>OK</td>
     </tr>
@@ -1088,7 +2330,7 @@
       <td>simulation_date</td>
       <td>0</td>
       <td>0.0</td>
-      <td>7</td>
+      <td>31</td>
       <td>OK</td>
       <td>OK</td>
     </tr>
@@ -1096,7 +2338,7 @@
       <td>weekday_base_load</td>
       <td>0</td>
       <td>0.0</td>
-      <td>6</td>
+      <td>7</td>
       <td>OK</td>
       <td>OK</td>
     </tr>
@@ -1104,23 +2346,7 @@
       <td>sequence</td>
       <td>0</td>
       <td>0.0</td>
-      <td>154</td>
-      <td>OK</td>
-      <td>OK</td>
-    </tr>
-    <tr>
-      <td>case_type</td>
-      <td>0</td>
-      <td>0.0</td>
-      <td>5</td>
-      <td>OK</td>
-      <td>OK</td>
-    </tr>
-    <tr>
-      <td>case_group</td>
-      <td>0</td>
-      <td>0.0</td>
-      <td>4</td>
+      <td>54</td>
       <td>OK</td>
       <td>OK</td>
     </tr>
@@ -1136,7 +2362,23 @@
       <td>size_mb</td>
       <td>0</td>
       <td>0.0</td>
-      <td>416</td>
+      <td>154</td>
+      <td>OK</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>storage_tier_original</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>3</td>
+      <td>OK</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>storage_tier_final</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>3</td>
       <td>OK</td>
       <td>OK</td>
     </tr>
@@ -1152,7 +2394,7 @@
       <td>days_stored</td>
       <td>0</td>
       <td>0.0</td>
-      <td>164</td>
+      <td>97</td>
       <td>OK</td>
       <td>OK</td>
     </tr>
@@ -1160,7 +2402,7 @@
       <td>days_since_last_access</td>
       <td>0</td>
       <td>0.0</td>
-      <td>119</td>
+      <td>85</td>
       <td>OK</td>
       <td>OK</td>
     </tr>
@@ -1176,7 +2418,7 @@
       <td>transfer_duration_sec</td>
       <td>0</td>
       <td>0.0</td>
-      <td>707</td>
+      <td>154</td>
       <td>OK</td>
       <td>OK</td>
     </tr>
@@ -1184,7 +2426,7 @@
       <td>transfer_speed_mbps</td>
       <td>0</td>
       <td>0.0</td>
-      <td>398</td>
+      <td>149</td>
       <td>OK</td>
       <td>OK</td>
     </tr>
@@ -1208,7 +2450,7 @@
       <td>created_at</td>
       <td>0</td>
       <td>0.0</td>
-      <td>704</td>
+      <td>1047</td>
       <td>OK</td>
       <td>OK</td>
     </tr>
@@ -1224,7 +2466,7 @@
       <td>hourly_arrival_count</td>
       <td>0</td>
       <td>0.0</td>
-      <td>20</td>
+      <td>10</td>
       <td>OK</td>
       <td>OK</td>
     </tr>
@@ -1232,39 +2474,47 @@
       <td>hourly_capacity</td>
       <td>0</td>
       <td>0.0</td>
-      <td>1</td>
-      <td>CONSTANT</td>
-      <td>CRITICAL</td>
+      <td>74</td>
+      <td>OK</td>
+      <td>OK</td>
     </tr>
     <tr>
-      <td>congestion_factor</td>
+      <td>queue_pressure_raw</td>
       <td>0</td>
       <td>0.0</td>
-      <td>1</td>
-      <td>CONSTANT, DERIVED</td>
-      <td>CRITICAL</td>
+      <td>144</td>
+      <td>OK</td>
+      <td>OK</td>
     </tr>
     <tr>
       <td>queue_pressure</td>
       <td>0</td>
       <td>0.0</td>
-      <td>75</td>
+      <td>144</td>
+      <td>DERIVED</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>congestion_factor</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>81</td>
       <td>DERIVED</td>
       <td>OK</td>
     </tr>
     <tr>
       <td>content_hash</td>
-      <td>707</td>
-      <td>100.0</td>
       <td>0</td>
-      <td>HIGH_NULLS, CONSTANT</td>
-      <td>CRITICAL</td>
+      <td>0.0</td>
+      <td>1047</td>
+      <td>HIGH_CARDINALITY</td>
+      <td>WARNING</td>
     </tr>
     <tr>
       <td>hash_head</td>
       <td>0</td>
       <td>0.0</td>
-      <td>707</td>
+      <td>1047</td>
       <td>HIGH_CARDINALITY, IDENTIFIER</td>
       <td>WARNING</td>
     </tr>
@@ -1272,9 +2522,57 @@
       <td>hash_tail</td>
       <td>0</td>
       <td>0.0</td>
-      <td>707</td>
+      <td>1047</td>
       <td>HIGH_CARDINALITY, IDENTIFIER</td>
       <td>WARNING</td>
+    </tr>
+    <tr>
+      <td>error_probability</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>46</td>
+      <td>ERROR_COMPONENT</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>error_probability_multiplier</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>7</td>
+      <td>ERROR_COMPONENT</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>case_type</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>4</td>
+      <td>OK</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>case_group</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>3</td>
+      <td>OK</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>error_family</td>
+      <td>1088</td>
+      <td>98.8193</td>
+      <td>2</td>
+      <td>HIGH_NULLS, ERROR_COMPONENT</td>
+      <td>CRITICAL</td>
+    </tr>
+    <tr>
+      <td>error_type</td>
+      <td>1088</td>
+      <td>98.8193</td>
+      <td>3</td>
+      <td>HIGH_NULLS, ERROR_COMPONENT</td>
+      <td>CRITICAL</td>
     </tr>
     <tr>
       <td>error_duplicado</td>
@@ -1288,25 +2586,25 @@
       <td>error_orphan</td>
       <td>0</td>
       <td>0.0</td>
-      <td>2</td>
-      <td>ERROR_COMPONENT</td>
-      <td>OK</td>
-    </tr>
-    <tr>
-      <td>error_null</td>
-      <td>0</td>
-      <td>0.0</td>
       <td>1</td>
       <td>CONSTANT, ERROR_COMPONENT</td>
       <td>CRITICAL</td>
     </tr>
     <tr>
-      <td>error_blob_timeout</td>
+      <td>error_null</td>
       <td>0</td>
       <td>0.0</td>
       <td>2</td>
       <td>ERROR_COMPONENT</td>
       <td>OK</td>
+    </tr>
+    <tr>
+      <td>error_blob_timeout</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>1</td>
+      <td>CONSTANT, ERROR_COMPONENT</td>
+      <td>CRITICAL</td>
     </tr>
     <tr>
       <td>has_error</td>
@@ -1333,10 +2631,138 @@
       <td>OK</td>
     </tr>
     <tr>
+      <td>retry_count</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>3</td>
+      <td>OK</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>retry_success</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>1</td>
+      <td>CONSTANT</td>
+      <td>CRITICAL</td>
+    </tr>
+    <tr>
+      <td>retry_delay_sec</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>3</td>
+      <td>OK</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>retry_cost</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>3</td>
+      <td>OK</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>error_penalty_cost</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>2</td>
+      <td>ERROR_COMPONENT</td>
+      <td>OK</td>
+    </tr>
+    <tr>
       <td>storage_cost</td>
       <td>0</td>
       <td>0.0</td>
-      <td>416</td>
+      <td>121</td>
+      <td>OK</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>total_operational_cost</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>122</td>
+      <td>OK</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>has_incident</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>1</td>
+      <td>CONSTANT</td>
+      <td>CRITICAL</td>
+    </tr>
+    <tr>
+      <td>incident_type</td>
+      <td>1101</td>
+      <td>100.0</td>
+      <td>0</td>
+      <td>HIGH_NULLS, CONSTANT</td>
+      <td>CRITICAL</td>
+    </tr>
+    <tr>
+      <td>metadata_quality_score</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>2</td>
+      <td>OK</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>missing_metadata</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>2</td>
+      <td>OK</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>wrong_extension</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>2</td>
+      <td>OK</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>empty_file</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>1</td>
+      <td>CONSTANT</td>
+      <td>CRITICAL</td>
+    </tr>
+    <tr>
+      <td>invalid_timestamp</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>1</td>
+      <td>CONSTANT</td>
+      <td>CRITICAL</td>
+    </tr>
+    <tr>
+      <td>malformed_json</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>2</td>
+      <td>OK</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>unknown_content_type</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>2</td>
+      <td>OK</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>storage_policy_noise_applied</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>2</td>
       <td>OK</td>
       <td>OK</td>
     </tr>
@@ -1344,7 +2770,7 @@
       <td>source_file</td>
       <td>0</td>
       <td>0.0</td>
-      <td>7</td>
+      <td>32</td>
       <td>OK</td>
       <td>OK</td>
     </tr>
@@ -1352,7 +2778,7 @@
       <td>source_path</td>
       <td>0</td>
       <td>0.0</td>
-      <td>7</td>
+      <td>32</td>
       <td>OK</td>
       <td>OK</td>
     </tr>
@@ -1368,7 +2794,7 @@
       <td>created_date</td>
       <td>0</td>
       <td>0.0</td>
-      <td>7</td>
+      <td>31</td>
       <td>OK</td>
       <td>OK</td>
     </tr>
@@ -1376,7 +2802,7 @@
       <td>simulation_datetime</td>
       <td>0</td>
       <td>0.0</td>
-      <td>109</td>
+      <td>400</td>
       <td>OK</td>
       <td>OK</td>
     </tr>
@@ -1384,7 +2810,7 @@
       <td>size_range</td>
       <td>0</td>
       <td>0.0</td>
-      <td>5</td>
+      <td>4</td>
       <td>DERIVED</td>
       <td>OK</td>
     </tr>
@@ -1430,48 +2856,48 @@
     <tr>
       <td>size_mb</td>
       <td>continua</td>
-      <td>707</td>
-      <td>36.5238</td>
-      <td>5.0505</td>
-      <td>93.1612</td>
-      <td>0.2371</td>
-      <td>1500.0</td>
-      <td>1.0732</td>
-      <td>21.5566</td>
-      <td>110.3312</td>
-      <td>190.6234</td>
-      <td>368.102</td>
-      <td>1499.7629</td>
-      <td>20.4834</td>
-      <td>2.5507</td>
-      <td>7.5149</td>
-      <td>93.7488</td>
+      <td>1101</td>
+      <td>15.7749</td>
+      <td>4.569</td>
+      <td>41.0453</td>
+      <td>0.355</td>
+      <td>273.5259</td>
+      <td>0.7621</td>
+      <td>8.2799</td>
+      <td>40.9599</td>
+      <td>77.6116</td>
+      <td>273.5259</td>
+      <td>273.1709</td>
+      <td>7.5177</td>
+      <td>2.6019</td>
+      <td>4.6611</td>
+      <td>23.3768</td>
       <td>alta</td>
       <td>heavy_tail</td>
       <td>medium_scale</td>
-      <td>17.5389</td>
+      <td>12.1708</td>
       <td>alto</td>
       <td>NEEDS_LOG</td>
     </tr>
     <tr>
       <td>days_stored</td>
       <td>continua</td>
-      <td>707</td>
-      <td>90.8614</td>
-      <td>93.0</td>
-      <td>52.1009</td>
+      <td>1101</td>
+      <td>95.5967</td>
+      <td>98.0</td>
+      <td>54.6303</td>
       <td>1.0</td>
       <td>180.0</td>
-      <td>47.0</td>
-      <td>136.0</td>
-      <td>161.0</td>
-      <td>171.0</td>
+      <td>44.0</td>
+      <td>146.0</td>
+      <td>166.0</td>
+      <td>175.0</td>
+      <td>180.0</td>
       <td>179.0</td>
-      <td>179.0</td>
-      <td>89.0</td>
-      <td>0.5734</td>
-      <td>-0.0559</td>
-      <td>-1.176</td>
+      <td>102.0</td>
+      <td>0.5715</td>
+      <td>-0.1177</td>
+      <td>-1.2618</td>
       <td>simetrica</td>
       <td>aprox_normal</td>
       <td>medium_scale</td>
@@ -1482,100 +2908,100 @@
     <tr>
       <td>days_since_last_access</td>
       <td>continua</td>
-      <td>707</td>
-      <td>47.5219</td>
-      <td>41.0</td>
-      <td>37.2591</td>
+      <td>1101</td>
+      <td>46.356</td>
+      <td>39.0</td>
+      <td>36.8711</td>
       <td>0.0</td>
-      <td>151.0</td>
-      <td>12.0</td>
-      <td>74.0</td>
-      <td>100.0</td>
-      <td>115.0</td>
-      <td>141.94</td>
-      <td>151.0</td>
+      <td>172.0</td>
+      <td>15.0</td>
+      <td>77.0</td>
+      <td>99.0</td>
+      <td>112.0</td>
+      <td>143.0</td>
+      <td>172.0</td>
       <td>62.0</td>
-      <td>0.784</td>
-      <td>0.5547</td>
-      <td>-0.6261</td>
+      <td>0.7954</td>
+      <td>0.6406</td>
+      <td>-0.3183</td>
       <td>moderada</td>
       <td>skewed</td>
       <td>medium_scale</td>
-      <td>0.0</td>
+      <td>0.3633</td>
       <td>bajo</td>
       <td>OK</td>
     </tr>
     <tr>
       <td>transfer_duration_sec</td>
       <td>continua</td>
-      <td>707</td>
-      <td>8.7259</td>
-      <td>1.18</td>
-      <td>28.0891</td>
-      <td>0.1205</td>
-      <td>426.632</td>
-      <td>0.411</td>
-      <td>5.3217</td>
-      <td>20.3184</td>
-      <td>37.2026</td>
-      <td>133.173</td>
-      <td>426.5115</td>
-      <td>4.9106</td>
-      <td>3.219</td>
-      <td>8.3652</td>
-      <td>93.0669</td>
+      <td>1101</td>
+      <td>2.383</td>
+      <td>0.7152</td>
+      <td>6.7575</td>
+      <td>0.1058</td>
+      <td>58.3609</td>
+      <td>0.3343</td>
+      <td>1.3595</td>
+      <td>4.288</td>
+      <td>7.8842</td>
+      <td>40.7434</td>
+      <td>58.2551</td>
+      <td>1.0253</td>
+      <td>2.8357</td>
+      <td>5.4519</td>
+      <td>32.1018</td>
       <td>alta</td>
       <td>heavy_tail</td>
-      <td>medium_scale</td>
-      <td>15.8416</td>
+      <td>small_scale</td>
+      <td>11.6258</td>
       <td>alto</td>
       <td>NEEDS_LOG</td>
     </tr>
     <tr>
       <td>transfer_speed_mbps</td>
       <td>continua</td>
-      <td>707</td>
-      <td>54.0878</td>
-      <td>45.4159</td>
-      <td>32.0811</td>
-      <td>9.4085</td>
-      <td>183.5294</td>
-      <td>30.8309</td>
-      <td>67.223</td>
-      <td>102.7372</td>
-      <td>119.8016</td>
-      <td>162.9876</td>
-      <td>174.1209</td>
-      <td>36.3921</td>
-      <td>0.5931</td>
-      <td>1.2979</td>
-      <td>1.6889</td>
+      <td>1101</td>
+      <td>82.4753</td>
+      <td>75.516</td>
+      <td>31.7719</td>
+      <td>28.818</td>
+      <td>224.2198</td>
+      <td>60.4607</td>
+      <td>92.6572</td>
+      <td>129.5695</td>
+      <td>149.2223</td>
+      <td>177.8937</td>
+      <td>195.4019</td>
+      <td>32.1965</td>
+      <td>0.3852</td>
+      <td>1.2055</td>
+      <td>1.9134</td>
       <td>alta</td>
       <td>log_normal_candidate</td>
       <td>medium_scale</td>
-      <td>3.5361</td>
-      <td>moderado</td>
+      <td>5.9946</td>
+      <td>alto</td>
       <td>NEEDS_LOG</td>
     </tr>
     <tr>
       <td>created_hour</td>
       <td>discreta</td>
-      <td>707</td>
-      <td>13.2786</td>
+      <td>1101</td>
+      <td>12.2861</td>
       <td>14.0</td>
-      <td>5.3952</td>
+      <td>5.6821</td>
       <td>1.0</td>
       <td>22.0</td>
       <td>9.0</td>
-      <td>16.0</td>
-      <td>21.0</td>
+      <td>15.0</td>
+      <td>20.0</td>
       <td>21.0</td>
       <td>22.0</td>
       <td>21.0</td>
-      <td>7.0</td>
-      <td>0.4063</td>
-      <td>-0.413</td>
-      <td>-0.3833</td>
+      <td>6.0</td>
+      <td>0.4625</td>
+      <td>-0.3747</td>
+      <td>-0.6062</td>
       <td>simetrica</td>
       <td>aprox_normal</td>
       <td>medium_scale</td>
@@ -1586,132 +3012,132 @@
     <tr>
       <td>storage_cost</td>
       <td>continua</td>
-      <td>707</td>
-      <td>0.0012</td>
-      <td>0.0001</td>
-      <td>0.0038</td>
-      <td>0.0</td>
-      <td>0.0536</td>
-      <td>0.0</td>
-      <td>0.0007</td>
-      <td>0.0038</td>
-      <td>0.0066</td>
-      <td>0.0122</td>
-      <td>0.0535</td>
+      <td>1101</td>
       <td>0.0006</td>
-      <td>3.0598</td>
-      <td>7.8584</td>
-      <td>83.4672</td>
+      <td>0.0001</td>
+      <td>0.0019</td>
+      <td>0.0</td>
+      <td>0.0131</td>
+      <td>0.0</td>
+      <td>0.0003</td>
+      <td>0.0011</td>
+      <td>0.0051</td>
+      <td>0.0131</td>
+      <td>0.0131</td>
+      <td>0.0003</td>
+      <td>2.9824</td>
+      <td>4.7591</td>
+      <td>24.2905</td>
       <td>alta</td>
       <td>heavy_tail</td>
       <td>small_scale</td>
-      <td>14.9929</td>
+      <td>13.3515</td>
       <td>alto</td>
       <td>NEEDS_LOG</td>
     </tr>
     <tr>
       <td>hourly_arrival_count</td>
       <td>discreta</td>
-      <td>707</td>
-      <td>11.0736</td>
-      <td>9.0</td>
-      <td>7.6603</td>
+      <td>1101</td>
+      <td>4.0318</td>
+      <td>3.0</td>
+      <td>2.5708</td>
       <td>1.0</td>
-      <td>33.0</td>
+      <td>10.0</td>
+      <td>2.0</td>
       <td>6.0</td>
-      <td>14.0</td>
-      <td>22.0</td>
-      <td>23.0</td>
-      <td>33.0</td>
-      <td>32.0</td>
       <td>8.0</td>
-      <td>0.6918</td>
-      <td>1.1915</td>
-      <td>0.996</td>
-      <td>alta</td>
-      <td>log_normal_candidate</td>
-      <td>medium_scale</td>
-      <td>4.6676</td>
-      <td>moderado</td>
-      <td>NEEDS_LOG</td>
-    </tr>
-    <tr>
-      <td>hourly_capacity</td>
-      <td>binaria</td>
-      <td>707</td>
-      <td>300.0</td>
-      <td>300.0</td>
-      <td>0.0</td>
-      <td>300.0</td>
-      <td>300.0</td>
-      <td>300.0</td>
-      <td>300.0</td>
-      <td>300.0</td>
-      <td>300.0</td>
-      <td>300.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>simetrica</td>
-      <td>aprox_normal</td>
+      <td>10.0</td>
+      <td>10.0</td>
+      <td>9.0</td>
+      <td>4.0</td>
+      <td>0.6376</td>
+      <td>0.8942</td>
+      <td>-0.256</td>
+      <td>moderada</td>
+      <td>skewed</td>
       <td>medium_scale</td>
       <td>0.0</td>
       <td>bajo</td>
-      <td>CONSTANT</td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>hourly_capacity</td>
+      <td>continua</td>
+      <td>1101</td>
+      <td>301.8365</td>
+      <td>301.0</td>
+      <td>23.7183</td>
+      <td>237.0</td>
+      <td>370.0</td>
+      <td>284.0</td>
+      <td>316.0</td>
+      <td>338.0</td>
+      <td>341.0</td>
+      <td>358.0</td>
+      <td>133.0</td>
+      <td>32.0</td>
+      <td>0.0786</td>
+      <td>0.1636</td>
+      <td>-0.1298</td>
+      <td>simetrica</td>
+      <td>aprox_normal</td>
+      <td>medium_scale</td>
+      <td>0.8174</td>
+      <td>bajo</td>
+      <td>OK</td>
     </tr>
     <tr>
       <td>queue_pressure</td>
       <td>continua</td>
-      <td>707</td>
-      <td>0.0378</td>
-      <td>0.0314</td>
-      <td>0.0267</td>
-      <td>0.0032</td>
-      <td>0.1175</td>
-      <td>0.019</td>
-      <td>0.0463</td>
-      <td>0.0762</td>
-      <td>0.0775</td>
-      <td>0.1175</td>
-      <td>0.1143</td>
-      <td>0.0273</td>
-      <td>0.7069</td>
-      <td>1.3292</td>
-      <td>1.5048</td>
+      <td>1101</td>
+      <td>0.014</td>
+      <td>0.01</td>
+      <td>0.0103</td>
+      <td>0.0028</td>
+      <td>0.0863</td>
+      <td>0.0065</td>
+      <td>0.0197</td>
+      <td>0.0288</td>
+      <td>0.0317</td>
+      <td>0.0382</td>
+      <td>0.0835</td>
+      <td>0.0131</td>
+      <td>0.7363</td>
+      <td>2.0471</td>
+      <td>8.3795</td>
       <td>alta</td>
       <td>log_normal_candidate</td>
       <td>small_scale</td>
-      <td>4.6676</td>
-      <td>moderado</td>
+      <td>0.8174</td>
+      <td>bajo</td>
       <td>NEEDS_LOG</td>
     </tr>
     <tr>
       <td>congestion_factor</td>
-      <td>binaria</td>
-      <td>707</td>
+      <td>continua</td>
+      <td>1101</td>
+      <td>1.0134</td>
+      <td>1.0052</td>
+      <td>0.0182</td>
       <td>1.0</td>
+      <td>1.0792</td>
       <td>1.0</td>
-      <td>0.0</td>
-      <td>1.0</td>
-      <td>1.0</td>
-      <td>1.0</td>
-      <td>1.0</td>
-      <td>1.0</td>
-      <td>1.0</td>
-      <td>1.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>simetrica</td>
-      <td>aprox_normal</td>
+      <td>1.0228</td>
+      <td>1.0417</td>
+      <td>1.05</td>
+      <td>1.0744</td>
+      <td>0.0792</td>
+      <td>0.0228</td>
+      <td>0.0179</td>
+      <td>1.5247</td>
+      <td>1.8001</td>
+      <td>alta</td>
+      <td>log_normal_candidate</td>
       <td>medium_scale</td>
-      <td>0.0</td>
-      <td>bajo</td>
-      <td>CONSTANT</td>
+      <td>3.3606</td>
+      <td>moderado</td>
+      <td>NEEDS_LOG</td>
     </tr>
   </tbody>
 </table>
@@ -1738,15 +3164,15 @@
       <td>file_type</td>
       <td>4</td>
       <td>jpg</td>
-      <td>31.8246</td>
+      <td>32.3342</td>
       <td>baja</td>
       <td>dummy</td>
     </tr>
     <tr>
       <td>storage_tier</td>
       <td>3</td>
-      <td>cool</td>
-      <td>44.9788</td>
+      <td>hot</td>
+      <td>42.3252</td>
       <td>baja</td>
       <td>dummy</td>
     </tr>
@@ -1754,7 +3180,7 @@
       <td>has_error</td>
       <td>2</td>
       <td>0</td>
-      <td>98.3027</td>
+      <td>98.8193</td>
       <td>baja</td>
       <td>excluir</td>
     </tr>
@@ -1762,7 +3188,7 @@
       <td>severity</td>
       <td>2</td>
       <td>0.0</td>
-      <td>98.3027</td>
+      <td>98.8193</td>
       <td>baja</td>
       <td>excluir</td>
     </tr>
@@ -1794,24 +3220,24 @@
   <tbody>
     <tr>
       <td>size_mb</td>
-      <td>1.0732</td>
-      <td>21.5566</td>
-      <td>20.4834</td>
-      <td>-29.6518</td>
-      <td>52.2816</td>
-      <td>124</td>
-      <td>17.5389</td>
+      <td>0.7621</td>
+      <td>8.2799</td>
+      <td>7.5177</td>
+      <td>-10.5145</td>
+      <td>19.5565</td>
+      <td>134</td>
+      <td>12.1708</td>
       <td>alto</td>
       <td>TRANSFORM</td>
       <td>No eliminar automaticamente; revisar si representa comportamiento real del sistema.</td>
     </tr>
     <tr>
       <td>days_stored</td>
-      <td>47.0</td>
-      <td>136.0</td>
-      <td>89.0</td>
-      <td>-86.5</td>
-      <td>269.5</td>
+      <td>44.0</td>
+      <td>146.0</td>
+      <td>102.0</td>
+      <td>-109.0</td>
+      <td>299.0</td>
       <td>0</td>
       <td>0.0</td>
       <td>bajo</td>
@@ -1820,50 +3246,50 @@
     </tr>
     <tr>
       <td>days_since_last_access</td>
-      <td>12.0</td>
-      <td>74.0</td>
+      <td>15.0</td>
+      <td>77.0</td>
       <td>62.0</td>
-      <td>-81.0</td>
-      <td>167.0</td>
-      <td>0</td>
-      <td>0.0</td>
+      <td>-78.0</td>
+      <td>170.0</td>
+      <td>4</td>
+      <td>0.3633</td>
       <td>bajo</td>
       <td>KEEP</td>
       <td>No eliminar automaticamente; revisar si representa comportamiento real del sistema.</td>
     </tr>
     <tr>
       <td>transfer_duration_sec</td>
-      <td>0.411</td>
-      <td>5.3217</td>
-      <td>4.9106</td>
-      <td>-6.9549</td>
-      <td>12.6876</td>
-      <td>112</td>
-      <td>15.8416</td>
+      <td>0.3343</td>
+      <td>1.3595</td>
+      <td>1.0253</td>
+      <td>-1.2036</td>
+      <td>2.8974</td>
+      <td>128</td>
+      <td>11.6258</td>
       <td>alto</td>
       <td>TRANSFORM</td>
       <td>No eliminar automaticamente; revisar si representa comportamiento real del sistema.</td>
     </tr>
     <tr>
       <td>transfer_speed_mbps</td>
-      <td>30.8309</td>
-      <td>67.223</td>
-      <td>36.3921</td>
-      <td>-23.7573</td>
-      <td>121.8112</td>
-      <td>25</td>
-      <td>3.5361</td>
-      <td>moderado</td>
+      <td>60.4607</td>
+      <td>92.6572</td>
+      <td>32.1965</td>
+      <td>12.166</td>
+      <td>140.9519</td>
+      <td>66</td>
+      <td>5.9946</td>
+      <td>alto</td>
       <td>TRANSFORM</td>
       <td>No eliminar automaticamente; revisar si representa comportamiento real del sistema.</td>
     </tr>
     <tr>
       <td>created_hour</td>
       <td>9.0</td>
-      <td>16.0</td>
-      <td>7.0</td>
-      <td>-1.5</td>
-      <td>26.5</td>
+      <td>15.0</td>
+      <td>6.0</td>
+      <td>0.0</td>
+      <td>24.0</td>
       <td>0</td>
       <td>0.0</td>
       <td>bajo</td>
@@ -1873,66 +3299,66 @@
     <tr>
       <td>storage_cost</td>
       <td>0.0</td>
+      <td>0.0003</td>
+      <td>0.0003</td>
+      <td>-0.0004</td>
       <td>0.0007</td>
-      <td>0.0006</td>
-      <td>-0.0009</td>
-      <td>0.0016</td>
-      <td>106</td>
-      <td>14.9929</td>
+      <td>147</td>
+      <td>13.3515</td>
       <td>alto</td>
       <td>TRANSFORM</td>
       <td>No eliminar automaticamente; revisar si representa comportamiento real del sistema.</td>
     </tr>
     <tr>
       <td>hourly_arrival_count</td>
+      <td>2.0</td>
       <td>6.0</td>
-      <td>14.0</td>
-      <td>8.0</td>
-      <td>-6.0</td>
-      <td>26.0</td>
-      <td>33</td>
-      <td>4.6676</td>
-      <td>moderado</td>
-      <td>TRANSFORM</td>
+      <td>4.0</td>
+      <td>-4.0</td>
+      <td>12.0</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>bajo</td>
+      <td>KEEP</td>
       <td>No eliminar automaticamente; revisar si representa comportamiento real del sistema.</td>
     </tr>
     <tr>
       <td>hourly_capacity</td>
-      <td>300.0</td>
-      <td>300.0</td>
-      <td>0.0</td>
-      <td>300.0</td>
-      <td>300.0</td>
-      <td>0</td>
-      <td>0.0</td>
+      <td>284.0</td>
+      <td>316.0</td>
+      <td>32.0</td>
+      <td>236.0</td>
+      <td>364.0</td>
+      <td>9</td>
+      <td>0.8174</td>
       <td>bajo</td>
       <td>KEEP</td>
       <td>No eliminar automaticamente; revisar si representa comportamiento real del sistema.</td>
     </tr>
     <tr>
       <td>queue_pressure</td>
-      <td>0.019</td>
-      <td>0.0463</td>
-      <td>0.0273</td>
-      <td>-0.022</td>
-      <td>0.0873</td>
-      <td>33</td>
-      <td>4.6676</td>
-      <td>moderado</td>
+      <td>0.0065</td>
+      <td>0.0197</td>
+      <td>0.0131</td>
+      <td>-0.0132</td>
+      <td>0.0394</td>
+      <td>9</td>
+      <td>0.8174</td>
+      <td>bajo</td>
       <td>TRANSFORM</td>
       <td>No eliminar automaticamente; revisar si representa comportamiento real del sistema.</td>
     </tr>
     <tr>
       <td>congestion_factor</td>
       <td>1.0</td>
-      <td>1.0</td>
-      <td>0.0</td>
-      <td>1.0</td>
-      <td>1.0</td>
-      <td>0</td>
-      <td>0.0</td>
-      <td>bajo</td>
-      <td>KEEP</td>
+      <td>1.0228</td>
+      <td>0.0228</td>
+      <td>0.9659</td>
+      <td>1.0569</td>
+      <td>37</td>
+      <td>3.3606</td>
+      <td>moderado</td>
+      <td>TRANSFORM</td>
       <td>No eliminar automaticamente; revisar si representa comportamiento real del sistema.</td>
     </tr>
   </tbody>
@@ -2268,46 +3694,40 @@
   </thead>
   <tbody>
     <tr>
-      <td>size_mb presenta asimetría/outliers relevantes (skew=7.51, kurtosis=93.75, outliers=17.54%). Distribución sugerida: heavy_tail. Recomendación: evaluar log1p o transformación robusta.</td>
+      <td>size_mb presenta asimetría/outliers relevantes (skew=4.66, kurtosis=23.38, outliers=12.17%). Distribución sugerida: heavy_tail. Recomendación: evaluar log1p o transformación robusta.</td>
     </tr>
     <tr>
-      <td>transfer_duration_sec presenta asimetría/outliers relevantes (skew=8.37, kurtosis=93.07, outliers=15.84%). Distribución sugerida: heavy_tail. Recomendación: evaluar log1p o transformación robusta.</td>
+      <td>transfer_duration_sec presenta asimetría/outliers relevantes (skew=5.45, kurtosis=32.10, outliers=11.63%). Distribución sugerida: heavy_tail. Recomendación: evaluar log1p o transformación robusta.</td>
     </tr>
     <tr>
-      <td>transfer_speed_mbps presenta asimetría/outliers relevantes (skew=1.30, kurtosis=1.69, outliers=3.54%). Distribución sugerida: log_normal_candidate. Recomendación: evaluar log1p o transformación robusta.</td>
+      <td>transfer_speed_mbps presenta asimetría/outliers relevantes (skew=1.21, kurtosis=1.91, outliers=5.99%). Distribución sugerida: log_normal_candidate. Recomendación: evaluar log1p o transformación robusta.</td>
     </tr>
     <tr>
-      <td>storage_cost presenta asimetría/outliers relevantes (skew=7.86, kurtosis=83.47, outliers=14.99%). Distribución sugerida: heavy_tail. Recomendación: evaluar log1p o transformación robusta.</td>
+      <td>storage_cost presenta asimetría/outliers relevantes (skew=4.76, kurtosis=24.29, outliers=13.35%). Distribución sugerida: heavy_tail. Recomendación: evaluar log1p o transformación robusta.</td>
     </tr>
     <tr>
-      <td>hourly_arrival_count presenta asimetría/outliers relevantes (skew=1.19, kurtosis=1.00, outliers=4.67%). Distribución sugerida: log_normal_candidate. Recomendación: evaluar log1p o transformación robusta.</td>
+      <td>queue_pressure presenta asimetría/outliers relevantes (skew=2.05, kurtosis=8.38, outliers=0.82%). Distribución sugerida: log_normal_candidate. Recomendación: evaluar log1p o transformación robusta.</td>
     </tr>
     <tr>
-      <td>hourly_capacity es constante. Recomendación: excluir del modelamiento.</td>
+      <td>congestion_factor presenta asimetría/outliers relevantes (skew=1.52, kurtosis=1.80, outliers=3.36%). Distribución sugerida: log_normal_candidate. Recomendación: evaluar log1p o transformación robusta.</td>
     </tr>
     <tr>
-      <td>queue_pressure presenta asimetría/outliers relevantes (skew=1.33, kurtosis=1.50, outliers=4.67%). Distribución sugerida: log_normal_candidate. Recomendación: evaluar log1p o transformación robusta.</td>
-    </tr>
-    <tr>
-      <td>congestion_factor es constante. Recomendación: excluir del modelamiento.</td>
-    </tr>
-    <tr>
-      <td>Variables con alto porcentaje de outliers: size_mb, transfer_duration_sec, storage_cost. En simulación Monte Carlo no deben eliminarse automáticamente; primero validar si representan escenarios extremos reales.</td>
+      <td>Variables con alto porcentaje de outliers: size_mb, transfer_duration_sec, transfer_speed_mbps, storage_cost. En simulación Monte Carlo no deben eliminarse automáticamente; primero validar si representan escenarios extremos reales.</td>
     </tr>
     <tr>
       <td>Variables categóricas sugeridas para exclusión: has_error, severity.</td>
     </tr>
     <tr>
-      <td>Variables con problemas críticos de calidad: hourly_capacity, congestion_factor, content_hash, error_null, scenario_name. Requieren exclusión, imputación o revisión de origen.</td>
+      <td>Variables con problemas críticos de calidad: error_family, error_type, error_orphan, error_blob_timeout, retry_success, has_incident, incident_type, empty_file, invalid_timestamp, scenario_name. Requieren exclusión, imputación o revisión de origen.</td>
     </tr>
     <tr>
-      <td>Variables con alertas de calidad: file_id, hash_head, hash_tail. Revisar antes de modelar.</td>
+      <td>Variables con alertas de calidad: file_id, content_hash, hash_head, hash_tail. Revisar antes de modelar.</td>
     </tr>
     <tr>
       <td>Variables con posible fuga de información: severity. No usarlas como predictoras si el objetivo es predecir error.</td>
     </tr>
     <tr>
-      <td>Variables derivadas detectadas: congestion_factor, queue_pressure, size_range. Evitar duplicidad en fases de modelamiento.</td>
+      <td>Variables derivadas detectadas: queue_pressure, congestion_factor, size_range. Evitar duplicidad en fases de modelamiento.</td>
     </tr>
   </tbody>
 </table>

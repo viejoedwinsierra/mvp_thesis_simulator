@@ -10,30 +10,29 @@ from pathlib import Path
 from typing import Dict, List, Optional
 
 
-# ============================================================
-# RUTAS DEL PROYECTO
-# ============================================================
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 CONFIG_DIR = BASE_DIR / "config"
+GLOBAL_CONFIG_DIR = CONFIG_DIR / "global"
 SCENARIOS_DIR = CONFIG_DIR / "escenarios"
+
+GLOBAL_TIME_DISTRIBUTION_CONFIG = GLOBAL_CONFIG_DIR / "time_distribution_config.json"
+GLOBAL_LIFECYCLE_CONFIG = GLOBAL_CONFIG_DIR / "lifecycle_config.json"
+GLOBAL_COST_CONFIG = GLOBAL_CONFIG_DIR / "cost_config.json"
+GLOBAL_ERROR_CONFIG = GLOBAL_CONFIG_DIR / "error_config.json"
+GLOBAL_NOISE_CONFIG = GLOBAL_CONFIG_DIR / "noise_config.json"
+GLOBAL_REALISM_CONFIG = GLOBAL_CONFIG_DIR / "realism_config.json"
+GLOBAL_CORRELATION_CONFIG = GLOBAL_CONFIG_DIR / "correlation_config.json"
 
 OUTPUT_BASE_DIR = BASE_DIR / "output"
 DATASET_OUTPUT_DIR = OUTPUT_BASE_DIR / "dataset"
 RUNTIME_CONFIG_DIR = OUTPUT_BASE_DIR / "runtime_configs"
 LOG_DIR = OUTPUT_BASE_DIR / "logs"
 
-
-# ============================================================
-# VARIABLES DEL RANGO DE SIMULACION
-# ============================================================
-START_DATE = date(2026, 4, 1)
-END_DATE = date(2026, 4, 7)
+START_DATE = date(2026, 1, 1)
+END_DATE = date(2026, 1, 31)
 
 
-# ============================================================
-# UTILIDADES
-# ============================================================
 def iter_dates(start_date: date, end_date: date):
     if end_date < start_date:
         raise ValueError("END_DATE no puede ser menor que START_DATE.")
@@ -67,6 +66,27 @@ def find_first_json(folder: Path, prefix: str) -> Optional[Path]:
     return candidates[0] if candidates else None
 
 
+def validate_global_configs() -> None:
+    required_files = [
+        GLOBAL_TIME_DISTRIBUTION_CONFIG,
+        GLOBAL_LIFECYCLE_CONFIG,
+        GLOBAL_COST_CONFIG,
+        GLOBAL_ERROR_CONFIG,
+        GLOBAL_NOISE_CONFIG,
+        GLOBAL_REALISM_CONFIG,
+        GLOBAL_CORRELATION_CONFIG,
+    ]
+
+    missing = [path for path in required_files if not path.exists()]
+
+    if missing:
+        missing_text = "\n".join(f" - {path}" for path in missing)
+        raise FileNotFoundError(
+            "Faltan archivos globales de configuracion:\n"
+            f"{missing_text}"
+        )
+
+
 def discover_scenarios(scenarios_dir: Path = SCENARIOS_DIR) -> List[Dict[str, Path]]:
     if not scenarios_dir.exists():
         raise FileNotFoundError(f"No existe la carpeta de escenarios: {scenarios_dir}")
@@ -75,12 +95,11 @@ def discover_scenarios(scenarios_dir: Path = SCENARIOS_DIR) -> List[Dict[str, Pa
 
     for folder in sorted(p for p in scenarios_dir.iterdir() if p.is_dir()):
         simulation_config = find_first_json(folder, "simulation_config")
-        time_distribution_config = find_first_json(folder, "time_distribution_config")
 
-        if not simulation_config or not time_distribution_config:
+        if not simulation_config:
             print(
                 f"[WARN] Escenario omitido: {folder.name}. "
-                "Falta simulation_config*.json o time_distribution_config*.json"
+                "Falta simulation_config*.json"
             )
             continue
 
@@ -89,7 +108,6 @@ def discover_scenarios(scenarios_dir: Path = SCENARIOS_DIR) -> List[Dict[str, Pa
                 "name": folder.name,
                 "folder": folder,
                 "simulation_config": simulation_config,
-                "time_distribution_config": time_distribution_config,
             }
         )
 
@@ -111,22 +129,14 @@ def prepare_runtime_config(
     start_date: date,
     end_date: date,
 ) -> Path:
-    """
-    Crea una copia runtime por escenario y dia.
-
-    NO modifica:
-      - el JSON original del escenario
-      - src.run_simulation.py
-
-    Si run_simulation respeta simulation.output_dir, escribira directamente
-    en output/dataset/<escenario>. Luego este script renombra el CSV.
-    """
     config = load_json(simulation_config_path)
+
     day_text = simulation_day.strftime("%Y-%m-%d")
 
     config.setdefault("simulation", {})
-    config["simulation"]["simulation_date"] = day_text
-    config["simulation"]["output_dir"] = str(scenario_output_dir.as_posix())
+    config["simulation"]["output_dir"] = str(
+        scenario_output_dir.as_posix()
+    )
 
     config.setdefault("scenario_execution", {})
     config["scenario_execution"].update(
@@ -135,16 +145,31 @@ def prepare_runtime_config(
             "start_date": start_date.strftime("%Y-%m-%d"),
             "end_date": end_date.strftime("%Y-%m-%d"),
             "current_simulation_date": day_text,
-            "expected_dataset_file": expected_dataset_name(scenario_name, simulation_day),
+            "expected_dataset_file": expected_dataset_name(
+                scenario_name,
+                simulation_day,
+            ),
             "source_config": str(simulation_config_path.as_posix()),
-            "generated_at": datetime.now().isoformat(timespec="seconds"),
+            "generated_at": datetime.now().isoformat(
+                timespec="seconds"
+            ),
         }
     )
 
-    runtime_path = RUNTIME_CONFIG_DIR / scenario_name / day_text / simulation_config_path.name
-    write_json(runtime_path, config)
-    return runtime_path
+    runtime_filename = (
+        f"{simulation_config_path.stem}_{day_text}"
+        f"{simulation_config_path.suffix}"
+    )
 
+    runtime_path = (
+        RUNTIME_CONFIG_DIR
+        / scenario_name
+        / runtime_filename
+    )
+
+    write_json(runtime_path, config)
+
+    return runtime_path
 
 def run_command(command: List[str], log_file: Path) -> int:
     log_file.parent.mkdir(parents=True, exist_ok=True)
@@ -166,12 +191,6 @@ def find_generated_csv_candidates(
     simulation_day: date,
     before_files: set[Path],
 ) -> List[Path]:
-    """
-    Busca CSV generados por run_simulation para el dia.
-
-    Primero revisa output/dataset/<escenario>.
-    Luego revisa output/dataset por si el simulador ignora output_dir.
-    """
     day_text = simulation_day.strftime("%Y-%m-%d")
 
     search_roots = [
@@ -194,9 +213,9 @@ def find_generated_csv_candidates(
             if day_text in csv_file.name and "blob_inventory" in name_lower:
                 candidates.append(csv_file)
 
-    # Quitar duplicados conservando orden
     unique_candidates = []
     seen = set()
+
     for item in candidates:
         resolved = item.resolve()
         if resolved not in seen:
@@ -212,19 +231,10 @@ def normalize_generated_dataset_file(
     scenario_output_dir: Path,
     before_files: set[Path],
 ) -> Optional[Path]:
-    """
-    Garantiza que el CSV final quede en:
-      output/dataset/<escenario>/blob_inventory_<escenario>_<YYYY-MM-DD>.csv
-
-    Esto corrige dos casos:
-      1. El simulador genero el CSV en otra carpeta.
-      2. El simulador genero blob_inventory_YYYY-MM-DD.csv sin nombre de escenario.
-    """
     scenario_output_dir.mkdir(parents=True, exist_ok=True)
 
     target_file = scenario_output_dir / expected_dataset_name(scenario_name, simulation_day)
 
-    # Si ya existe con el nombre correcto, no hacer nada.
     if target_file.exists():
         return target_file
 
@@ -237,7 +247,6 @@ def normalize_generated_dataset_file(
     if not candidates:
         return None
 
-    # Preferir archivos dentro de la carpeta del escenario.
     candidates = sorted(
         candidates,
         key=lambda p: (
@@ -282,23 +291,38 @@ def execute_scenario_day(
         end_date=end_date,
     )
 
-    time_distribution_config = scenario["time_distribution_config"]
-    target_dataset_file = scenario_output_dir / expected_dataset_name(scenario_name, simulation_day)
+    target_dataset_file = scenario_output_dir / expected_dataset_name(
+        scenario_name,
+        simulation_day,
+    )
 
     if overwrite_day and target_dataset_file.exists():
         target_dataset_file.unlink()
 
-    # Foto del estado antes de ejecutar para saber que CSV son nuevos.
     before_files = set(OUTPUT_BASE_DIR.rglob("*.csv")) if OUTPUT_BASE_DIR.exists() else set()
 
     command = [
         python_executable,
         "-m",
         "src.run_simulation",
-        "--config",
+        "--simulation-config",
         str(runtime_simulation_config),
         "--time-distribution",
-        str(time_distribution_config),
+        str(GLOBAL_TIME_DISTRIBUTION_CONFIG),
+        "--lifecycle-config",
+        str(GLOBAL_LIFECYCLE_CONFIG),
+        "--cost-config",
+        str(GLOBAL_COST_CONFIG),
+        "--error-config",
+        str(GLOBAL_ERROR_CONFIG),
+        "--noise-config",
+        str(GLOBAL_NOISE_CONFIG),
+        "--realism-config",
+        str(GLOBAL_REALISM_CONFIG),
+        "--correlation-config",
+        str(GLOBAL_CORRELATION_CONFIG),
+        "--simulation-date",
+        day_text,
     ]
 
     log_file = LOG_DIR / scenario_name / f"{day_text}.log"
@@ -306,7 +330,13 @@ def execute_scenario_day(
     print("=" * 80)
     print(f"[RUN] Escenario: {scenario_name} | Fecha: {day_text}")
     print(f"[CFG] Simulation       : {runtime_simulation_config}")
-    print(f"[CFG] Time distribution: {time_distribution_config}")
+    print(f"[CFG] Time distribution: {GLOBAL_TIME_DISTRIBUTION_CONFIG}")
+    print(f"[CFG] Lifecycle        : {GLOBAL_LIFECYCLE_CONFIG}")
+    print(f"[CFG] Cost             : {GLOBAL_COST_CONFIG}")
+    print(f"[CFG] Error            : {GLOBAL_ERROR_CONFIG}")
+    print(f"[CFG] Noise            : {GLOBAL_NOISE_CONFIG}")
+    print(f"[CFG] Realism          : {GLOBAL_REALISM_CONFIG}")
+    print(f"[CFG] Correlation      : {GLOBAL_CORRELATION_CONFIG}")
     print(f"[OUT] Dataset          : {scenario_output_dir}")
     print(f"[CSV] Esperado         : {target_dataset_file}")
     print(f"[LOG] Log              : {log_file}")
@@ -338,7 +368,13 @@ def execute_scenario_day(
         "status": status,
         "return_code": return_code,
         "runtime_simulation_config": str(runtime_simulation_config),
-        "time_distribution_config": str(time_distribution_config),
+        "time_distribution_config": str(GLOBAL_TIME_DISTRIBUTION_CONFIG),
+        "lifecycle_config": str(GLOBAL_LIFECYCLE_CONFIG),
+        "cost_config": str(GLOBAL_COST_CONFIG),
+        "error_config": str(GLOBAL_ERROR_CONFIG),
+        "noise_config": str(GLOBAL_NOISE_CONFIG),
+        "realism_config": str(GLOBAL_REALISM_CONFIG),
+        "correlation_config": str(GLOBAL_CORRELATION_CONFIG),
         "dataset_output_dir": str(scenario_output_dir),
         "dataset_file": str(normalized_file) if normalized_file else None,
         "expected_dataset_file": str(target_dataset_file),
@@ -358,6 +394,7 @@ def write_execution_manifest(
         "generated_at": datetime.now().isoformat(timespec="seconds"),
         "base_dir": str(BASE_DIR),
         "scenarios_dir": str(SCENARIOS_DIR),
+        "global_config_dir": str(GLOBAL_CONFIG_DIR),
         "dataset_output_dir": str(DATASET_OUTPUT_DIR),
         "start_date": start_date.strftime("%Y-%m-%d"),
         "end_date": end_date.strftime("%Y-%m-%d"),
@@ -368,6 +405,15 @@ def write_execution_manifest(
         "failed": sum(1 for item in results if item["status"] != "OK"),
         "scenarios": scenarios,
         "dates": dates,
+        "global_configs": {
+            "time_distribution_config": str(GLOBAL_TIME_DISTRIBUTION_CONFIG),
+            "lifecycle_config": str(GLOBAL_LIFECYCLE_CONFIG),
+            "cost_config": str(GLOBAL_COST_CONFIG),
+            "error_config": str(GLOBAL_ERROR_CONFIG),
+            "noise_config": str(GLOBAL_NOISE_CONFIG),
+            "realism_config": str(GLOBAL_REALISM_CONFIG),
+            "correlation_config": str(GLOBAL_CORRELATION_CONFIG),
+        },
         "results": results,
     }
 
@@ -383,6 +429,8 @@ def run_all_scenarios(
     scenario_filter: Optional[str] = None,
     overwrite: bool = True,
 ) -> None:
+    validate_global_configs()
+
     OUTPUT_BASE_DIR.mkdir(parents=True, exist_ok=True)
     DATASET_OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     RUNTIME_CONFIG_DIR.mkdir(parents=True, exist_ok=True)
@@ -405,6 +453,7 @@ def run_all_scenarios(
 
     print(f"Rango de fechas: {start_date} -> {end_date}")
     print(f"Escenarios detectados: {len(scenarios)}")
+    print(f"Config global: {GLOBAL_CONFIG_DIR}")
 
     for scenario in scenarios:
         print(f" - {scenario['name']}")
@@ -449,7 +498,7 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description=(
             "Ejecuta escenarios de config/escenarios por rango de fechas. "
-            "Deja los CSV dentro de output/dataset/<escenario> con nombre de escenario."
+            "Usa configuraciones globales desde config/global."
         )
     )
 
