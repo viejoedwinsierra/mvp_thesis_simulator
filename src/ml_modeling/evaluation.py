@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from pathlib import Path
 import json
-import os
 from typing import Any
 
 import joblib
@@ -10,6 +9,8 @@ import numpy as np
 import pandas as pd
 from sklearn.metrics import (
     accuracy_score,
+    average_precision_score,
+    balanced_accuracy_score,
     f1_score,
     mean_absolute_error,
     mean_squared_error,
@@ -20,11 +21,66 @@ from sklearn.metrics import (
 )
 
 
+CLASSIFICATION_TECHNIQUES = {
+    "logistic_regression",
+    "sgd_classifier",
+    "random_forest_classifier",
+    "gradient_boosting_classifier",
+    "hist_gradient_boosting_classifier",
+}
+
+REGRESSION_TECHNIQUES = {
+    "linear_regression",
+    "ridge_regressor",
+    "lasso_regressor",
+    "elastic_net_regressor",
+    "sgd_regressor",
+    "random_forest_regressor",
+    "gradient_boosting_regressor",
+    "hist_gradient_boosting_regressor",
+}
+
+
+def infer_task_type(technique: str) -> str:
+    """
+    Inferencia robusta del tipo de tarea.
+
+    Mantiene compatibilidad con nombres antiguos tipo *_classifier / *_regressor,
+    pero también soporta modelos lineales como logistic_regression y linear_regression.
+    """
+
+    if technique in CLASSIFICATION_TECHNIQUES:
+        return "classification"
+
+    if technique in REGRESSION_TECHNIQUES:
+        return "regression"
+
+    if "classifier" in technique:
+        return "classification"
+
+    if "regressor" in technique:
+        return "regression"
+
+    if technique.startswith("logistic"):
+        return "classification"
+
+    if technique.startswith("linear"):
+        return "regression"
+
+    return "unknown"
+
+
 def discover_ml_models(modeling_root: str | Path = "output/modeling/ml") -> list[dict[str, Any]]:
     """
-    Descubre modelos ML guardados en la estructura:
+    Descubre modelos guardados en la estructura:
 
     output/modeling/ml/<technique>/models/*.joblib
+
+    Compatible con:
+    - modelos ML no lineales;
+    - modelos lineales;
+    - modelos regularizados;
+    - modelos SGD.
     """
 
     root = Path(modeling_root)
@@ -43,12 +99,7 @@ def discover_ml_models(modeling_root: str | Path = "output/modeling/ml") -> list
         else:
             target = "unknown"
 
-        if "classifier" in technique:
-            task_type = "classification"
-        elif "regressor" in technique:
-            task_type = "regression"
-        else:
-            task_type = "unknown"
+        task_type = infer_task_type(technique)
 
         models.append({
             "family": "machine_learning",
@@ -71,26 +122,37 @@ def _infer_target_from_model_info(model_info: dict[str, Any]) -> str:
     if target and target != "unknown":
         return target
 
+    task_type = model_info.get("task_type")
     technique = model_info.get("technique", "")
 
-    if "classifier" in technique:
+    if task_type == "classification" or technique in CLASSIFICATION_TECHNIQUES:
         return "has_error"
 
     return "storage_cost"
 
 
 def _get_prediction_score(model, X, y_pred):
+    """
+    Obtiene score continuo para clasificación.
+
+    Para pipelines de sklearn:
+    - model.predict_proba(X)
+    - model.decision_function(X)
+
+    Si no existe score continuo, retorna y_pred.
+    """
+
     if hasattr(model, "predict_proba"):
         try:
             return model.predict_proba(X)[:, 1]
         except Exception:
-            return y_pred
+            pass
 
     if hasattr(model, "decision_function"):
         try:
             return model.decision_function(X)
         except Exception:
-            return y_pred
+            pass
 
     return y_pred
 
@@ -123,6 +185,7 @@ def _classification_metrics(y_true, y_pred, y_score, technique: str, target: str
         "status": "ok",
         "n": len(y_true),
         "accuracy": accuracy_score(y_true, y_pred),
+        "balanced_accuracy": balanced_accuracy_score(y_true, y_pred),
         "precision": precision_score(y_true, y_pred, zero_division=0),
         "recall": recall_score(y_true, y_pred, zero_division=0),
         "f1": f1_score(y_true, y_pred, zero_division=0),
@@ -132,6 +195,11 @@ def _classification_metrics(y_true, y_pred, y_score, technique: str, target: str
         row["roc_auc"] = roc_auc_score(y_true, y_score)
     except Exception:
         row["roc_auc"] = np.nan
+
+    try:
+        row["pr_auc"] = average_precision_score(y_true, y_score)
+    except Exception:
+        row["pr_auc"] = np.nan
 
     return row
 
@@ -143,7 +211,7 @@ def _prepare_evaluation_frame(df_new: pd.DataFrame, target: str):
     X = df_new.drop(columns=[target], errors="ignore")
     y = df_new[target].copy()
 
-    # Se eliminan columnas claramente no útiles para inferencia si existen.
+    # Columnas de identificación o trazabilidad que no deben entrar a inferencia.
     X = X.drop(
         columns=[
             "source_file",
@@ -158,7 +226,8 @@ def _prepare_evaluation_frame(df_new: pd.DataFrame, target: str):
         errors="ignore",
     )
 
-    y = pd.to_numeric(y, errors="coerce") if target in {"has_error", "storage_cost"} else y
+    if target in {"has_error", "storage_cost"}:
+        y = pd.to_numeric(y, errors="coerce")
 
     valid_mask = y.notna()
 
@@ -174,9 +243,20 @@ def evaluate_single_ml_model(
     threshold: float = 0.5,
 ) -> tuple[dict[str, Any], pd.DataFrame]:
     technique = model_info.get("technique", "unknown")
-    task_type = model_info.get("task_type", "unknown")
+    task_type = model_info.get("task_type", infer_task_type(technique))
     target = _infer_target_from_model_info(model_info)
     model_path = Path(model_info["model_path"])
+
+    if task_type == "unknown":
+        return {
+            "family": "machine_learning",
+            "technique": technique,
+            "target": target,
+            "task_type": task_type,
+            "status": "error",
+            "error_message": f"No se pudo inferir task_type para technique={technique}",
+            "model_path": str(model_path),
+        }, pd.DataFrame()
 
     try:
         model = joblib.load(model_path)
@@ -202,9 +282,12 @@ def evaluate_single_ml_model(
                 target=target,
             )
 
+            metrics["threshold"] = threshold
+
             predictions = pd.DataFrame({
                 "technique": technique,
                 "target": target,
+                "threshold": threshold,
                 "y_true": y_eval.values,
                 "y_pred": y_pred,
                 "score": y_score,
@@ -212,7 +295,7 @@ def evaluate_single_ml_model(
 
         elif task_type == "regression":
             y_eval = pd.to_numeric(y, errors="coerce")
-            y_pred = pd.to_numeric(pd.Series(y_pred_raw), errors="coerce")
+            y_pred = pd.to_numeric(pd.Series(y_pred_raw, index=y_eval.index), errors="coerce")
 
             valid = y_eval.notna() & y_pred.notna()
 
@@ -252,6 +335,46 @@ def evaluate_single_ml_model(
         }
 
         return metrics, pd.DataFrame()
+
+
+def evaluate_single_ml_model_multi_threshold(
+    df_new: pd.DataFrame,
+    model_info: dict[str, Any],
+    thresholds: list[float] | tuple[float, ...] = (0.05, 0.10, 0.20, 0.30, 0.50),
+) -> tuple[pd.DataFrame, dict[str, pd.DataFrame]]:
+    """
+    Evaluación opcional multi-threshold para modelos de clasificación.
+
+    No reemplaza evaluate_single_ml_model; sirve cuando quieres analizar sensibilidad
+    de precision/recall/f1 frente al threshold.
+    """
+
+    technique = model_info.get("technique", "unknown")
+    task_type = model_info.get("task_type", infer_task_type(technique))
+
+    if task_type != "classification":
+        metrics, predictions = evaluate_single_ml_model(
+            df_new=df_new,
+            model_info=model_info,
+            threshold=0.5,
+        )
+        return pd.DataFrame([metrics]), {f"{technique}_{model_info.get('target')}": predictions}
+
+    rows = []
+    predictions_by_threshold: dict[str, pd.DataFrame] = {}
+
+    for threshold in thresholds:
+        metrics, predictions = evaluate_single_ml_model(
+            df_new=df_new,
+            model_info=model_info,
+            threshold=float(threshold),
+        )
+
+        rows.append(metrics)
+        key = f"{technique}_{model_info.get('target')}_threshold_{threshold}"
+        predictions_by_threshold[key] = predictions
+
+    return pd.DataFrame(rows), predictions_by_threshold
 
 
 def evaluate_saved_ml_models(

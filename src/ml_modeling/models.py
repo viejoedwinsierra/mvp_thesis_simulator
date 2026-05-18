@@ -3,6 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 
 import pandas as pd
+from sklearn.base import clone
 from sklearn.ensemble import (
     GradientBoostingClassifier,
     GradientBoostingRegressor,
@@ -11,7 +12,15 @@ from sklearn.ensemble import (
     HistGradientBoostingClassifier,
     HistGradientBoostingRegressor,
 )
-from sklearn.linear_model import SGDClassifier, SGDRegressor
+from sklearn.linear_model import (
+    ElasticNet,
+    Lasso,
+    LinearRegression,
+    LogisticRegression,
+    Ridge,
+    SGDClassifier,
+    SGDRegressor,
+)
 from sklearn.pipeline import Pipeline
 
 from ml_modeling.common import (
@@ -36,6 +45,34 @@ from ml_modeling.plots import (
 
 
 REGRESSION_MODELS = {
+    # Baselines lineales interpretables
+    "linear_regression": LinearRegression(),
+
+    # Modelos lineales regularizados
+    "ridge_regressor": Ridge(
+        alpha=1.0,
+        random_state=42,
+    ),
+    "lasso_regressor": Lasso(
+        alpha=0.001,
+        max_iter=5000,
+        random_state=42,
+    ),
+    "elastic_net_regressor": ElasticNet(
+        alpha=0.001,
+        l1_ratio=0.5,
+        max_iter=5000,
+        random_state=42,
+    ),
+
+    # Modelo lineal escalable para datasets grandes
+    "sgd_regressor": SGDRegressor(
+        random_state=42,
+        max_iter=3000,
+        tol=1e-3,
+    ),
+
+    # Modelos no lineales
     "random_forest_regressor": RandomForestRegressor(
         n_estimators=250,
         random_state=42,
@@ -53,15 +90,27 @@ REGRESSION_MODELS = {
         max_iter=220,
         learning_rate=0.05,
     ),
-    "sgd_regressor": SGDRegressor(
-        random_state=42,
-        max_iter=3000,
-        tol=1e-3,
-    ),
 }
 
 
 CLASSIFICATION_MODELS = {
+    # Baseline lineal interpretable para has_error
+    "logistic_regression": LogisticRegression(
+        max_iter=5000,
+        class_weight="balanced",
+        solver="lbfgs",
+    ),
+
+    # Modelo lineal escalable para datasets grandes
+    "sgd_classifier": SGDClassifier(
+        random_state=42,
+        loss="log_loss",
+        max_iter=3000,
+        tol=1e-3,
+        class_weight="balanced",
+    ),
+
+    # Modelos no lineales
     "random_forest_classifier": RandomForestClassifier(
         n_estimators=250,
         random_state=42,
@@ -80,13 +129,19 @@ CLASSIFICATION_MODELS = {
         max_iter=220,
         learning_rate=0.05,
     ),
-    "sgd_classifier": SGDClassifier(
-        random_state=42,
-        loss="log_loss",
-        max_iter=3000,
-        tol=1e-3,
-        class_weight="balanced",
-    ),
+}
+
+
+SCALED_REGRESSION_MODELS = {
+    "ridge_regressor",
+    "lasso_regressor",
+    "elastic_net_regressor",
+    "sgd_regressor",
+}
+
+SCALED_CLASSIFICATION_MODELS = {
+    "logistic_regression",
+    "sgd_classifier",
 }
 
 
@@ -99,13 +154,16 @@ def run_regression_model(
     random_state: int = 42,
 ) -> MLModelResult:
     if technique not in REGRESSION_MODELS:
-        raise ValueError(f"Modelo de regresion no soportado: {technique}")
+        raise ValueError(
+            "Modelo de regresion no soportado: "
+            f"{technique}. Modelos validos: {', '.join(REGRESSION_MODELS)}"
+        )
 
     output_dir = Path(output_dir)
     plot_dir = output_dir / "plots"
     table_dir = output_dir / "tables"
 
-    scale_numeric = technique == "sgd_regressor"
+    scale_numeric = technique in SCALED_REGRESSION_MODELS
 
     X, y, numeric_features, categorical_features = build_model_frame(
         df=df,
@@ -128,7 +186,7 @@ def run_regression_model(
 
     model = Pipeline([
         ("preprocessor", preprocessor),
-        ("model", REGRESSION_MODELS[technique]),
+        ("model", clone(REGRESSION_MODELS[technique])),
     ])
 
     model.fit(X_train, y_train)
@@ -188,13 +246,16 @@ def run_classification_model(
     random_state: int = 42,
 ) -> MLModelResult:
     if technique not in CLASSIFICATION_MODELS:
-        raise ValueError(f"Modelo de clasificacion no soportado: {technique}")
+        raise ValueError(
+            "Modelo de clasificacion no soportado: "
+            f"{technique}. Modelos validos: {', '.join(CLASSIFICATION_MODELS)}"
+        )
 
     output_dir = Path(output_dir)
     plot_dir = output_dir / "plots"
     table_dir = output_dir / "tables"
 
-    scale_numeric = technique == "sgd_classifier"
+    scale_numeric = technique in SCALED_CLASSIFICATION_MODELS
 
     X, y, numeric_features, categorical_features = build_model_frame(
         df=df,
@@ -223,7 +284,7 @@ def run_classification_model(
 
     model = Pipeline([
         ("preprocessor", preprocessor),
-        ("model", CLASSIFICATION_MODELS[technique]),
+        ("model", clone(CLASSIFICATION_MODELS[technique])),
     ])
 
     model.fit(X_train, y_train)

@@ -132,64 +132,77 @@ table.data-table tr:nth-child(even), table.dataframe tr:nth-child(even) {{ backg
 </html>"""
 
 
+
+def _best_row(
+    df: pd.DataFrame,
+    metric: str,
+    ascending: bool,
+    hallazgo: str,
+    lectura: str,
+) -> dict | None:
+    if metric not in df.columns:
+        return None
+
+    data = df.dropna(subset=[metric]).copy()
+    if data.empty:
+        return None
+
+    best = data.sort_values(metric, ascending=ascending).iloc[0]
+    return {
+        "hallazgo": hallazgo,
+        "technique": best.get("technique"),
+        "target": best.get("target"),
+        "value": best.get(metric),
+        "metric": metric,
+        "lectura": lectura,
+    }
+
+
+def _finding_value(findings: pd.DataFrame, hallazgo: str):
+    if findings is None or findings.empty or "hallazgo" not in findings.columns:
+        return None
+
+    data = findings[findings["hallazgo"] == hallazgo]
+    if data.empty:
+        return None
+
+    return data["value"].iloc[0]
+
+
 def build_evaluation_findings(metrics_df: pd.DataFrame) -> pd.DataFrame:
     rows = []
 
     if metrics_df is None or metrics_df.empty:
-        return pd.DataFrame(columns=["hallazgo", "technique", "target", "value", "lectura"])
+        return pd.DataFrame(
+            columns=["hallazgo", "technique", "target", "value", "metric", "lectura"]
+        )
 
     ok = metrics_df[metrics_df.get("status", "ok") == "ok"].copy()
 
-    if "r2" in ok.columns:
-        reg = ok.dropna(subset=["r2"])
-        if not reg.empty:
-            best = reg.sort_values("r2", ascending=False).iloc[0]
-            rows.append({
-                "hallazgo": "mejor_r2",
-                "technique": best.get("technique"),
-                "target": best.get("target"),
-                "value": best.get("r2"),
-                "lectura": "Modelo con mejor capacidad explicativa sobre nuevos datos.",
-            })
+    checks = [
+        ("r2", False, "mejor_r2", "Modelo con mejor capacidad explicativa sobre nuevos datos."),
+        ("rmse", True, "menor_rmse", "Modelo con menor error cuadrático medio sobre nuevos datos."),
+        ("mae", True, "menor_mae", "Modelo con menor error absoluto medio sobre nuevos datos."),
+        ("roc_auc", False, "mejor_roc_auc", "Modelo con mejor separación general entre clases."),
+        ("pr_auc", False, "mejor_pr_auc", "Modelo más útil en clasificación desbalanceada, según precisión-recall."),
+        ("balanced_accuracy", False, "mejor_balanced_accuracy", "Modelo con mejor balance entre clases."),
+        ("f1", False, "mejor_f1", "Modelo con mejor equilibrio entre precisión y recall."),
+        ("recall", False, "mejor_recall", "Modelo que recupera más errores reales."),
+        ("precision", False, "mejor_precision", "Modelo con mayor precisión entre positivos predichos."),
+    ]
 
-    if "rmse" in ok.columns:
-        reg = ok.dropna(subset=["rmse"])
-        if not reg.empty:
-            best = reg.sort_values("rmse", ascending=True).iloc[0]
-            rows.append({
-                "hallazgo": "menor_rmse",
-                "technique": best.get("technique"),
-                "target": best.get("target"),
-                "value": best.get("rmse"),
-                "lectura": "Modelo con menor error sobre nuevos datos.",
-            })
-
-    if "roc_auc" in ok.columns:
-        clf = ok.dropna(subset=["roc_auc"])
-        if not clf.empty:
-            best = clf.sort_values("roc_auc", ascending=False).iloc[0]
-            rows.append({
-                "hallazgo": "mejor_roc_auc",
-                "technique": best.get("technique"),
-                "target": best.get("target"),
-                "value": best.get("roc_auc"),
-                "lectura": "Modelo con mejor separación entre clases en nuevos datos.",
-            })
-
-    if "recall" in ok.columns:
-        clf = ok.dropna(subset=["recall"])
-        if not clf.empty:
-            best = clf.sort_values("recall", ascending=False).iloc[0]
-            rows.append({
-                "hallazgo": "mejor_recall",
-                "technique": best.get("technique"),
-                "target": best.get("target"),
-                "value": best.get("recall"),
-                "lectura": "Modelo que recupera más errores reales.",
-            })
+    for metric, ascending, hallazgo, lectura in checks:
+        row = _best_row(
+            df=ok,
+            metric=metric,
+            ascending=ascending,
+            hallazgo=hallazgo,
+            lectura=lectura,
+        )
+        if row:
+            rows.append(row)
 
     return pd.DataFrame(rows)
-
 
 def build_ml_evaluation_report(
     metrics_df: pd.DataFrame,
@@ -209,19 +222,15 @@ def build_ml_evaluation_report(
     ok_count = int((metrics_df.get("status") == "ok").sum()) if "status" in metrics_df else len(metrics_df)
     error_count = int((metrics_df.get("status") == "error").sum()) if "status" in metrics_df else 0
 
-    best_r2 = None
-    if not findings[findings["hallazgo"] == "mejor_r2"].empty:
-        best_r2 = findings[findings["hallazgo"] == "mejor_r2"]["value"].iloc[0]
-
-    best_auc = None
-    if not findings[findings["hallazgo"] == "mejor_roc_auc"].empty:
-        best_auc = findings[findings["hallazgo"] == "mejor_roc_auc"]["value"].iloc[0]
-
     cards = ""
     cards += _card("Modelos OK", ok_count, "Evaluados sin reentrenar")
     cards += _card("Modelos con error", error_count, "Revisar registry/model path")
-    cards += _card("Mejor R²", best_r2, "Regresión")
-    cards += _card("Mejor ROC-AUC", best_auc, "Clasificación")
+    cards += _card("Mejor R²", _finding_value(findings, "mejor_r2"), "Regresión")
+    cards += _card("Menor RMSE", _finding_value(findings, "menor_rmse"), "Regresión")
+    cards += _card("Mejor ROC-AUC", _finding_value(findings, "mejor_roc_auc"), "Clasificación")
+    cards += _card("Mejor PR-AUC", _finding_value(findings, "mejor_pr_auc"), "Clasificación desbalanceada")
+    cards += _card("Mejor F1", _finding_value(findings, "mejor_f1"), "Balance precisión/recall")
+    cards += _card("Mejor Recall", _finding_value(findings, "mejor_recall"), "Detección de errores")
 
     body = f"""
     <section class="note">
@@ -230,6 +239,8 @@ def build_ml_evaluation_report(
         <strong>Threshold clasificación:</strong> {threshold}<br><br>
         Este reporte representa la fase tipo producción: se generan nuevos datasets y los modelos guardados se evalúan sin reentrenar.
         Esto permite medir generalización, robustez, degradación y sensibilidad ante nueva variabilidad simulada.
+        También permite comparar modelos lineales, regularizados y no lineales usando métricas adicionales cuando estén disponibles:
+        F1, PR-AUC, balanced accuracy, recall y precision.
     </section>
 
     <section class="metrics-grid">
