@@ -220,6 +220,7 @@ class DatasetSimulationConfig:
     correlations: Mapping[str, object] | None = None
 
     # Raw configs are kept for modules that need full access to original files.
+    raw_simulation_config: Mapping[str, object] | None = None
     raw_noise_config: Mapping[str, object] | None = None
     raw_realism_config: Mapping[str, object] | None = None
     raw_correlation_config: Mapping[str, object] | None = None
