@@ -4,9 +4,10 @@ import argparse
 import inspect
 import json
 import random
+from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
-from typing import Any
+from typing import Any, Mapping
 
 from src.simulator.config_models import (
     ArrivalProcessConfig,
@@ -42,6 +43,42 @@ DEFAULT_HASH_CONFIG = {
     "hash_tail_length": 12,
 }
 
+REQUIRED_SIMULATION_SECTIONS = [
+    "simulation",
+    "daily_charge",
+    "base_load_profiles",
+    "file_types",
+    "transfer",
+]
+
+
+@dataclass(frozen=True)
+class ConfigPaths:
+    simulation_config: Path
+    time_distribution: Path
+    lifecycle_config: Path
+    cost_config: Path
+    error_config: Path
+    noise_config: Path
+    realism_config: Path
+    correlation_config: Path
+
+
+@dataclass(frozen=True)
+class RawConfigBundle:
+    simulation: dict[str, Any]
+    time_distribution: dict[str, Any]
+    lifecycle: dict[str, Any]
+    cost: dict[str, Any]
+    error: dict[str, Any]
+    noise: dict[str, Any]
+    realism: dict[str, Any]
+    correlation: dict[str, Any]
+
+
+# ============================================================
+# JSON / VALIDATION HELPERS
+# ============================================================
 
 def load_json(path: str | Path) -> dict[str, Any]:
     path = Path(path)
@@ -55,13 +92,40 @@ def load_json(path: str | Path) -> dict[str, Any]:
         raise ValueError(f"JSON invalido en archivo: {path}. Error: {exc}") from exc
 
 
-def require_section(raw: dict[str, Any], section: str, source: str) -> Any:
+def load_raw_configs(paths: ConfigPaths) -> RawConfigBundle:
+    return RawConfigBundle(
+        simulation=load_json(paths.simulation_config),
+        time_distribution=load_json(paths.time_distribution),
+        lifecycle=load_json(paths.lifecycle_config),
+        cost=load_json(paths.cost_config),
+        error=load_json(paths.error_config),
+        noise=load_json(paths.noise_config),
+        realism=load_json(paths.realism_config),
+        correlation=load_json(paths.correlation_config),
+    )
+
+
+def require_section(raw: Mapping[str, Any], section: str, source: str) -> Any:
     value = raw.get(section)
 
     if value is None:
         raise ValueError(f"{source} debe contener la seccion obligatoria '{section}'.")
 
     return value
+
+
+def validate_required_simulation_sections(simulation_raw: Mapping[str, Any]) -> None:
+    missing = [
+        section
+        for section in REQUIRED_SIMULATION_SECTIONS
+        if section not in simulation_raw
+    ]
+
+    if missing:
+        raise ValueError(
+            "simulation_config.json incompleto. Faltan secciones obligatorias: "
+            + ", ".join(missing)
+        )
 
 
 def supports_parameter(cls: type, name: str) -> bool:
@@ -79,6 +143,10 @@ def instantiate_supported(cls: type, **kwargs: Any) -> Any:
     }
     return cls(**accepted)
 
+
+# ============================================================
+# DATE / RANDOM HELPERS
+# ============================================================
 
 def resolve_simulation_date_and_day(
     simulation_date: str | None,
@@ -105,7 +173,26 @@ def resolve_simulation_date_and_day(
     return parsed_date.isoformat(), calculated_day
 
 
-def build_lognormal_config(raw: dict[str, Any]) -> LogNormalDistributionConfig:
+def sample_uniform_factor(
+    cfg: Mapping[str, Any],
+    rng: random.Random,
+    default: float = 1.0,
+) -> float:
+    if not cfg or cfg.get("distribution") != "uniform":
+        return default
+
+    return rng.uniform(float(cfg["min"]), float(cfg["max"]))
+
+
+def clamp(value: float, min_value: float, max_value: float) -> float:
+    return max(min_value, min(value, max_value))
+
+
+# ============================================================
+# BUILDERS
+# ============================================================
+
+def build_lognormal_config(raw: Mapping[str, Any]) -> LogNormalDistributionConfig:
     return LogNormalDistributionConfig(
         distribution=raw["distribution"],
         mean=raw["mean"],
@@ -128,24 +215,20 @@ def build_error_multiplier(raw: Any) -> ErrorConditionMultiplier | float:
 
 
 def resolve_base_load_for_day(
-    simulation_raw: dict[str, Any],
+    simulation_raw: Mapping[str, Any],
     selected_day: str,
     rng: random.Random,
 ) -> float:
-    daily_charge = simulation_raw.get("daily_charge")
-    base_load_profiles = simulation_raw.get("base_load_profiles")
-
-    if not daily_charge:
-        raise ValueError(
-            "simulation_config.json debe contener 'daily_charge'. "
-            "Ejemplo: {'monday': 'low', 'tuesday': 'medium', ...}"
-        )
-
-    if not base_load_profiles:
-        raise ValueError(
-            "simulation_config.json debe contener 'base_load_profiles'. "
-            "Ejemplo: {'low': {'min': 0.1, 'max': 0.2}, ...}"
-        )
+    daily_charge = require_section(
+        simulation_raw,
+        "daily_charge",
+        "simulation_config.json",
+    )
+    base_load_profiles = require_section(
+        simulation_raw,
+        "base_load_profiles",
+        "simulation_config.json",
+    )
 
     if selected_day not in daily_charge:
         available_days = ", ".join(sorted(daily_charge.keys()))
@@ -178,33 +261,15 @@ def resolve_base_load_for_day(
             f"Perfil '{profile_name}' invalido: min ({min_value}) > max ({max_value})."
         )
 
-    base_load = rng.uniform(min_value, max_value)
-
-    return max(0.0, min(base_load, 1.0))
-
-
-def sample_uniform_factor(
-    cfg: dict[str, Any],
-    rng: random.Random,
-    default: float = 1.0,
-) -> float:
-    if not cfg:
-        return default
-
-    if cfg.get("distribution") != "uniform":
-        return default
-
-    return rng.uniform(cfg["min"], cfg["max"])
+    return clamp(rng.uniform(min_value, max_value), 0.0, 1.0)
 
 
 def load_weekly_time_distribution(
-    path: str | Path,
-    simulation_raw: dict[str, Any],
+    time_distribution_raw: Mapping[str, Any],
+    simulation_raw: Mapping[str, Any],
     rng: random.Random,
 ) -> list[WeekdayTimeDistribution]:
-    raw = load_json(path)
-
-    error_rate_mode = raw.get("error_rate_mode")
+    error_rate_mode = time_distribution_raw.get("error_rate_mode")
 
     if not error_rate_mode or str(error_rate_mode).strip().lower() != "multiplier":
         raise ValueError(
@@ -213,12 +278,12 @@ def load_weekly_time_distribution(
         )
 
     weekly_raw = require_section(
-        raw,
+        time_distribution_raw,
         "weekly_time_distribution",
         "time_distribution_config.json",
     )
 
-    execution_variability = raw.get("execution_variability", {})
+    execution_variability = time_distribution_raw.get("execution_variability", {})
     weekly_base_load_factor = 1.0
     weekly_error_factor = 1.0
 
@@ -242,29 +307,31 @@ def load_weekly_time_distribution(
             selected_day=day,
             rng=rng,
         )
-        base_load = max(0.0, min(base_load * weekly_base_load_factor, 1.0))
+        base_load = clamp(base_load * weekly_base_load_factor, 0.0, 1.0)
+
+        slots = [
+            TimeSlotConfig(
+                name=slot["name"],
+                start=slot["start"],
+                end=slot["end"],
+                percentage_load=slot["percentage_load"],
+                error_multiplier=slot["error_multiplier"] * weekly_error_factor,
+            )
+            for slot in day_raw["time_distribution"]
+        ]
 
         result.append(
             WeekdayTimeDistribution(
                 day=day,
                 base_load=base_load,
-                time_distribution=[
-                    TimeSlotConfig(
-                        name=slot["name"],
-                        start=slot["start"],
-                        end=slot["end"],
-                        percentage_load=slot["percentage_load"],
-                        error_multiplier=slot["error_multiplier"] * weekly_error_factor,
-                    )
-                    for slot in day_raw["time_distribution"]
-                ],
+                time_distribution=slots,
             )
         )
 
     return result
 
 
-def build_arrival_process_config(raw: dict[str, Any]) -> ArrivalProcessConfig | None:
+def build_arrival_process_config(raw: Mapping[str, Any]) -> ArrivalProcessConfig | None:
     arrival_raw = raw.get("arrival_process")
 
     if not arrival_raw:
@@ -277,7 +344,7 @@ def build_arrival_process_config(raw: dict[str, Any]) -> ArrivalProcessConfig | 
     )
 
 
-def build_capacity_config(raw: dict[str, Any]) -> CapacityConfig | None:
+def build_capacity_config(raw: Mapping[str, Any]) -> CapacityConfig | None:
     capacity_raw = raw.get("capacity")
 
     if not capacity_raw:
@@ -294,7 +361,7 @@ def build_capacity_config(raw: dict[str, Any]) -> CapacityConfig | None:
     )
 
 
-def build_outliers_config(raw: dict[str, Any]) -> OutliersConfig | None:
+def build_outliers_config(raw: Mapping[str, Any]) -> OutliersConfig | None:
     outliers_raw = raw.get("outliers")
 
     if not outliers_raw:
@@ -310,7 +377,7 @@ def build_outliers_config(raw: dict[str, Any]) -> OutliersConfig | None:
     )
 
 
-def build_storage_tier_config(cost_raw: dict[str, Any]) -> StorageTierConfig:
+def build_storage_tier_config(cost_raw: Mapping[str, Any]) -> StorageTierConfig:
     raw = require_section(cost_raw, "storage_tier", "cost_config.json")
 
     return StorageTierConfig(
@@ -327,7 +394,7 @@ def build_storage_tier_config(cost_raw: dict[str, Any]) -> StorageTierConfig:
     )
 
 
-def build_lifecycle_config(lifecycle_raw: dict[str, Any]) -> LifecycleConfig:
+def build_lifecycle_config(lifecycle_raw: Mapping[str, Any]) -> LifecycleConfig:
     raw = require_section(lifecycle_raw, "lifecycle", "lifecycle_config.json")
 
     return LifecycleConfig(
@@ -351,7 +418,7 @@ def build_lifecycle_config(lifecycle_raw: dict[str, Any]) -> LifecycleConfig:
     )
 
 
-def build_cost_model_config(cost_raw: dict[str, Any]) -> CostModelConfig:
+def build_cost_model_config(cost_raw: Mapping[str, Any]) -> CostModelConfig:
     raw = require_section(cost_raw, "cost_model", "cost_config.json")
 
     return CostModelConfig(
@@ -360,7 +427,7 @@ def build_cost_model_config(cost_raw: dict[str, Any]) -> CostModelConfig:
     )
 
 
-def build_errors_config(error_raw: dict[str, Any]) -> ErrorsConfig:
+def build_errors_config(error_raw: Mapping[str, Any]) -> ErrorsConfig:
     raw = require_section(error_raw, "errors", "error_config.json")
 
     multipliers = {
@@ -375,7 +442,7 @@ def build_errors_config(error_raw: dict[str, Any]) -> ErrorsConfig:
     )
 
 
-def build_error_families(error_raw: dict[str, Any]) -> list[ErrorFamily]:
+def build_error_families(error_raw: Mapping[str, Any]) -> list[ErrorFamily]:
     raw = require_section(error_raw, "errors", "error_config.json")
 
     return [
@@ -398,7 +465,7 @@ def build_error_families(error_raw: dict[str, Any]) -> list[ErrorFamily]:
     ]
 
 
-def build_file_type_config(simulation_raw: dict[str, Any]) -> FileTypeConfig:
+def build_file_type_config(simulation_raw: Mapping[str, Any]) -> FileTypeConfig:
     raw = require_section(simulation_raw, "file_types", "simulation_config.json")
 
     return FileTypeConfig(
@@ -410,7 +477,7 @@ def build_file_type_config(simulation_raw: dict[str, Any]) -> FileTypeConfig:
     )
 
 
-def build_transfer_config(simulation_raw: dict[str, Any]) -> TransferConfig:
+def build_transfer_config(simulation_raw: Mapping[str, Any]) -> TransferConfig:
     raw = require_section(simulation_raw, "transfer", "simulation_config.json")
 
     return TransferConfig(
@@ -419,7 +486,7 @@ def build_transfer_config(simulation_raw: dict[str, Any]) -> TransferConfig:
     )
 
 
-def build_scenario_config(simulation_raw: dict[str, Any]) -> ScenarioConfig | None:
+def build_scenario_config(simulation_raw: Mapping[str, Any]) -> ScenarioConfig | None:
     scenario_name = None
     scenario_description = None
 
@@ -439,28 +506,19 @@ def build_scenario_config(simulation_raw: dict[str, Any]) -> ScenarioConfig | No
     return ScenarioConfig(name=scenario_name, description=scenario_description)
 
 
-def load_configuration(
-    simulation_config_path: str | Path,
-    time_distribution_path: str | Path,
-    lifecycle_config_path: str | Path,
-    cost_config_path: str | Path,
-    error_config_path: str | Path,
-    noise_config_path: str | Path,
-    realism_config_path: str | Path,
-    correlation_config_path: str | Path,
+# ============================================================
+# CONFIGURATION LOADER
+# ============================================================
+
+def build_dataset_config(
+    raw: RawConfigBundle,
     simulation_date: str | None = None,
     day: str | None = None,
 ) -> DatasetSimulationConfig:
-    simulation_raw = load_json(simulation_config_path)
-    lifecycle_raw = load_json(lifecycle_config_path)
-    cost_raw = load_json(cost_config_path)
-    error_raw = load_json(error_config_path)
-    noise_raw = load_json(noise_config_path)
-    realism_raw = load_json(realism_config_path)
-    correlation_raw = load_json(correlation_config_path)
+    validate_required_simulation_sections(raw.simulation)
 
     simulation_section = require_section(
-        simulation_raw,
+        raw.simulation,
         "simulation",
         "simulation_config.json",
     )
@@ -474,8 +532,8 @@ def load_configuration(
     rng = random.Random(seed)
 
     weekly_time_distribution = load_weekly_time_distribution(
-        path=time_distribution_path,
-        simulation_raw=simulation_raw,
+        time_distribution_raw=raw.time_distribution,
+        simulation_raw=raw.simulation,
         rng=rng,
     )
 
@@ -487,41 +545,77 @@ def load_configuration(
         seed=seed,
     )
 
-    hash_raw = simulation_raw.get("hash", DEFAULT_HASH_CONFIG)
+    hash_raw = raw.simulation.get("hash", DEFAULT_HASH_CONFIG)
     hash_config = HashConfig(**hash_raw) if hash_raw else None
 
     config = instantiate_supported(
         DatasetSimulationConfig,
         simulation=simulation,
-        file_types=build_file_type_config(simulation_raw),
-        storage_tier=build_storage_tier_config(cost_raw),
-        lifecycle=build_lifecycle_config(lifecycle_raw),
-        transfer=build_transfer_config(simulation_raw),
-        cost_model=build_cost_model_config(cost_raw),
-        errors=build_errors_config(error_raw),
+        file_types=build_file_type_config(raw.simulation),
+        storage_tier=build_storage_tier_config(raw.cost),
+        lifecycle=build_lifecycle_config(raw.lifecycle),
+        transfer=build_transfer_config(raw.simulation),
+        cost_model=build_cost_model_config(raw.cost),
+        errors=build_errors_config(raw.error),
         hash=hash_config,
         weekly_time_distribution=weekly_time_distribution,
-        error_families=build_error_families(error_raw),
-        arrival_process=build_arrival_process_config(simulation_raw),
-        capacity=build_capacity_config(simulation_raw),
-        outliers=build_outliers_config(simulation_raw),
-        scenario=build_scenario_config(simulation_raw),
-        noise=noise_raw.get("noise"),
-        realism=realism_raw.get("realism"),
-        correlations=correlation_raw.get("correlations"),
-        raw_noise_config=noise_raw,
-        raw_realism_config=realism_raw,
-        raw_correlation_config=correlation_raw,
-        raw_cost_config=cost_raw,
-        raw_lifecycle_config=lifecycle_raw,
-        raw_error_config=error_raw,
+        error_families=build_error_families(raw.error),
+        arrival_process=build_arrival_process_config(raw.simulation),
+        capacity=build_capacity_config(raw.simulation),
+        outliers=build_outliers_config(raw.simulation),
+        scenario=build_scenario_config(raw.simulation),
+        noise=raw.noise.get("noise"),
+        realism=raw.realism.get("realism"),
+        correlations=raw.correlation.get("correlations"),
+        raw_noise_config=raw.noise,
+        raw_realism_config=raw.realism,
+        raw_correlation_config=raw.correlation,
+        raw_cost_config=raw.cost,
+        raw_lifecycle_config=raw.lifecycle,
+        raw_error_config=raw.error,
     )
 
     config.validate()
     return config
 
 
-def main() -> int:
+def load_configuration(
+    simulation_config_path: str | Path,
+    time_distribution_path: str | Path,
+    lifecycle_config_path: str | Path,
+    cost_config_path: str | Path,
+    error_config_path: str | Path,
+    noise_config_path: str | Path,
+    realism_config_path: str | Path,
+    correlation_config_path: str | Path,
+    simulation_date: str | None = None,
+    day: str | None = None,
+) -> DatasetSimulationConfig:
+    paths = ConfigPaths(
+        simulation_config=Path(simulation_config_path),
+        time_distribution=Path(time_distribution_path),
+        lifecycle_config=Path(lifecycle_config_path),
+        cost_config=Path(cost_config_path),
+        error_config=Path(error_config_path),
+        noise_config=Path(noise_config_path),
+        realism_config=Path(realism_config_path),
+        correlation_config=Path(correlation_config_path),
+    )
+
+    raw = load_raw_configs(paths)
+
+    return build_dataset_config(
+        raw=raw,
+        simulation_date=simulation_date,
+        day=day,
+    )
+
+
+# ============================================================
+# CLI
+# ============================================================
+
+def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Run dataset-first thesis simulator with modular configuration files."
     )
@@ -537,7 +631,11 @@ def main() -> int:
     parser.add_argument("--simulation-date", required=False)
     parser.add_argument("--day", required=False)
 
-    args = parser.parse_args()
+    return parser.parse_args()
+
+
+def main() -> int:
+    args = parse_args()
 
     config = load_configuration(
         simulation_config_path=args.simulation_config,

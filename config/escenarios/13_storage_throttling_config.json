@@ -1,0 +1,35 @@
+{
+  "config_metadata": {
+    "config_name": "13_storage_throttling_config",
+    "version": "5.0",
+    "description": "Throttling de almacenamiento.",
+    "generated_at": "2026-05-18T12:23:58.831033+00:00",
+    "format": "flat_override_config"
+  },
+  "scenario": {
+    "scenario_id": "13_storage_throttling",
+    "seed": 54,
+    "description": "Throttling de almacenamiento.",
+    "runtime_config_dir": "../../output/runtime_configs/13_storage_throttling",
+    "overrides": {
+      "simulation_config.simulation.seed": 54,
+      "simulation_config.scenario.name": "13_storage_throttling",
+      "simulation_config.scenario.description": "Throttling de almacenamiento.",
+      "simulation_config.daily_charge": {
+        "monday": "medium",
+        "tuesday": "high",
+        "wednesday": "medium",
+        "thursday": "high",
+        "friday": "medium",
+        "saturday": "medium",
+        "sunday": "low"
+      },
+      "noise_config.noise.active_profile": "high",
+      "error_config.errors.base_error_probability": 0.045,
+      "realism_config.realism.incidents.probability_per_simulated_day": 0.18,
+      "realism_config.realism.saturation.queue_pressure_threshold": 0.68,
+      "simulation_config.capacity.files_per_hour": 650,
+      "simulation_config.transfer.duration_model.max_duration_sec": 4800
+    }
+  }
+}

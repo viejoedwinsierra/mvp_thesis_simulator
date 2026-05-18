@@ -1,11 +1,18 @@
 {
+  "config_metadata": {
+    "config_name": "lifecycle_config",
+    "version": "2.1-config-driven",
+    "owner": "storage_lifecycle_and_access_age",
+    "description": "Edad del blob, dias desde ultimo acceso y probabilidad de movimiento entre tiers.",
+    "updated_at": "2026-05-18T12:17:50.995164+00:00",
+    "update_note": "Se agregan ajustes beta dinamicos configurables para days_since_last_access."
+  },
   "lifecycle": {
     "days_stored": {
       "distribution": "uniform",
       "min": 1,
       "max": 180
     },
-
     "days_since_last_access": {
       "strategy": "beta_scaled_to_days_stored",
       "profiles": {
@@ -23,29 +30,40 @@
         }
       },
       "distribution_weights": {
-        "low_access": 0.50,
-        "medium_access": 0.30,
-        "high_access": 0.20
+        "low_access": 0.5,
+        "medium_access": 0.3,
+        "high_access": 0.2
       },
-      "constraint": "days_since_last_access <= days_stored"
+      "constraint": "days_since_last_access <= days_stored",
+      "dynamic_beta_adjustments": {
+        "enabled": true,
+        "description": "Ajustes dinamicos de alpha/beta segun edad del blob. Reemplaza constantes hardcoded.",
+        "recent_files": {
+          "enabled": true,
+          "max_days_stored": 7,
+          "alpha_multiplier": 1.5
+        },
+        "old_files": {
+          "enabled": true,
+          "min_days_stored": 120,
+          "beta_multiplier": 1.3
+        }
+      }
     },
-
     "movement_storage": {
       "enabled": true,
       "default_probability": 0.15,
       "probability_by_tier": {
-        "hot": 0.20,
+        "hot": 0.2,
         "cool": 0.12,
         "archive": 0.05
       }
     },
-
     "policy_execution": {
       "enabled": true,
       "delay_probability": 0.08,
       "manual_override_probability": 0.03
     },
-
     "output_columns": {
       "days_stored": true,
       "days_since_last_access": true,

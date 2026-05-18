@@ -1,0 +1,37 @@
+{
+  "config_metadata": {
+    "config_name": "20_caos_controlado_config",
+    "version": "5.0",
+    "description": "Caos controlado con alta carga.",
+    "generated_at": "2026-05-18T12:23:58.834206+00:00",
+    "format": "flat_override_config"
+  },
+  "scenario": {
+    "scenario_id": "20_caos_controlado",
+    "seed": 61,
+    "description": "Caos controlado con alta carga.",
+    "runtime_config_dir": "../../output/runtime_configs/20_caos_controlado",
+    "overrides": {
+      "simulation_config.simulation.seed": 61,
+      "simulation_config.scenario.name": "20_caos_controlado",
+      "simulation_config.scenario.description": "Caos controlado con alta carga.",
+      "simulation_config.daily_charge": {
+        "monday": "high",
+        "tuesday": "high",
+        "wednesday": "high",
+        "thursday": "high",
+        "friday": "high",
+        "saturday": "medium",
+        "sunday": "medium"
+      },
+      "noise_config.noise.active_profile": "high",
+      "error_config.errors.base_error_probability": 0.07,
+      "realism_config.realism.incidents.probability_per_simulated_day": 0.25,
+      "realism_config.realism.saturation.queue_pressure_threshold": 0.6,
+      "simulation_config.capacity.files_per_hour": 520,
+      "simulation_config.capacity.congestion_model.max_congestion_factor": 5.8,
+      "simulation_config.capacity.duration_congestion_model.max_duration_sec": 5400,
+      "simulation_config.arrival_process.event_model.event_probability": 0.24
+    }
+  }
+}

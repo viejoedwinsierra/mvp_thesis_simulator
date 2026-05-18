@@ -1,0 +1,33 @@
+{
+  "config_metadata": {
+    "config_name": "14_metadata_latency_config",
+    "version": "5.0",
+    "description": "Latencia de metadata.",
+    "generated_at": "2026-05-18T12:23:58.831556+00:00",
+    "format": "flat_override_config"
+  },
+  "scenario": {
+    "scenario_id": "14_metadata_latency",
+    "seed": 55,
+    "description": "Latencia de metadata.",
+    "runtime_config_dir": "../../output/runtime_configs/14_metadata_latency",
+    "overrides": {
+      "simulation_config.simulation.seed": 55,
+      "simulation_config.scenario.name": "14_metadata_latency",
+      "simulation_config.scenario.description": "Latencia de metadata.",
+      "simulation_config.daily_charge": {
+        "monday": "medium",
+        "tuesday": "high",
+        "wednesday": "medium",
+        "thursday": "high",
+        "friday": "medium",
+        "saturday": "medium",
+        "sunday": "low"
+      },
+      "noise_config.noise.active_profile": "medium",
+      "error_config.errors.base_error_probability": 0.028,
+      "realism_config.realism.incidents.probability_per_simulated_day": 0.09,
+      "realism_config.realism.saturation.queue_pressure_threshold": 0.76
+    }
+  }
+}

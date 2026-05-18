@@ -1,0 +1,33 @@
+{
+  "config_metadata": {
+    "config_name": "19_caos_suave_config",
+    "version": "5.0",
+    "description": "Perturbaciones moderadas.",
+    "generated_at": "2026-05-18T12:23:58.833741+00:00",
+    "format": "flat_override_config"
+  },
+  "scenario": {
+    "scenario_id": "19_caos_suave",
+    "seed": 60,
+    "description": "Perturbaciones moderadas.",
+    "runtime_config_dir": "../../output/runtime_configs/19_caos_suave",
+    "overrides": {
+      "simulation_config.simulation.seed": 60,
+      "simulation_config.scenario.name": "19_caos_suave",
+      "simulation_config.scenario.description": "Perturbaciones moderadas.",
+      "simulation_config.daily_charge": {
+        "monday": "high",
+        "tuesday": "high",
+        "wednesday": "high",
+        "thursday": "high",
+        "friday": "high",
+        "saturday": "medium",
+        "sunday": "medium"
+      },
+      "noise_config.noise.active_profile": "high",
+      "error_config.errors.base_error_probability": 0.06,
+      "realism_config.realism.incidents.probability_per_simulated_day": 0.22,
+      "realism_config.realism.saturation.queue_pressure_threshold": 0.64
+    }
+  }
+}

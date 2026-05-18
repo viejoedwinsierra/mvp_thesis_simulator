@@ -1,0 +1,33 @@
+{
+  "config_metadata": {
+    "config_name": "08_hot_tier_dominante_config",
+    "version": "5.0",
+    "description": "Predominio de archivos recientes hot tier.",
+    "generated_at": "2026-05-18T12:23:58.829128+00:00",
+    "format": "flat_override_config"
+  },
+  "scenario": {
+    "scenario_id": "08_hot_tier_dominante",
+    "seed": 49,
+    "description": "Predominio de archivos recientes hot tier.",
+    "runtime_config_dir": "../../output/runtime_configs/08_hot_tier_dominante",
+    "overrides": {
+      "simulation_config.simulation.seed": 49,
+      "simulation_config.scenario.name": "08_hot_tier_dominante",
+      "simulation_config.scenario.description": "Predominio de archivos recientes hot tier.",
+      "simulation_config.daily_charge": {
+        "monday": "medium",
+        "tuesday": "high",
+        "wednesday": "medium",
+        "thursday": "high",
+        "friday": "medium",
+        "saturday": "medium",
+        "sunday": "low"
+      },
+      "noise_config.noise.active_profile": "low",
+      "error_config.errors.base_error_probability": 0.012,
+      "realism_config.realism.incidents.probability_per_simulated_day": 0.03,
+      "realism_config.realism.saturation.queue_pressure_threshold": 0.86
+    }
+  }
+}

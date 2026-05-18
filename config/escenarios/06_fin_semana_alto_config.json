@@ -1,0 +1,33 @@
+{
+  "config_metadata": {
+    "config_name": "06_fin_semana_alto_config",
+    "version": "5.0",
+    "description": "Carga alta durante fin de semana.",
+    "generated_at": "2026-05-18T12:23:58.828356+00:00",
+    "format": "flat_override_config"
+  },
+  "scenario": {
+    "scenario_id": "06_fin_semana_alto",
+    "seed": 47,
+    "description": "Carga alta durante fin de semana.",
+    "runtime_config_dir": "../../output/runtime_configs/06_fin_semana_alto",
+    "overrides": {
+      "simulation_config.simulation.seed": 47,
+      "simulation_config.scenario.name": "06_fin_semana_alto",
+      "simulation_config.scenario.description": "Carga alta durante fin de semana.",
+      "simulation_config.daily_charge": {
+        "monday": "medium",
+        "tuesday": "high",
+        "wednesday": "medium",
+        "thursday": "high",
+        "friday": "medium",
+        "saturday": "medium",
+        "sunday": "low"
+      },
+      "noise_config.noise.active_profile": "medium",
+      "error_config.errors.base_error_probability": 0.021,
+      "realism_config.realism.incidents.probability_per_simulated_day": 0.07,
+      "realism_config.realism.saturation.queue_pressure_threshold": 0.79
+    }
+  }
+}

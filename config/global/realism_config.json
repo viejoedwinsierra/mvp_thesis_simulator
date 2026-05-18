@@ -1,9 +1,15 @@
 {
+  "config_metadata": {
+    "config_name": "realism_config",
+    "version": "2.1-config-driven",
+    "owner": "operational_realism_state_and_incidents",
+    "description": "Realismo operacional: incidentes, drift, saturacion, retries, metadata y ruido de politicas. No define costos base ni probabilidad base de error.",
+    "updated_at": "2026-05-18T12:17:50.995439+00:00"
+  },
   "realism": {
     "enabled": true,
     "version": "1.2",
     "description": "Configuracion transversal para simular imperfecciones operacionales del sistema.",
-
     "modules": {
       "correlations": {
         "enabled": true,
@@ -34,7 +40,6 @@
         "enabled": true
       }
     },
-
     "execution_controls": {
       "apply_after": [
         "time_distribution",
@@ -51,9 +56,8 @@
         "storage_cost"
       ]
     },
-
     "dynamic_capacity": {
-      "base_files_per_hour_source": "capacity.files_per_hour",
+      "base_files_per_hour_source": "simulation_config.capacity.files_per_hour",
       "min_files_per_hour": 600,
       "max_files_per_hour": 1100,
       "capacity_variability_enabled": false,
@@ -64,9 +68,9 @@
       "recovery": {
         "enabled": true,
         "recovery_rate_per_hour": 0.12
-      }
+      },
+      "description": "Usa la capacidad base de simulation_config y aplica variacion, degradacion y recuperacion operacional."
     },
-
     "incidents": {
       "probability_per_simulated_day": 0.08,
       "max_incidents_per_day": 2,
@@ -77,52 +81,48 @@
           "duration_hours_min": 1,
           "duration_hours_max": 3,
           "speed_multiplier": 0.45,
-          "duration_multiplier": 1.90,
-          "error_multiplier": 2.50
+          "duration_multiplier": 1.9,
+          "error_multiplier": 2.5
         },
         "storage_throttling": {
-          "weight": 0.30,
+          "weight": 0.3,
           "duration_hours_min": 1,
           "duration_hours_max": 2,
           "capacity_multiplier": 0.55,
-          "duration_multiplier": 2.00,
-          "error_multiplier": 1.80
+          "duration_multiplier": 2.0,
+          "error_multiplier": 1.8
         },
         "metadata_service_latency": {
           "weight": 0.25,
           "duration_hours_min": 1,
           "duration_hours_max": 4,
           "duration_multiplier": 1.45,
-          "error_multiplier": 1.80
+          "error_multiplier": 1.8
         }
       }
     },
-
     "entity_skew": {
       "entity_type": "prefix",
       "strategy": "pareto",
-      "pareto_alpha": 1.40,
-      "top_entities_load_share": 0.70,
+      "pareto_alpha": 1.4,
+      "top_entities_load_share": 0.7,
       "min_entities": 8,
       "max_entities": 30
     },
-
     "metadata_quality": {
-      "missing_metadata_probability": 0.030,
+      "missing_metadata_probability": 0.03,
       "wrong_extension_probability": 0.015,
-      "empty_file_probability": 0.010,
+      "empty_file_probability": 0.01,
       "invalid_timestamp_probability": 0.005,
-      "malformed_json_probability": 0.020,
+      "malformed_json_probability": 0.02,
       "unknown_content_type_probability": 0.012
     },
-
     "storage_policy_noise": {
-      "wrong_tier_probability": 0.060,
-      "force_hot_large_files_probability": 0.040,
-      "archive_recent_file_probability": 0.020,
-      "cool_recent_file_probability": 0.030
+      "wrong_tier_probability": 0.06,
+      "force_hot_large_files_probability": 0.04,
+      "archive_recent_file_probability": 0.02,
+      "cool_recent_file_probability": 0.03
     },
-
     "retries": {
       "max_retries": 3,
       "retry_probability_after_error": 0.65,
@@ -138,18 +138,33 @@
         "increase_duration_multiplier": 1.15
       }
     },
-
     "saturation": {
-      "queue_pressure_threshold": 0.80,
+      "queue_pressure_threshold": 0.8,
       "duration_growth": "exponential",
-      "duration_multiplier_max": 4.00,
-      "error_multiplier_max": 3.00,
-      "congestion_multiplier_max": 2.80
+      "duration_multiplier_max": 4.0,
+      "error_multiplier_max": 3.0,
+      "congestion_multiplier_max": 2.8,
+      "duration_penalty_factor": 0.55,
+      "error_penalty_factor": 0.35,
+      "duration_overload_exponent": 1.5,
+      "error_overload_exponent": 1.0,
+      "congestion_overload_exponent": 1.0
     },
-
     "daily_drift": {
       "speed_drift_std": 0.08,
       "error_drift_std": 0.04
+    },
+    "traceability": {
+      "enabled": true,
+      "output_columns": {
+        "has_incident": true,
+        "incident_type": true,
+        "metadata_quality_score": true,
+        "storage_policy_noise_applied": true,
+        "retry_count": true,
+        "retry_success": true,
+        "retry_delay_sec": true
+      }
     }
   }
 }

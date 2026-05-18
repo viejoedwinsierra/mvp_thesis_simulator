@@ -339,37 +339,159 @@ class SimulationOrchestrator:
         return list(zip(hours, weights))
 
     def apply_hourly_noise(self, expected_hourly_count: float) -> float:
+        """
+        Aplica variabilidad horaria sobre el volumen esperado.
+
+        Fuentes de configuración:
+        - simulation_config.arrival_process.hourly_noise
+        - simulation_config.arrival_process.event_model
+
+        Objetivos:
+        - evitar constantes hardcoded;
+        - mantener estabilidad estadística;
+        - soportar tuning desde configuración.
+        """
+
         arrival_process = getattr(self.config, "arrival_process", None)
 
-        hourly_noise = 0.0
-        if arrival_process is not None:
-            hourly_noise = getattr(arrival_process, "hourly_noise", 0.10)
+        if arrival_process is None:
+            return max(expected_hourly_count, 0.0)
 
-        # 🔥 1. Ruido base (normal, no uniforme)
-        noise = self.rng.normalvariate(0, hourly_noise / 2)
+        # =========================================================
+        # 1. Ruido base configurable
+        # =========================================================
 
-        # 🔥 2. Eventos ocasionales (picos o caídas)
-        event_prob = 0.08  # 8% de horas con evento
+        hourly_noise = max(
+            getattr(arrival_process, "hourly_noise", 0.10),
+            0.0,
+        )
 
-        if self.rng.random() < event_prob:
-            if self.rng.random() < 0.7:
-                # 📈 pico (más común)
-                noise += self.rng.uniform(0.15, 0.35)
+        # =========================================================
+        # 2. Event model desde raw config
+        # =========================================================
+
+        event_model = self.get_simulation_block(
+            "arrival_process",
+            "event_model",
+            default={},
+        )
+
+        event_enabled = event_model.get("enabled", True)
+
+        event_probability = event_model.get(
+            "event_probability",
+            0.08,
+        )
+
+        spike_probability = event_model.get(
+            "spike_probability",
+            0.70,
+        )
+
+        spike_noise_min = event_model.get(
+            "spike_noise_min",
+            0.15,
+        )
+
+        spike_noise_max = event_model.get(
+            "spike_noise_max",
+            0.35,
+        )
+
+        drop_noise_min = event_model.get(
+            "drop_noise_min",
+            0.10,
+        )
+
+        drop_noise_max = event_model.get(
+            "drop_noise_max",
+            0.25,
+        )
+
+        volume_scale_divisor = max(
+            event_model.get("volume_scale_divisor", 1000),
+            1,
+        )
+
+        volume_scale_max = max(
+            event_model.get("volume_scale_max", 2.0),
+            0.0,
+        )
+
+        volume_scale_multiplier = max(
+            event_model.get("volume_scale_multiplier", 0.5),
+            0.0,
+        )
+
+        noise_min = event_model.get(
+            "noise_min",
+            -0.40,
+        )
+
+        noise_max = event_model.get(
+            "noise_max",
+            0.50,
+        )
+
+        # =========================================================
+        # 3. Ruido base gaussiano
+        # =========================================================
+
+        noise = self.rng.normalvariate(
+            0,
+            hourly_noise / 2,
+        )
+
+        # =========================================================
+        # 4. Eventos operacionales
+        # =========================================================
+
+        if event_enabled and self.rng.random() < event_probability:
+
+            if self.rng.random() < spike_probability:
+                # 📈 spike
+                noise += self.rng.uniform(
+                    spike_noise_min,
+                    spike_noise_max,
+                )
+
             else:
-                # 📉 caída
-                noise -= self.rng.uniform(0.10, 0.25)
+                # 📉 drop
+                noise -= self.rng.uniform(
+                    drop_noise_min,
+                    drop_noise_max,
+                )
 
-        # 🔥 3. Escalar ruido con volumen (más carga = más variabilidad)
-        scale_factor = min(expected_hourly_count / 1000, 2.0)
-        noise *= (1 + 0.5 * scale_factor)
+        # =========================================================
+        # 5. Escalamiento por volumen
+        # =========================================================
 
-        # 🔒 4. Clamp para evitar extremos absurdos
-        noise = max(min(noise, 0.5), -0.4)
+        scale_factor = min(
+            expected_hourly_count / volume_scale_divisor,
+            volume_scale_max,
+        )
+
+        noise *= (
+            1 + volume_scale_multiplier * scale_factor
+        )
+
+        # =========================================================
+        # 6. Clamp de estabilidad
+        # =========================================================
+
+        noise = max(
+            min(noise, noise_max),
+            noise_min,
+        )
+
+        # =========================================================
+        # 7. Resultado final
+        # =========================================================
 
         result = expected_hourly_count * (1 + noise)
 
         return max(result, 0.0)
-
+        
     def poisson(self, lambda_value: float) -> int:
         if lambda_value <= 0:
             return 0
@@ -392,25 +514,47 @@ class SimulationOrchestrator:
         if queue_pressure <= 1:
             return 1.0
 
+        capacity = getattr(self.config, "capacity", None)
+        congestion_model = getattr(capacity, "congestion_model", None)
+
+        if congestion_model is None or not getattr(congestion_model, "enabled", True):
+            return 1.0
+
         overload = queue_pressure - 1
 
-        # 🔥 1. Base no lineal más agresiva
-        base = 1 + (overload ** 1.3)
+        overload_exponent = getattr(congestion_model, "overload_exponent", 1.3)
 
-        # 🔥 2. Amplificación progresiva
-        if queue_pressure > 1.5:
-            base *= self.rng.uniform(1.2, 1.8)
+        base = 1 + (overload ** overload_exponent)
 
-        if queue_pressure > 2.0:
-            base *= self.rng.uniform(1.5, 2.5)
+        moderate_threshold = getattr(congestion_model, "moderate_threshold", 1.5)
+        severe_threshold = getattr(congestion_model, "severe_threshold", 2.0)
 
-        # 🔥 3. Variabilidad (evita dataset artificial)
-        noise = self.rng.uniform(0.9, 1.2)
+        if queue_pressure > moderate_threshold:
+            base *= self.rng.uniform(
+                getattr(congestion_model, "moderate_amplification_min", 1.2),
+                getattr(congestion_model, "moderate_amplification_max", 1.8),
+            )
+
+        if queue_pressure > severe_threshold:
+            base *= self.rng.uniform(
+                getattr(congestion_model, "severe_amplification_min", 1.5),
+                getattr(congestion_model, "severe_amplification_max", 2.5),
+            )
+
+        noise = self.rng.uniform(
+            getattr(congestion_model, "residual_noise_min", 0.9),
+            getattr(congestion_model, "residual_noise_max", 1.2),
+        )
 
         congestion_factor = base * noise
 
-        # 🔒 4. Clamp (control estadístico)
-        return min(congestion_factor, 5.0)
+        max_congestion_factor = getattr(
+            congestion_model,
+            "max_congestion_factor",
+            5.0,
+        )
+
+        return min(congestion_factor, max_congestion_factor)
 
     def apply_congestion_to_duration(
         self,
@@ -423,30 +567,46 @@ class SimulationOrchestrator:
         if capacity is None or not getattr(capacity, "enabled", False):
             return transfer_duration_sec
 
-        penalty_base = getattr(capacity, "duration_penalty_factor", 0.5)
+        duration_model = getattr(capacity, "duration_congestion_model", None)
 
-        # Sin congestión real
+        if duration_model is None or not getattr(duration_model, "enabled", True):
+            return transfer_duration_sec
+
         if congestion_factor <= 1:
             return transfer_duration_sec
 
         overload = congestion_factor - 1
 
-        # 🔥 1. Penalización no lineal (clave)
-        nonlinear_penalty = 1 + (overload ** 1.5) * penalty_base
+        penalty_base = getattr(capacity, "duration_penalty_factor", 0.55)
+        overload_exponent = getattr(duration_model, "overload_exponent", 1.5)
 
-        # 🔥 2. Variabilidad (muy importante)
-        noise = self.rng.uniform(0.9, 1.3)
+        nonlinear_penalty = 1 + (overload ** overload_exponent) * penalty_base
 
-        # 🔥 3. Penalización adicional si hay congestión severa
-        if congestion_factor > 1.5:
-            spike = self.rng.uniform(1.2, 2.5)
+        noise = self.rng.uniform(
+            getattr(duration_model, "noise_min", 0.9),
+            getattr(duration_model, "noise_max", 1.3),
+        )
+
+        severe_threshold = getattr(duration_model, "severe_threshold", 1.5)
+
+        if congestion_factor > severe_threshold:
+            spike = self.rng.uniform(
+                getattr(duration_model, "spike_min", 1.2),
+                getattr(duration_model, "spike_max", 2.5),
+            )
         else:
             spike = 1.0
 
-        adjusted_duration = transfer_duration_sec * nonlinear_penalty * noise * spike
+        adjusted_duration = (
+            transfer_duration_sec
+            * nonlinear_penalty
+            * noise
+            * spike
+        )
 
-        # 🔒 4. Clamp para evitar explosiones irreales
-        return min(adjusted_duration, 3600)
+        max_duration_sec = getattr(duration_model, "max_duration_sec", 3600)
+
+        return min(adjusted_duration, max_duration_sec)
 
     def generate_created_at_datetime_for_hour(self, created_hour: int) -> datetime:
         base_date = datetime.fromisoformat(self.config.simulation.simulation_date)
@@ -500,13 +660,42 @@ class SimulationOrchestrator:
     def apply_scenario_to_size(self, size_mb: float) -> float:
         scenario_name = self.get_scenario_name()
 
-        if scenario_name == "large_files":
-            return size_mb * self.rng.uniform(1.10, 1.35)
+        if scenario_name is None:
+            return size_mb
 
-        if scenario_name == "high_load":
-            return size_mb * self.rng.uniform(0.95, 1.10)
+        scenario_effects = getattr(self.config, "scenario_effects", None)
 
-        return size_mb
+        if (
+            scenario_effects is None
+            or not getattr(scenario_effects, "enabled", False)
+        ):
+            return size_mb
+
+        by_scenario = getattr(scenario_effects, "by_scenario", {})
+
+        scenario_cfg = by_scenario.get(scenario_name)
+
+        if scenario_cfg is None:
+            return size_mb
+
+        size_multiplier = getattr(
+            scenario_cfg,
+            "size_multiplier",
+            None,
+        )
+
+        if (
+            size_multiplier is None
+            or not getattr(size_multiplier, "enabled", False)
+        ):
+            return size_mb
+
+        multiplier = self.rng.uniform(
+            getattr(size_multiplier, "min", 1.0),
+            getattr(size_multiplier, "max", 1.0),
+        )
+
+        return size_mb * multiplier
 
     def apply_scenario_to_transfer_speed(
         self,
@@ -514,38 +703,112 @@ class SimulationOrchestrator:
         queue_pressure: float = 1.0,
         congestion_factor: float = 1.0,
     ) -> float:
-        scenario_name = self.get_scenario_name()
 
         speed = transfer_speed_mbps
 
-        # Penalización por escenario
-        if scenario_name == "network_degraded":
-            speed *= self.rng.uniform(0.45, 0.75)
+        scenario_name = self.get_scenario_name()
 
-        elif scenario_name == "low_capacity":
-            speed *= self.rng.uniform(0.70, 0.95)
+        scenario_effects = getattr(self.config, "scenario_effects", None)
 
-        elif scenario_name == "large_files":
-            speed *= self.rng.uniform(0.90, 1.00)
+        if (
+            scenario_name is not None
+            and scenario_effects is not None
+            and getattr(scenario_effects, "enabled", False)
+        ):
+            by_scenario = getattr(scenario_effects, "by_scenario", {})
 
-        elif scenario_name == "high_error":
-            speed *= self.rng.uniform(0.85, 1.00)
+            scenario_cfg = by_scenario.get(scenario_name)
 
-        # Penalización por presión de cola
-        if queue_pressure > 1:
-            overload = queue_pressure - 1
-            pressure_penalty = 1 / (1 + min(overload * 0.35, 0.75))
-            speed *= pressure_penalty
+            if scenario_cfg is not None:
+                transfer_multiplier = getattr(
+                    scenario_cfg,
+                    "transfer_speed_multiplier",
+                    None,
+                )
 
-        # Penalización por congestión real
-        if congestion_factor > 1:
-            congestion_penalty = 1 / (1 + min((congestion_factor - 1) * 0.25, 0.60))
-            speed *= congestion_penalty
+                if (
+                    transfer_multiplier is not None
+                    and getattr(transfer_multiplier, "enabled", False)
+                ):
+                    speed *= self.rng.uniform(
+                        getattr(transfer_multiplier, "min", 1.0),
+                        getattr(transfer_multiplier, "max", 1.0),
+                    )
 
-        # Ruido operativo leve
-        speed *= self.rng.uniform(0.95, 1.05)
+        transfer_cfg = getattr(self.config, "transfer", None)
+        duration_model = getattr(transfer_cfg, "duration_model", None)
 
-        return max(speed, 0.5)
+        if duration_model is not None:
+
+            queue_penalty_cfg = getattr(
+                duration_model,
+                "queue_pressure_penalty",
+                None,
+            )
+
+            if (
+                queue_pressure > 1
+                and queue_penalty_cfg is not None
+                and getattr(queue_penalty_cfg, "enabled", True)
+            ):
+                overload = queue_pressure - 1
+
+                factor = getattr(queue_penalty_cfg, "factor", 0.35)
+                max_penalty = getattr(queue_penalty_cfg, "max_penalty", 0.75)
+
+                pressure_penalty = 1 / (
+                    1 + min(overload * factor, max_penalty)
+                )
+
+                speed *= pressure_penalty
+
+            congestion_penalty_cfg = getattr(
+                duration_model,
+                "congestion_speed_penalty",
+                None,
+            )
+
+            if (
+                congestion_factor > 1
+                and congestion_penalty_cfg is not None
+                and getattr(congestion_penalty_cfg, "enabled", True)
+            ):
+                overload = congestion_factor - 1
+
+                factor = getattr(congestion_penalty_cfg, "factor", 0.25)
+                max_penalty = getattr(congestion_penalty_cfg, "max_penalty", 0.60)
+
+                congestion_penalty = 1 / (
+                    1 + min(overload * factor, max_penalty)
+                )
+
+                speed *= congestion_penalty
+
+            operational_noise_cfg = getattr(
+                duration_model,
+                "operational_speed_noise",
+                None,
+            )
+
+            if (
+                operational_noise_cfg is not None
+                and getattr(operational_noise_cfg, "enabled", True)
+            ):
+                speed *= self.rng.uniform(
+                    getattr(operational_noise_cfg, "min", 0.95),
+                    getattr(operational_noise_cfg, "max", 1.05),
+                )
+
+            min_speed = getattr(
+                duration_model,
+                "min_transfer_speed_mbps",
+                0.5,
+            )
+
+        else:
+            min_speed = 0.5
+
+        return max(speed, min_speed)
 
     def generate_days_stored(self) -> int:
         return self.rng.randint(
@@ -559,28 +822,35 @@ class SimulationOrchestrator:
         profile_name = self.pick_weighted(access_cfg.distribution_weights)
         profile = access_cfg.profiles[profile_name]
 
-        # 🔥 1. Ajuste dinámico (muy importante)
         alpha = profile.alpha
         beta = profile.beta
 
-        if days_stored < 7:
-            alpha *= 1.5  # más probabilidad de acceso reciente
-        elif days_stored > 120:
-            beta *= 1.3   # más abandono
+        dynamic_cfg = getattr(access_cfg, "dynamic_beta_adjustments", None)
 
-        # 🔥 2. Beta distribution
+        if dynamic_cfg is not None and getattr(dynamic_cfg, "enabled", True):
+            recent_cfg = getattr(dynamic_cfg, "recent_files", None)
+
+            if (
+                recent_cfg is not None
+                and getattr(recent_cfg, "enabled", True)
+                and days_stored <= getattr(recent_cfg, "max_days_stored", 7)
+            ):
+                alpha *= getattr(recent_cfg, "alpha_multiplier", 1.5)
+
+            old_cfg = getattr(dynamic_cfg, "old_files", None)
+
+            if (
+                old_cfg is not None
+                and getattr(old_cfg, "enabled", True)
+                and days_stored >= getattr(old_cfg, "min_days_stored", 120)
+            ):
+                beta *= getattr(old_cfg, "beta_multiplier", 1.3)
+
         ratio = self.rng.betavariate(alpha, beta)
 
-        value = days_stored * ratio
+        value = int(round(days_stored * ratio))
 
-        # 🔥 3. Evitar sesgo hacia abajo
-        value = int(round(value))
-
-        # 🔥 4. Clamp inferior y superior
-        min_days = 0
-        max_days = days_stored
-
-        return max(min(value, max_days), min_days)
+        return max(min(value, days_stored), 0)
 
     def resolve_storage_tier(self, days_since_last_access: int) -> str:
         for rule in self.config.storage_tier.rules:
@@ -607,31 +877,69 @@ class SimulationOrchestrator:
         congestion_factor: float = 1.0,
     ) -> float:
 
+        transfer_cfg = getattr(self.config, "transfer", None)
+        duration_model = getattr(transfer_cfg, "duration_model", None)
+
+        min_speed = 0.5
+        if duration_model is not None:
+            min_speed = getattr(duration_model, "min_transfer_speed_mbps", 0.5)
+
         if transfer_speed_mbps <= 0:
             raise ValueError("transfer_speed_mbps must be greater than 0.")
 
-        # 1. Tiempo base físico (segundos)
+        transfer_speed_mbps = max(transfer_speed_mbps, min_speed)
+
         base_time = (size_mb * 8) / transfer_speed_mbps
 
-        # 2. Latencia fija (red / handshake)
-        latency = self.rng.uniform(0.05, 0.3)
+        if duration_model is None or not getattr(duration_model, "enabled", True):
+            return base_time
 
-        # 3. Overhead proporcional (protocolos, chunks, retries leves)
-        overhead_factor = self.rng.uniform(1.02, 1.10)
+        latency_cfg = getattr(duration_model, "latency_sec", None)
+        overhead_cfg = getattr(duration_model, "overhead_factor", None)
+        congestion_cfg = getattr(duration_model, "congestion_penalty", None)
+        noise_cfg = getattr(duration_model, "duration_noise", None)
 
-        # 4. Penalización por congestión (CLAVE)
+        latency = self.rng.uniform(
+            getattr(latency_cfg, "min", 0.05),
+            getattr(latency_cfg, "max", 0.3),
+        )
+
+        overhead_factor = self.rng.uniform(
+            getattr(overhead_cfg, "min", 1.02),
+            getattr(overhead_cfg, "max", 1.10),
+        )
+
         if congestion_factor > 1:
-            congestion_penalty = 1 + (congestion_factor - 1) * self.rng.uniform(0.4, 0.9)
+            congestion_penalty = 1 + (
+                (congestion_factor - 1)
+                * self.rng.uniform(
+                    getattr(congestion_cfg, "min", 0.4),
+                    getattr(congestion_cfg, "max", 0.9),
+                )
+            )
         else:
             congestion_penalty = 1.0
 
-        # 5. Ruido lognormal (evita colas artificiales extremas)
-        noise = self.rng.lognormvariate(0, 0.25)
+        noise_distribution = getattr(noise_cfg, "distribution", "lognormal")
+        noise_mu = getattr(noise_cfg, "mu", 0.0)
+        noise_sigma = getattr(noise_cfg, "sigma", 0.25)
 
-        duration = base_time * overhead_factor * congestion_penalty * noise + latency
+        if noise_distribution == "lognormal":
+            noise = self.rng.lognormvariate(noise_mu, noise_sigma)
+        else:
+            noise = 1.0
 
-        # 6. Clamp para evitar explosiones irreales
-        return min(duration, 3600)  # máximo 1 hora
+        duration = (
+            base_time
+            * overhead_factor
+            * congestion_penalty
+            * noise
+            + latency
+        )
+
+        max_duration_sec = getattr(duration_model, "max_duration_sec", 3600)
+
+        return min(duration, max_duration_sec)
 
     def compute_storage_cost(
         self,
@@ -710,24 +1018,85 @@ class SimulationOrchestrator:
         return min(probability, 0.95)
 
     def generate_lognormal_value(self, config: Any) -> float:
-        # 1. Generar valor base
-        value = self.rng.lognormvariate(config.mean, config.sigma)
+        distribution_controls = getattr(
+            self.config,
+            "distribution_controls",
+            None,
+        )
 
-        # 2. Soft clamp superior (MUY importante)
+        lognormal_cfg = None
+
+        if distribution_controls is not None:
+            lognormal_cfg = getattr(
+                distribution_controls,
+                "lognormal",
+                None,
+            )
+
+        value = self.rng.lognormvariate(
+            config.mean,
+            config.sigma,
+        )
+
+        soft_clamp_enabled = True
+        soft_clamp_excess_factor = 0.15
+
+        if lognormal_cfg is not None:
+            soft_clamp_enabled = getattr(
+                lognormal_cfg,
+                "soft_clamp_enabled",
+                True,
+            )
+
+            soft_clamp_excess_factor = getattr(
+                lognormal_cfg,
+                "soft_clamp_excess_factor",
+                0.15,
+            )
+
         max_val = config.max
-        if value > max_val:
-            # en vez de cortar, comprime suavemente
-            excess = value - max_val
-            value = max_val + excess * 0.15  # solo deja pasar un 15%
 
-        # 3. Clamp inferior normal
+        if soft_clamp_enabled and value > max_val:
+            excess = value - max_val
+
+            value = (
+                max_val
+                + excess * soft_clamp_excess_factor
+            )
+
         value = max(value, config.min)
 
-        # 4. Ruido leve adicional (evita patrones)
-        value *= self.rng.uniform(0.98, 1.02)
+        post_noise_enabled = True
+        post_noise_min = 0.98
+        post_noise_max = 1.02
+
+        if lognormal_cfg is not None:
+            post_noise_enabled = getattr(
+                lognormal_cfg,
+                "post_noise_enabled",
+                True,
+            )
+
+            post_noise_min = getattr(
+                lognormal_cfg,
+                "post_noise_min",
+                0.98,
+            )
+
+            post_noise_max = getattr(
+                lognormal_cfg,
+                "post_noise_max",
+                1.02,
+            )
+
+        if post_noise_enabled:
+            value *= self.rng.uniform(
+                post_noise_min,
+                post_noise_max,
+            )
 
         return value
-    
+   
     def pick_weighted(self, weights: Mapping[str, float]) -> str:
         population = list(weights.keys())
         values = list(weights.values())
@@ -747,27 +1116,58 @@ class SimulationOrchestrator:
         if capacity is None or not getattr(capacity, "enabled", False):
             return 0
 
-        base_capacity = getattr(capacity, "files_per_hour", 800)
+        base_capacity = float(getattr(capacity, "files_per_hour", 800))
+
+        scenario_cfg = getattr(capacity, "scenario_capacity_multipliers", None)
         scenario_name = self.get_scenario_name()
 
-        if scenario_name == "low_capacity":
-            base_capacity *= self.rng.uniform(0.60, 0.85)
-        elif scenario_name == "network_degraded":
-            base_capacity *= self.rng.uniform(0.75, 0.95)
-        elif scenario_name == "high_error":
-            base_capacity *= self.rng.uniform(0.85, 1.00)
+        if (
+            scenario_cfg is not None
+            and getattr(scenario_cfg, "enabled", True)
+            and scenario_name is not None
+        ):
+            by_scenario = getattr(scenario_cfg, "by_scenario", {})
+            scenario_multiplier = by_scenario.get(scenario_name)
 
-        if hour is not None:
-            if 0 <= hour < 6:
-                base_capacity *= self.rng.uniform(0.80, 0.95)
-            elif 6 <= hour < 12:
-                base_capacity *= self.rng.uniform(0.90, 1.05)
-            elif 12 <= hour < 18:
-                base_capacity *= self.rng.uniform(0.95, 1.10)
-            else:
-                base_capacity *= self.rng.uniform(0.85, 1.00)
+            if scenario_multiplier is not None:
+                base_capacity *= self.rng.uniform(
+                    getattr(scenario_multiplier, "min", 1.0),
+                    getattr(scenario_multiplier, "max", 1.0),
+                )
 
-        base_capacity *= self.rng.uniform(0.90, 1.10)
+        hourly_cfg = getattr(capacity, "hourly_capacity_multipliers", None)
+
+        if (
+            hour is not None
+            and hourly_cfg is not None
+            and getattr(hourly_cfg, "enabled", True)
+        ):
+            ranges = getattr(hourly_cfg, "ranges", [])
+
+            for item in ranges:
+                start_hour = getattr(item, "start_hour", None)
+                end_hour = getattr(item, "end_hour", None)
+
+                if start_hour is None or end_hour is None:
+                    continue
+
+                if start_hour <= hour <= end_hour:
+                    base_capacity *= self.rng.uniform(
+                        getattr(item, "min", 1.0),
+                        getattr(item, "max", 1.0),
+                    )
+                    break
+
+            residual_noise = getattr(hourly_cfg, "residual_noise", None)
+
+            if (
+                residual_noise is not None
+                and getattr(residual_noise, "enabled", True)
+            ):
+                base_capacity *= self.rng.uniform(
+                    getattr(residual_noise, "min", 1.0),
+                    getattr(residual_noise, "max", 1.0),
+                )
 
         min_cap = getattr(capacity, "min_capacity", 300)
         max_cap = getattr(capacity, "max_capacity", 1500)
@@ -1229,16 +1629,25 @@ class SimulationOrchestrator:
         error_multiplier_max = saturation_cfg.get("error_multiplier_max", 3.0)
         congestion_multiplier_max = saturation_cfg.get("congestion_multiplier_max", 2.8)
 
+        duration_penalty_factor = saturation_cfg.get("duration_penalty_factor", 1.0)
+        error_penalty_factor = saturation_cfg.get("error_penalty_factor", 1.0)
+
+        duration_exponent = saturation_cfg.get("duration_overload_exponent", 1.5)
+        error_exponent = saturation_cfg.get("error_overload_exponent", 1.0)
+        congestion_exponent = saturation_cfg.get("congestion_overload_exponent", 1.0)
+
         duration_multiplier = min(
-            1.0 + overload ** 1.5,
+            1.0 + (overload ** duration_exponent) * duration_penalty_factor,
             duration_multiplier_max,
         )
+
         error_multiplier = min(
-            1.0 + overload,
+            1.0 + (overload ** error_exponent) * error_penalty_factor,
             error_multiplier_max,
         )
+
         congestion_multiplier = min(
-            1.0 + overload,
+            1.0 + (overload ** congestion_exponent),
             congestion_multiplier_max,
         )
 
@@ -1247,7 +1656,6 @@ class SimulationOrchestrator:
         record["congestion_factor"] *= congestion_multiplier
 
         return record
-
 
     def apply_correlations_to_record(self, record: dict[str, Any]) -> dict[str, Any]:
         correlations = self.correlation_config or {}

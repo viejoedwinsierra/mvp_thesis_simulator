@@ -1,0 +1,33 @@
+{
+  "config_metadata": {
+    "config_name": "16_calidad_metadata_baja_config",
+    "version": "5.0",
+    "description": "Degradación de metadata.",
+    "generated_at": "2026-05-18T12:23:58.832415+00:00",
+    "format": "flat_override_config"
+  },
+  "scenario": {
+    "scenario_id": "16_calidad_metadata_baja",
+    "seed": 57,
+    "description": "Degradación de metadata.",
+    "runtime_config_dir": "../../output/runtime_configs/16_calidad_metadata_baja",
+    "overrides": {
+      "simulation_config.simulation.seed": 57,
+      "simulation_config.scenario.name": "16_calidad_metadata_baja",
+      "simulation_config.scenario.description": "Degradación de metadata.",
+      "simulation_config.daily_charge": {
+        "monday": "low",
+        "tuesday": "low",
+        "wednesday": "medium",
+        "thursday": "medium",
+        "friday": "medium",
+        "saturday": "low",
+        "sunday": "low"
+      },
+      "noise_config.noise.active_profile": "medium",
+      "error_config.errors.base_error_probability": 0.032,
+      "realism_config.realism.incidents.probability_per_simulated_day": 0.1,
+      "realism_config.realism.saturation.queue_pressure_threshold": 0.75
+    }
+  }
+}

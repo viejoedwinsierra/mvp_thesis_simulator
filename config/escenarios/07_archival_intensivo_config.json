@@ -1,0 +1,33 @@
+{
+  "config_metadata": {
+    "config_name": "07_archival_intensivo_config",
+    "version": "5.0",
+    "description": "Mayor envejecimiento y tier archive.",
+    "generated_at": "2026-05-18T12:23:58.828805+00:00",
+    "format": "flat_override_config"
+  },
+  "scenario": {
+    "scenario_id": "07_archival_intensivo",
+    "seed": 48,
+    "description": "Mayor envejecimiento y tier archive.",
+    "runtime_config_dir": "../../output/runtime_configs/07_archival_intensivo",
+    "overrides": {
+      "simulation_config.simulation.seed": 48,
+      "simulation_config.scenario.name": "07_archival_intensivo",
+      "simulation_config.scenario.description": "Mayor envejecimiento y tier archive.",
+      "simulation_config.daily_charge": {
+        "monday": "medium",
+        "tuesday": "high",
+        "wednesday": "medium",
+        "thursday": "high",
+        "friday": "medium",
+        "saturday": "medium",
+        "sunday": "low"
+      },
+      "noise_config.noise.active_profile": "low",
+      "error_config.errors.base_error_probability": 0.012,
+      "realism_config.realism.incidents.probability_per_simulated_day": 0.04,
+      "realism_config.realism.saturation.queue_pressure_threshold": 0.84
+    }
+  }
+}

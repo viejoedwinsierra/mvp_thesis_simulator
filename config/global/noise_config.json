@@ -1,27 +1,27 @@
 {
+  "config_metadata": {
+    "config_name": "noise_config",
+    "version": "2.0",
+    "owner": "statistical_perturbation",
+    "description": "Ruido estadistico controlado. Debe aplicarse despues de base/lifecycle/transfer y antes de realism/correlations."
+  },
   "noise": {
     "enabled": true,
-
     "active_profile": "medium",
-
     "profiles": {
       "low": {
         "multiplier": 0.5
       },
-
       "medium": {
         "multiplier": 1.0
       },
-
       "high": {
         "multiplier": 1.8
       },
-
       "chaotic": {
         "multiplier": 3.0
       }
     },
-
     "apply_order": [
       "size_mb",
       "transfer_speed_mbps",
@@ -32,7 +32,6 @@
       "queue_pressure",
       "congestion_factor"
     ],
-
     "recompute_after_noise": [
       "size_gb",
       "transfer_duration_sec",
@@ -42,109 +41,83 @@
       "storage_cost",
       "error_probability"
     ],
-
     "variables": {
-
       "size_mb": {
         "enabled": true,
-
         "noise_type": "relative_gaussian",
-
         "std_factor": 0.06,
-
         "min": 0.001
       },
-
       "transfer_speed_mbps": {
         "enabled": true,
-
         "noise_type": "relative_gaussian",
-
         "std_factor": 0.15,
-
         "min": 1,
         "max": 300
       },
-
       "transfer_duration_sec": {
         "enabled": true,
-
         "noise_type": "residual_gaussian",
-
         "std_factor": 0.04,
-
         "min": 0.01,
-
         "depends_on": [
           "size_mb",
           "transfer_speed_mbps"
         ]
       },
-
       "days_stored": {
         "enabled": true,
-
         "noise_type": "discrete_jitter",
-
         "max_delta": 5,
-
         "min": 1,
         "max": 180
       },
-
       "days_since_last_access": {
         "enabled": true,
-
         "noise_type": "discrete_jitter",
-
         "max_delta": 7,
-
         "min": 0,
-
         "constraint": "days_since_last_access <= days_stored",
-
         "post_process": "clamp_to_days_stored"
       },
-
       "effective_capacity": {
         "enabled": true,
-
         "noise_type": "relative_gaussian",
-
         "std_factor": 0.08,
-
         "min": 1
       },
-
       "queue_pressure": {
         "enabled": true,
-
         "noise_type": "residual_gaussian",
-
         "std": 0.02,
-
         "min": 0,
         "max": 1,
-
         "depends_on": [
           "hourly_arrival_count",
           "effective_capacity"
         ]
       },
-
       "congestion_factor": {
         "enabled": true,
-
         "noise_type": "residual_gaussian",
-
         "std": 0.03,
-
         "min": 0.8,
         "max": 3.0,
-
         "depends_on": [
           "queue_pressure"
         ]
+      }
+    },
+    "traceability": {
+      "enabled": true,
+      "output_columns": {
+        "noise_profile": true,
+        "noise_applied": true,
+        "noise_size_applied": true,
+        "noise_speed_applied": true,
+        "noise_capacity_applied": true,
+        "noise_queue_applied": true,
+        "noise_congestion_applied": true
       }
     }
   }

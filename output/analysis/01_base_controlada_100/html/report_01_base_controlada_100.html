@@ -183,12 +183,12 @@
       <td>406.6413</td>
       <td>2.0226</td>
       <td>5.4601</td>
-      <td>0.2957</td>
-      <td>0.2957</td>
-      <td>49.3333</td>
+      <td>0.2962</td>
+      <td>0.2962</td>
+      <td>49.7143</td>
       <td>48.1905</td>
-      <td>2.4762</td>
-      <td>0</td>
+      <td>2.0952</td>
+      <td>31</td>
       <td>0</td>
     </tr>
   </tbody>
@@ -205,458 +205,23 @@
     <tr style="text-align: right;">
       <th>scenario</th>
       <th>config_status</th>
-      <th>simulation_config</th>
-      <th>time_distribution_config</th>
-      <th>lifecycle_config</th>
-      <th>cost_config</th>
-      <th>error_config</th>
-      <th>noise_config</th>
-      <th>realism_config</th>
-      <th>correlation_config</th>
-      <th>max_valid_files_per_day</th>
-      <th>base_simulation_date_in_config</th>
-      <th>seed</th>
-      <th>arrival_strategy</th>
-      <th>hourly_noise</th>
-      <th>capacity_enabled</th>
-      <th>files_per_hour</th>
-      <th>duration_penalty_factor</th>
-      <th>error_penalty_factor</th>
-      <th>min_capacity</th>
-      <th>max_capacity</th>
-      <th>outliers_enabled</th>
-      <th>outlier_probability</th>
-      <th>outlier_multiplier_min</th>
-      <th>outlier_multiplier_max</th>
-      <th>outlier_max_size_mb</th>
-      <th>transfer_mean_mbps</th>
-      <th>transfer_sigma</th>
-      <th>transfer_min_mbps</th>
-      <th>transfer_max_mbps</th>
-      <th>base_error_probability</th>
-      <th>movement_storage_probability</th>
-      <th>storage_strategy</th>
-      <th>storage_cost_formula</th>
-      <th>time_slot_count</th>
-      <th>weekly_percentage_sum</th>
-      <th>daily_charge_json</th>
-      <th>base_load_profiles_json</th>
-      <th>file_type_distribution_json</th>
-      <th>tier_cost_json</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td>01_base_controlada_100</td>
-      <td>OK</td>
-      <td>config\escenarios\01_base_controlada_100\simulation_config_01_base_controlada_100.json</td>
-      <td>config\global\time_distribution_config.json</td>
-      <td>config\global\lifecycle_config.json</td>
-      <td>config\global\cost_config.json</td>
-      <td>config\global\error_config.json</td>
-      <td>config\global\noise_config.json</td>
-      <td>config\global\realism_config.json</td>
-      <td>config\global\correlation_config.json</td>
-      <td>100</td>
-      <td></td>
-      <td>9001</td>
-      <td>poisson</td>
-      <td>0.04</td>
-      <td>True</td>
-      <td>35</td>
-      <td>0.2</td>
-      <td>0.1</td>
-      <td></td>
-      <td></td>
-      <td>True</td>
-      <td>0.005</td>
-      <td>1.5</td>
-      <td>4</td>
-      <td>650</td>
-      <td>4.4</td>
-      <td>0.35</td>
-      <td>5</td>
-      <td>300</td>
-      <td>0.02</td>
-      <td>0.15</td>
-      <td>by_days_since_last_access</td>
-      <td>size_mb * cost_per_mb_per_day * days_stored</td>
-      <td>28</td>
-      <td>7.0</td>
-      <td>{"monday": "low", "tuesday": "low", "wednesday": "low", "thursday": "low", "friday": "low", "saturday": "low", "sunday": "low"}</td>
-      <td>{"low": {"min": 0.12, "max": 0.22}, "medium": {"min": 0.3, "max": 0.5}, "high": {"min": 0.55, "max": 0.8}}</td>
-      <td>{"json": 0.3, "jpg": 0.35, "pdf": 0.25, "mp4": 0.1}</td>
-      <td>{"hot": 2e-05, "cool": 1e-05, "archive": 2e-06}</td>
+      <td>NO_CONFIG_FOUND</td>
     </tr>
   </tbody>
 </table>
         </div>
     </section>
     
-    <section class="card ">
-        <h2>C. Configuraciones runtime por fecha</h2>
-        <p class='section-desc'>Copias runtime que documentan fecha ejecutada, semilla y salida usada por cada dia.</p>
-        <div class="table-container">
-            <table class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th>runtime_date</th>
-      <th>runtime_config</th>
-      <th>simulation_date</th>
-      <th>selected_day</th>
-      <th>max_valid_files_per_day</th>
-      <th>output_dir</th>
-      <th>seed</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>2026-01-01</td>
-      <td>output\runtime_configs\01_base_controlada_100\simulation_config_01_base_controlada_100_2026-01-01.json</td>
-      <td></td>
-      <td></td>
-      <td>100</td>
-      <td>C:/git_edwin/mvp_thesis_simulator/output/dataset/01_base_controlada_100</td>
-      <td>9001</td>
-    </tr>
-    <tr>
-      <td>2026-01-02</td>
-      <td>output\runtime_configs\01_base_controlada_100\simulation_config_01_base_controlada_100_2026-01-02.json</td>
-      <td></td>
-      <td></td>
-      <td>100</td>
-      <td>C:/git_edwin/mvp_thesis_simulator/output/dataset/01_base_controlada_100</td>
-      <td>9001</td>
-    </tr>
-    <tr>
-      <td>2026-01-03</td>
-      <td>output\runtime_configs\01_base_controlada_100\simulation_config_01_base_controlada_100_2026-01-03.json</td>
-      <td></td>
-      <td></td>
-      <td>100</td>
-      <td>C:/git_edwin/mvp_thesis_simulator/output/dataset/01_base_controlada_100</td>
-      <td>9001</td>
-    </tr>
-    <tr>
-      <td>2026-01-04</td>
-      <td>output\runtime_configs\01_base_controlada_100\simulation_config_01_base_controlada_100_2026-01-04.json</td>
-      <td></td>
-      <td></td>
-      <td>100</td>
-      <td>C:/git_edwin/mvp_thesis_simulator/output/dataset/01_base_controlada_100</td>
-      <td>9001</td>
-    </tr>
-    <tr>
-      <td>2026-01-05</td>
-      <td>output\runtime_configs\01_base_controlada_100\simulation_config_01_base_controlada_100_2026-01-05.json</td>
-      <td></td>
-      <td></td>
-      <td>100</td>
-      <td>C:/git_edwin/mvp_thesis_simulator/output/dataset/01_base_controlada_100</td>
-      <td>9001</td>
-    </tr>
-    <tr>
-      <td>2026-01-06</td>
-      <td>output\runtime_configs\01_base_controlada_100\simulation_config_01_base_controlada_100_2026-01-06.json</td>
-      <td></td>
-      <td></td>
-      <td>100</td>
-      <td>C:/git_edwin/mvp_thesis_simulator/output/dataset/01_base_controlada_100</td>
-      <td>9001</td>
-    </tr>
-    <tr>
-      <td>2026-01-07</td>
-      <td>output\runtime_configs\01_base_controlada_100\simulation_config_01_base_controlada_100_2026-01-07.json</td>
-      <td></td>
-      <td></td>
-      <td>100</td>
-      <td>C:/git_edwin/mvp_thesis_simulator/output/dataset/01_base_controlada_100</td>
-      <td>9001</td>
-    </tr>
-    <tr>
-      <td>2026-01-08</td>
-      <td>output\runtime_configs\01_base_controlada_100\simulation_config_01_base_controlada_100_2026-01-08.json</td>
-      <td></td>
-      <td></td>
-      <td>100</td>
-      <td>C:/git_edwin/mvp_thesis_simulator/output/dataset/01_base_controlada_100</td>
-      <td>9001</td>
-    </tr>
-    <tr>
-      <td>2026-01-09</td>
-      <td>output\runtime_configs\01_base_controlada_100\simulation_config_01_base_controlada_100_2026-01-09.json</td>
-      <td></td>
-      <td></td>
-      <td>100</td>
-      <td>C:/git_edwin/mvp_thesis_simulator/output/dataset/01_base_controlada_100</td>
-      <td>9001</td>
-    </tr>
-    <tr>
-      <td>2026-01-10</td>
-      <td>output\runtime_configs\01_base_controlada_100\simulation_config_01_base_controlada_100_2026-01-10.json</td>
-      <td></td>
-      <td></td>
-      <td>100</td>
-      <td>C:/git_edwin/mvp_thesis_simulator/output/dataset/01_base_controlada_100</td>
-      <td>9001</td>
-    </tr>
-    <tr>
-      <td>2026-01-11</td>
-      <td>output\runtime_configs\01_base_controlada_100\simulation_config_01_base_controlada_100_2026-01-11.json</td>
-      <td></td>
-      <td></td>
-      <td>100</td>
-      <td>C:/git_edwin/mvp_thesis_simulator/output/dataset/01_base_controlada_100</td>
-      <td>9001</td>
-    </tr>
-    <tr>
-      <td>2026-01-12</td>
-      <td>output\runtime_configs\01_base_controlada_100\simulation_config_01_base_controlada_100_2026-01-12.json</td>
-      <td></td>
-      <td></td>
-      <td>100</td>
-      <td>C:/git_edwin/mvp_thesis_simulator/output/dataset/01_base_controlada_100</td>
-      <td>9001</td>
-    </tr>
-    <tr>
-      <td>2026-01-13</td>
-      <td>output\runtime_configs\01_base_controlada_100\simulation_config_01_base_controlada_100_2026-01-13.json</td>
-      <td></td>
-      <td></td>
-      <td>100</td>
-      <td>C:/git_edwin/mvp_thesis_simulator/output/dataset/01_base_controlada_100</td>
-      <td>9001</td>
-    </tr>
-    <tr>
-      <td>2026-01-14</td>
-      <td>output\runtime_configs\01_base_controlada_100\simulation_config_01_base_controlada_100_2026-01-14.json</td>
-      <td></td>
-      <td></td>
-      <td>100</td>
-      <td>C:/git_edwin/mvp_thesis_simulator/output/dataset/01_base_controlada_100</td>
-      <td>9001</td>
-    </tr>
-    <tr>
-      <td>2026-01-15</td>
-      <td>output\runtime_configs\01_base_controlada_100\simulation_config_01_base_controlada_100_2026-01-15.json</td>
-      <td></td>
-      <td></td>
-      <td>100</td>
-      <td>C:/git_edwin/mvp_thesis_simulator/output/dataset/01_base_controlada_100</td>
-      <td>9001</td>
-    </tr>
-    <tr>
-      <td>2026-01-16</td>
-      <td>output\runtime_configs\01_base_controlada_100\simulation_config_01_base_controlada_100_2026-01-16.json</td>
-      <td></td>
-      <td></td>
-      <td>100</td>
-      <td>C:/git_edwin/mvp_thesis_simulator/output/dataset/01_base_controlada_100</td>
-      <td>9001</td>
-    </tr>
-    <tr>
-      <td>2026-01-17</td>
-      <td>output\runtime_configs\01_base_controlada_100\simulation_config_01_base_controlada_100_2026-01-17.json</td>
-      <td></td>
-      <td></td>
-      <td>100</td>
-      <td>C:/git_edwin/mvp_thesis_simulator/output/dataset/01_base_controlada_100</td>
-      <td>9001</td>
-    </tr>
-    <tr>
-      <td>2026-01-18</td>
-      <td>output\runtime_configs\01_base_controlada_100\simulation_config_01_base_controlada_100_2026-01-18.json</td>
-      <td></td>
-      <td></td>
-      <td>100</td>
-      <td>C:/git_edwin/mvp_thesis_simulator/output/dataset/01_base_controlada_100</td>
-      <td>9001</td>
-    </tr>
-    <tr>
-      <td>2026-01-19</td>
-      <td>output\runtime_configs\01_base_controlada_100\simulation_config_01_base_controlada_100_2026-01-19.json</td>
-      <td></td>
-      <td></td>
-      <td>100</td>
-      <td>C:/git_edwin/mvp_thesis_simulator/output/dataset/01_base_controlada_100</td>
-      <td>9001</td>
-    </tr>
-    <tr>
-      <td>2026-01-20</td>
-      <td>output\runtime_configs\01_base_controlada_100\simulation_config_01_base_controlada_100_2026-01-20.json</td>
-      <td></td>
-      <td></td>
-      <td>100</td>
-      <td>C:/git_edwin/mvp_thesis_simulator/output/dataset/01_base_controlada_100</td>
-      <td>9001</td>
-    </tr>
-    <tr>
-      <td>2026-01-21</td>
-      <td>output\runtime_configs\01_base_controlada_100\simulation_config_01_base_controlada_100_2026-01-21.json</td>
-      <td></td>
-      <td></td>
-      <td>100</td>
-      <td>C:/git_edwin/mvp_thesis_simulator/output/dataset/01_base_controlada_100</td>
-      <td>9001</td>
-    </tr>
-    <tr>
-      <td>2026-01-22</td>
-      <td>output\runtime_configs\01_base_controlada_100\simulation_config_01_base_controlada_100_2026-01-22.json</td>
-      <td></td>
-      <td></td>
-      <td>100</td>
-      <td>C:/git_edwin/mvp_thesis_simulator/output/dataset/01_base_controlada_100</td>
-      <td>9001</td>
-    </tr>
-    <tr>
-      <td>2026-01-23</td>
-      <td>output\runtime_configs\01_base_controlada_100\simulation_config_01_base_controlada_100_2026-01-23.json</td>
-      <td></td>
-      <td></td>
-      <td>100</td>
-      <td>C:/git_edwin/mvp_thesis_simulator/output/dataset/01_base_controlada_100</td>
-      <td>9001</td>
-    </tr>
-    <tr>
-      <td>2026-01-24</td>
-      <td>output\runtime_configs\01_base_controlada_100\simulation_config_01_base_controlada_100_2026-01-24.json</td>
-      <td></td>
-      <td></td>
-      <td>100</td>
-      <td>C:/git_edwin/mvp_thesis_simulator/output/dataset/01_base_controlada_100</td>
-      <td>9001</td>
-    </tr>
-    <tr>
-      <td>2026-01-25</td>
-      <td>output\runtime_configs\01_base_controlada_100\simulation_config_01_base_controlada_100_2026-01-25.json</td>
-      <td></td>
-      <td></td>
-      <td>100</td>
-      <td>C:/git_edwin/mvp_thesis_simulator/output/dataset/01_base_controlada_100</td>
-      <td>9001</td>
-    </tr>
-    <tr>
-      <td>2026-01-26</td>
-      <td>output\runtime_configs\01_base_controlada_100\simulation_config_01_base_controlada_100_2026-01-26.json</td>
-      <td></td>
-      <td></td>
-      <td>100</td>
-      <td>C:/git_edwin/mvp_thesis_simulator/output/dataset/01_base_controlada_100</td>
-      <td>9001</td>
-    </tr>
-    <tr>
-      <td>2026-01-27</td>
-      <td>output\runtime_configs\01_base_controlada_100\simulation_config_01_base_controlada_100_2026-01-27.json</td>
-      <td></td>
-      <td></td>
-      <td>100</td>
-      <td>C:/git_edwin/mvp_thesis_simulator/output/dataset/01_base_controlada_100</td>
-      <td>9001</td>
-    </tr>
-    <tr>
-      <td>2026-01-28</td>
-      <td>output\runtime_configs\01_base_controlada_100\simulation_config_01_base_controlada_100_2026-01-28.json</td>
-      <td></td>
-      <td></td>
-      <td>100</td>
-      <td>C:/git_edwin/mvp_thesis_simulator/output/dataset/01_base_controlada_100</td>
-      <td>9001</td>
-    </tr>
-    <tr>
-      <td>2026-01-29</td>
-      <td>output\runtime_configs\01_base_controlada_100\simulation_config_01_base_controlada_100_2026-01-29.json</td>
-      <td></td>
-      <td></td>
-      <td>100</td>
-      <td>C:/git_edwin/mvp_thesis_simulator/output/dataset/01_base_controlada_100</td>
-      <td>9001</td>
-    </tr>
-    <tr>
-      <td>2026-01-30</td>
-      <td>output\runtime_configs\01_base_controlada_100\simulation_config_01_base_controlada_100_2026-01-30.json</td>
-      <td></td>
-      <td></td>
-      <td>100</td>
-      <td>C:/git_edwin/mvp_thesis_simulator/output/dataset/01_base_controlada_100</td>
-      <td>9001</td>
-    </tr>
-    <tr>
-      <td>2026-01-31</td>
-      <td>output\runtime_configs\01_base_controlada_100\simulation_config_01_base_controlada_100_2026-01-31.json</td>
-      <td></td>
-      <td></td>
-      <td>100</td>
-      <td>C:/git_edwin/mvp_thesis_simulator/output/dataset/01_base_controlada_100</td>
-      <td>9001</td>
-    </tr>
-    <tr>
-      <td>2026-04-01</td>
-      <td>output\runtime_configs\01_base_controlada_100\simulation_config_01_base_controlada_100_2026-04-01.json</td>
-      <td></td>
-      <td></td>
-      <td>100</td>
-      <td>C:/git_edwin/mvp_thesis_simulator/output/dataset/01_base_controlada_100</td>
-      <td>9001</td>
-    </tr>
-    <tr>
-      <td>2026-04-02</td>
-      <td>output\runtime_configs\01_base_controlada_100\simulation_config_01_base_controlada_100_2026-04-02.json</td>
-      <td></td>
-      <td></td>
-      <td>100</td>
-      <td>C:/git_edwin/mvp_thesis_simulator/output/dataset/01_base_controlada_100</td>
-      <td>9001</td>
-    </tr>
-    <tr>
-      <td>2026-04-03</td>
-      <td>output\runtime_configs\01_base_controlada_100\simulation_config_01_base_controlada_100_2026-04-03.json</td>
-      <td></td>
-      <td></td>
-      <td>100</td>
-      <td>C:/git_edwin/mvp_thesis_simulator/output/dataset/01_base_controlada_100</td>
-      <td>9001</td>
-    </tr>
-    <tr>
-      <td>2026-04-04</td>
-      <td>output\runtime_configs\01_base_controlada_100\simulation_config_01_base_controlada_100_2026-04-04.json</td>
-      <td></td>
-      <td></td>
-      <td>100</td>
-      <td>C:/git_edwin/mvp_thesis_simulator/output/dataset/01_base_controlada_100</td>
-      <td>9001</td>
-    </tr>
-    <tr>
-      <td>2026-04-05</td>
-      <td>output\runtime_configs\01_base_controlada_100\simulation_config_01_base_controlada_100_2026-04-05.json</td>
-      <td></td>
-      <td></td>
-      <td>100</td>
-      <td>C:/git_edwin/mvp_thesis_simulator/output/dataset/01_base_controlada_100</td>
-      <td>9001</td>
-    </tr>
-    <tr>
-      <td>2026-04-06</td>
-      <td>output\runtime_configs\01_base_controlada_100\simulation_config_01_base_controlada_100_2026-04-06.json</td>
-      <td></td>
-      <td></td>
-      <td>100</td>
-      <td>C:/git_edwin/mvp_thesis_simulator/output/dataset/01_base_controlada_100</td>
-      <td>9001</td>
-    </tr>
-    <tr>
-      <td>2026-04-07</td>
-      <td>output\runtime_configs\01_base_controlada_100\simulation_config_01_base_controlada_100_2026-04-07.json</td>
-      <td></td>
-      <td></td>
-      <td>100</td>
-      <td>C:/git_edwin/mvp_thesis_simulator/output/dataset/01_base_controlada_100</td>
-      <td>9001</td>
-    </tr>
-  </tbody>
-</table>
-        </div>
-    </section>
-    
+        <section class="card ">
+            <h2>C. Configuraciones runtime por fecha</h2>
+            <p>No disponible.</p>
+        </section>
+        
     <section class="card ">
         <h2>D. Inventario de archivos CSV del escenario</h2>
         <p class='section-desc'>Archivos encontrados dentro de output/dataset/<escenario>.</p>
@@ -921,281 +486,281 @@
     <tr>
       <td>01_base_controlada_100</td>
       <td>2026-01-01</td>
-      <td>100</td>
+      <td></td>
       <td>15</td>
-      <td>-85</td>
-      <td>15.0</td>
-      <td>OK</td>
+      <td></td>
+      <td></td>
+      <td>NO_EXPECTED_MAX</td>
     </tr>
     <tr>
       <td>01_base_controlada_100</td>
       <td>2026-01-02</td>
-      <td>100</td>
+      <td></td>
       <td>18</td>
-      <td>-82</td>
-      <td>18.0</td>
-      <td>OK</td>
+      <td></td>
+      <td></td>
+      <td>NO_EXPECTED_MAX</td>
     </tr>
     <tr>
       <td>01_base_controlada_100</td>
       <td>2026-01-03</td>
-      <td>100</td>
+      <td></td>
       <td>18</td>
-      <td>-82</td>
-      <td>18.0</td>
-      <td>OK</td>
+      <td></td>
+      <td></td>
+      <td>NO_EXPECTED_MAX</td>
     </tr>
     <tr>
       <td>01_base_controlada_100</td>
       <td>2026-01-04</td>
-      <td>100</td>
+      <td></td>
       <td>18</td>
-      <td>-82</td>
-      <td>18.0</td>
-      <td>OK</td>
+      <td></td>
+      <td></td>
+      <td>NO_EXPECTED_MAX</td>
     </tr>
     <tr>
       <td>01_base_controlada_100</td>
       <td>2026-01-05</td>
-      <td>100</td>
+      <td></td>
       <td>15</td>
-      <td>-85</td>
-      <td>15.0</td>
-      <td>OK</td>
+      <td></td>
+      <td></td>
+      <td>NO_EXPECTED_MAX</td>
     </tr>
     <tr>
       <td>01_base_controlada_100</td>
       <td>2026-01-06</td>
-      <td>100</td>
+      <td></td>
       <td>15</td>
-      <td>-85</td>
-      <td>15.0</td>
-      <td>OK</td>
+      <td></td>
+      <td></td>
+      <td>NO_EXPECTED_MAX</td>
     </tr>
     <tr>
       <td>01_base_controlada_100</td>
       <td>2026-01-07</td>
-      <td>100</td>
+      <td></td>
       <td>15</td>
-      <td>-85</td>
-      <td>15.0</td>
-      <td>OK</td>
+      <td></td>
+      <td></td>
+      <td>NO_EXPECTED_MAX</td>
     </tr>
     <tr>
       <td>01_base_controlada_100</td>
       <td>2026-01-08</td>
-      <td>100</td>
+      <td></td>
       <td>15</td>
-      <td>-85</td>
-      <td>15.0</td>
-      <td>OK</td>
+      <td></td>
+      <td></td>
+      <td>NO_EXPECTED_MAX</td>
     </tr>
     <tr>
       <td>01_base_controlada_100</td>
       <td>2026-01-09</td>
-      <td>100</td>
+      <td></td>
       <td>18</td>
-      <td>-82</td>
-      <td>18.0</td>
-      <td>OK</td>
+      <td></td>
+      <td></td>
+      <td>NO_EXPECTED_MAX</td>
     </tr>
     <tr>
       <td>01_base_controlada_100</td>
       <td>2026-01-10</td>
-      <td>100</td>
+      <td></td>
       <td>18</td>
-      <td>-82</td>
-      <td>18.0</td>
-      <td>OK</td>
+      <td></td>
+      <td></td>
+      <td>NO_EXPECTED_MAX</td>
     </tr>
     <tr>
       <td>01_base_controlada_100</td>
       <td>2026-01-11</td>
-      <td>100</td>
+      <td></td>
       <td>18</td>
-      <td>-82</td>
-      <td>18.0</td>
-      <td>OK</td>
+      <td></td>
+      <td></td>
+      <td>NO_EXPECTED_MAX</td>
     </tr>
     <tr>
       <td>01_base_controlada_100</td>
       <td>2026-01-12</td>
-      <td>100</td>
+      <td></td>
       <td>15</td>
-      <td>-85</td>
-      <td>15.0</td>
-      <td>OK</td>
+      <td></td>
+      <td></td>
+      <td>NO_EXPECTED_MAX</td>
     </tr>
     <tr>
       <td>01_base_controlada_100</td>
       <td>2026-01-13</td>
-      <td>100</td>
+      <td></td>
       <td>15</td>
-      <td>-85</td>
-      <td>15.0</td>
-      <td>OK</td>
+      <td></td>
+      <td></td>
+      <td>NO_EXPECTED_MAX</td>
     </tr>
     <tr>
       <td>01_base_controlada_100</td>
       <td>2026-01-14</td>
-      <td>100</td>
+      <td></td>
       <td>15</td>
-      <td>-85</td>
-      <td>15.0</td>
-      <td>OK</td>
+      <td></td>
+      <td></td>
+      <td>NO_EXPECTED_MAX</td>
     </tr>
     <tr>
       <td>01_base_controlada_100</td>
       <td>2026-01-15</td>
-      <td>100</td>
+      <td></td>
       <td>15</td>
-      <td>-85</td>
-      <td>15.0</td>
-      <td>OK</td>
+      <td></td>
+      <td></td>
+      <td>NO_EXPECTED_MAX</td>
     </tr>
     <tr>
       <td>01_base_controlada_100</td>
       <td>2026-01-16</td>
-      <td>100</td>
+      <td></td>
       <td>18</td>
-      <td>-82</td>
-      <td>18.0</td>
-      <td>OK</td>
+      <td></td>
+      <td></td>
+      <td>NO_EXPECTED_MAX</td>
     </tr>
     <tr>
       <td>01_base_controlada_100</td>
       <td>2026-01-17</td>
-      <td>100</td>
+      <td></td>
       <td>18</td>
-      <td>-82</td>
-      <td>18.0</td>
-      <td>OK</td>
+      <td></td>
+      <td></td>
+      <td>NO_EXPECTED_MAX</td>
     </tr>
     <tr>
       <td>01_base_controlada_100</td>
       <td>2026-01-18</td>
-      <td>100</td>
+      <td></td>
       <td>18</td>
-      <td>-82</td>
-      <td>18.0</td>
-      <td>OK</td>
+      <td></td>
+      <td></td>
+      <td>NO_EXPECTED_MAX</td>
     </tr>
     <tr>
       <td>01_base_controlada_100</td>
       <td>2026-01-19</td>
-      <td>100</td>
+      <td></td>
       <td>15</td>
-      <td>-85</td>
-      <td>15.0</td>
-      <td>OK</td>
+      <td></td>
+      <td></td>
+      <td>NO_EXPECTED_MAX</td>
     </tr>
     <tr>
       <td>01_base_controlada_100</td>
       <td>2026-01-20</td>
-      <td>100</td>
+      <td></td>
       <td>15</td>
-      <td>-85</td>
-      <td>15.0</td>
-      <td>OK</td>
+      <td></td>
+      <td></td>
+      <td>NO_EXPECTED_MAX</td>
     </tr>
     <tr>
       <td>01_base_controlada_100</td>
       <td>2026-01-21</td>
-      <td>100</td>
+      <td></td>
       <td>15</td>
-      <td>-85</td>
-      <td>15.0</td>
-      <td>OK</td>
+      <td></td>
+      <td></td>
+      <td>NO_EXPECTED_MAX</td>
     </tr>
     <tr>
       <td>01_base_controlada_100</td>
       <td>2026-01-22</td>
-      <td>100</td>
+      <td></td>
       <td>15</td>
-      <td>-85</td>
-      <td>15.0</td>
-      <td>OK</td>
+      <td></td>
+      <td></td>
+      <td>NO_EXPECTED_MAX</td>
     </tr>
     <tr>
       <td>01_base_controlada_100</td>
       <td>2026-01-23</td>
-      <td>100</td>
+      <td></td>
       <td>18</td>
-      <td>-82</td>
-      <td>18.0</td>
-      <td>OK</td>
+      <td></td>
+      <td></td>
+      <td>NO_EXPECTED_MAX</td>
     </tr>
     <tr>
       <td>01_base_controlada_100</td>
       <td>2026-01-24</td>
-      <td>100</td>
+      <td></td>
       <td>18</td>
-      <td>-82</td>
-      <td>18.0</td>
-      <td>OK</td>
+      <td></td>
+      <td></td>
+      <td>NO_EXPECTED_MAX</td>
     </tr>
     <tr>
       <td>01_base_controlada_100</td>
       <td>2026-01-25</td>
-      <td>100</td>
+      <td></td>
       <td>18</td>
-      <td>-82</td>
-      <td>18.0</td>
-      <td>OK</td>
+      <td></td>
+      <td></td>
+      <td>NO_EXPECTED_MAX</td>
     </tr>
     <tr>
       <td>01_base_controlada_100</td>
       <td>2026-01-26</td>
-      <td>100</td>
+      <td></td>
       <td>15</td>
-      <td>-85</td>
-      <td>15.0</td>
-      <td>OK</td>
+      <td></td>
+      <td></td>
+      <td>NO_EXPECTED_MAX</td>
     </tr>
     <tr>
       <td>01_base_controlada_100</td>
       <td>2026-01-27</td>
-      <td>100</td>
+      <td></td>
       <td>15</td>
-      <td>-85</td>
-      <td>15.0</td>
-      <td>OK</td>
+      <td></td>
+      <td></td>
+      <td>NO_EXPECTED_MAX</td>
     </tr>
     <tr>
       <td>01_base_controlada_100</td>
       <td>2026-01-28</td>
-      <td>100</td>
+      <td></td>
       <td>15</td>
-      <td>-85</td>
-      <td>15.0</td>
-      <td>OK</td>
+      <td></td>
+      <td></td>
+      <td>NO_EXPECTED_MAX</td>
     </tr>
     <tr>
       <td>01_base_controlada_100</td>
       <td>2026-01-29</td>
-      <td>100</td>
+      <td></td>
       <td>15</td>
-      <td>-85</td>
-      <td>15.0</td>
-      <td>OK</td>
+      <td></td>
+      <td></td>
+      <td>NO_EXPECTED_MAX</td>
     </tr>
     <tr>
       <td>01_base_controlada_100</td>
       <td>2026-01-30</td>
-      <td>100</td>
+      <td></td>
       <td>18</td>
-      <td>-82</td>
-      <td>18.0</td>
-      <td>OK</td>
+      <td></td>
+      <td></td>
+      <td>NO_EXPECTED_MAX</td>
     </tr>
     <tr>
       <td>01_base_controlada_100</td>
       <td>2026-01-31</td>
-      <td>100</td>
+      <td></td>
       <td>36</td>
-      <td>-64</td>
-      <td>36.0</td>
-      <td>OK</td>
+      <td></td>
+      <td></td>
+      <td>NO_EXPECTED_MAX</td>
     </tr>
   </tbody>
 </table>
@@ -1325,83 +890,11 @@
         </div>
     </section>
     
-    <section class="card ">
-        <h2>G. Comparacion config vs observado</h2>
-        <p class='section-desc'>Contrasta parametros configurados contra distribuciones empiricas observadas.</p>
-        <div class="table-container">
-            <table class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th>scenario</th>
-      <th>metric</th>
-      <th>key</th>
-      <th>configured_value</th>
-      <th>observed_value</th>
-      <th>absolute_difference</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>01_base_controlada_100</td>
-      <td>file_type_distribution</td>
-      <td>json</td>
-      <td>0.3</td>
-      <td>0.2571</td>
-      <td>0.0429</td>
-    </tr>
-    <tr>
-      <td>01_base_controlada_100</td>
-      <td>file_type_distribution</td>
-      <td>jpg</td>
-      <td>0.35</td>
-      <td>0.3695</td>
-      <td>0.0195</td>
-    </tr>
-    <tr>
-      <td>01_base_controlada_100</td>
-      <td>file_type_distribution</td>
-      <td>pdf</td>
-      <td>0.25</td>
-      <td>0.2838</td>
-      <td>0.0338</td>
-    </tr>
-    <tr>
-      <td>01_base_controlada_100</td>
-      <td>file_type_distribution</td>
-      <td>mp4</td>
-      <td>0.1</td>
-      <td>0.0895</td>
-      <td>0.0105</td>
-    </tr>
-    <tr>
-      <td>01_base_controlada_100</td>
-      <td>error_rate_vs_base_probability</td>
-      <td>has_error</td>
-      <td>0.02</td>
-      <td>0.0</td>
-      <td>0.02</td>
-    </tr>
-    <tr>
-      <td>01_base_controlada_100</td>
-      <td>capacity_vs_queue_pressure</td>
-      <td>mean_queue_pressure</td>
-      <td>35.0</td>
-      <td>0.0084</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>01_base_controlada_100</td>
-      <td>outlier_probability_proxy</td>
-      <td>size_mb_gt_p95</td>
-      <td>0.005</td>
-      <td>0.0495</td>
-      <td>0.0445</td>
-    </tr>
-  </tbody>
-</table>
-        </div>
-    </section>
-    
+        <section class="card ">
+            <h2>G. Comparacion config vs observado</h2>
+            <p>No disponible.</p>
+        </section>
+        
     <section class="card ">
         <h2>H. Parametros observados en el dataset</h2>
         <p class='section-desc'>Distribuciones empiricas por tipo de archivo, tier, franja horaria, caso, errores y retries.</p>
@@ -1449,8 +942,8 @@
       <td>Distribucion observada por tier</td>
       <td>storage_tier</td>
       <td>hot</td>
-      <td>259</td>
-      <td>49.3333</td>
+      <td>261</td>
+      <td>49.7143</td>
     </tr>
     <tr>
       <td>Distribucion observada por tier</td>
@@ -1463,15 +956,15 @@
       <td>Distribucion observada por tier</td>
       <td>storage_tier</td>
       <td>archive</td>
-      <td>13</td>
-      <td>2.4762</td>
+      <td>11</td>
+      <td>2.0952</td>
     </tr>
     <tr>
       <td>Distribucion observada por tier final</td>
       <td>storage_tier_final</td>
       <td>hot</td>
-      <td>259</td>
-      <td>49.3333</td>
+      <td>261</td>
+      <td>49.7143</td>
     </tr>
     <tr>
       <td>Distribucion observada por tier final</td>
@@ -1484,8 +977,8 @@
       <td>Distribucion observada por tier final</td>
       <td>storage_tier_final</td>
       <td>archive</td>
-      <td>13</td>
-      <td>2.4762</td>
+      <td>11</td>
+      <td>2.0952</td>
     </tr>
     <tr>
       <td>Distribucion observada por franja horaria</td>
@@ -1591,7 +1084,7 @@
       <td>El escenario 01_base_controlada_100 fue analizado de forma independiente para validar comportamiento, configuracion y datos generados.</td>
     </tr>
     <tr>
-      <td>Validacion de volumen por fecha: OK=31.</td>
+      <td>Validacion de volumen por fecha: NO_EXPECTED_MAX=31.</td>
     </tr>
     <tr>
       <td>Validaciones de integridad fallidas: 0.</td>
@@ -1603,7 +1096,7 @@
       <td>Tasa observada de retries: 0.00%.</td>
     </tr>
     <tr>
-      <td>Costo operacional total simulado observado: 0.295731.</td>
+      <td>Costo operacional total simulado observado: 0.296243.</td>
     </tr>
     <tr>
       <td>Tamaño promedio observado: 13.7425 MB; p95=33.7514 MB.</td>
@@ -2942,19 +2435,19 @@
       <td>0.0</td>
       <td>0.0348</td>
       <td>0.0</td>
-      <td>0.0002</td>
+      <td>0.0003</td>
       <td>0.0008</td>
       <td>0.0008</td>
       <td>0.0065</td>
       <td>0.0348</td>
       <td>0.0002</td>
-      <td>5.5198</td>
-      <td>10.315</td>
-      <td>110.5943</td>
+      <td>5.51</td>
+      <td>10.3154</td>
+      <td>110.5999</td>
       <td>alta</td>
       <td>heavy_tail</td>
       <td>small_scale</td>
-      <td>17.3333</td>
+      <td>16.1905</td>
       <td>alto</td>
       <td>NEEDS_LOG</td>
     </tr>
@@ -3095,7 +2588,7 @@
       <td>storage_tier</td>
       <td>3</td>
       <td>hot</td>
-      <td>49.3333</td>
+      <td>49.7143</td>
       <td>baja</td>
       <td>dummy</td>
     </tr>
@@ -3222,12 +2715,12 @@
     <tr>
       <td>storage_cost</td>
       <td>0.0</td>
-      <td>0.0002</td>
+      <td>0.0003</td>
       <td>0.0002</td>
       <td>-0.0003</td>
-      <td>0.0005</td>
-      <td>91</td>
-      <td>17.3333</td>
+      <td>0.0006</td>
+      <td>85</td>
+      <td>16.1905</td>
       <td>alto</td>
       <td>TRANSFORM</td>
       <td>No eliminar automaticamente; revisar si representa comportamiento real del sistema.</td>
@@ -3623,7 +3116,7 @@
       <td>transfer_duration_sec presenta asimetría/outliers relevantes (skew=6.27, kurtosis=41.69, outliers=16.57%). Distribución sugerida: heavy_tail. Recomendación: evaluar log1p o transformación robusta.</td>
     </tr>
     <tr>
-      <td>storage_cost presenta asimetría/outliers relevantes (skew=10.32, kurtosis=110.59, outliers=17.33%). Distribución sugerida: heavy_tail. Recomendación: evaluar log1p o transformación robusta.</td>
+      <td>storage_cost presenta asimetría/outliers relevantes (skew=10.32, kurtosis=110.60, outliers=16.19%). Distribución sugerida: heavy_tail. Recomendación: evaluar log1p o transformación robusta.</td>
     </tr>
     <tr>
       <td>congestion_factor presenta asimetría/outliers relevantes (skew=1.76, kurtosis=2.32, outliers=12.38%). Distribución sugerida: log_normal_candidate. Recomendación: evaluar log1p o transformación robusta.</td>

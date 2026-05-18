@@ -1,0 +1,44 @@
+{
+  "config_metadata": {
+    "config_name": "low_activity_workload_config",
+    "version": "2.1",
+    "owner": "workload_profile",
+    "description": "Perfil de baja actividad.",
+    "generated_at": "2026-05-18T03:15:29.885413+00:00"
+  },
+  "workload": {
+    "workload_id": "low_activity_workload",
+    "daily_charge": {
+      "monday": "low",
+      "tuesday": "low",
+      "wednesday": "medium",
+      "thursday": "medium",
+      "friday": "medium",
+      "saturday": "low",
+      "sunday": "low"
+    },
+    "base_load_profiles": {
+      "low": {
+        "min": 0.1,
+        "max": 0.25
+      },
+      "medium": {
+        "min": 0.26,
+        "max": 0.55
+      },
+      "high": {
+        "min": 0.56,
+        "max": 0.99
+      }
+    },
+    "arrival_process": {
+      "strategy": "poisson",
+      "hourly_noise": 0.08
+    },
+    "capacity": {
+      "enabled": true,
+      "files_per_hour": 800,
+      "description": "Capacidad base nominal. La variacion dinamica pertenece a realism_config.dynamic_capacity."
+    }
+  }
+}

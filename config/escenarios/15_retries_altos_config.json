@@ -1,0 +1,33 @@
+{
+  "config_metadata": {
+    "config_name": "15_retries_altos_config",
+    "version": "5.0",
+    "description": "Mayor volumen de retries.",
+    "generated_at": "2026-05-18T12:23:58.831981+00:00",
+    "format": "flat_override_config"
+  },
+  "scenario": {
+    "scenario_id": "15_retries_altos",
+    "seed": 56,
+    "description": "Mayor volumen de retries.",
+    "runtime_config_dir": "../../output/runtime_configs/15_retries_altos",
+    "overrides": {
+      "simulation_config.simulation.seed": 56,
+      "simulation_config.scenario.name": "15_retries_altos",
+      "simulation_config.scenario.description": "Mayor volumen de retries.",
+      "simulation_config.daily_charge": {
+        "monday": "medium",
+        "tuesday": "high",
+        "wednesday": "medium",
+        "thursday": "high",
+        "friday": "medium",
+        "saturday": "medium",
+        "sunday": "low"
+      },
+      "noise_config.noise.active_profile": "high",
+      "error_config.errors.base_error_probability": 0.05,
+      "realism_config.realism.incidents.probability_per_simulated_day": 0.16,
+      "realism_config.realism.saturation.queue_pressure_threshold": 0.72
+    }
+  }
+}

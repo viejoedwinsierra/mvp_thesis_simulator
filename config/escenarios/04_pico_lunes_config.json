@@ -1,0 +1,33 @@
+{
+  "config_metadata": {
+    "config_name": "04_pico_lunes_config",
+    "version": "5.0",
+    "description": "Pico operacional al inicio de semana.",
+    "generated_at": "2026-05-18T12:23:58.827104+00:00",
+    "format": "flat_override_config"
+  },
+  "scenario": {
+    "scenario_id": "04_pico_lunes",
+    "seed": 45,
+    "description": "Pico operacional al inicio de semana.",
+    "runtime_config_dir": "../../output/runtime_configs/04_pico_lunes",
+    "overrides": {
+      "simulation_config.simulation.seed": 45,
+      "simulation_config.scenario.name": "04_pico_lunes",
+      "simulation_config.scenario.description": "Pico operacional al inicio de semana.",
+      "simulation_config.daily_charge": {
+        "monday": "medium",
+        "tuesday": "high",
+        "wednesday": "medium",
+        "thursday": "high",
+        "friday": "medium",
+        "saturday": "medium",
+        "sunday": "low"
+      },
+      "noise_config.noise.active_profile": "medium",
+      "error_config.errors.base_error_probability": 0.018,
+      "realism_config.realism.incidents.probability_per_simulated_day": 0.06,
+      "realism_config.realism.saturation.queue_pressure_threshold": 0.8
+    }
+  }
+}

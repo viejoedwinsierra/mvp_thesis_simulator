@@ -1,0 +1,33 @@
+{
+  "config_metadata": {
+    "config_name": "17_politicas_lifecycle_ruidosas_config",
+    "version": "5.0",
+    "description": "Lifecycle policies inestables.",
+    "generated_at": "2026-05-18T12:23:58.832912+00:00",
+    "format": "flat_override_config"
+  },
+  "scenario": {
+    "scenario_id": "17_politicas_lifecycle_ruidosas",
+    "seed": 58,
+    "description": "Lifecycle policies inestables.",
+    "runtime_config_dir": "../../output/runtime_configs/17_politicas_lifecycle_ruidosas",
+    "overrides": {
+      "simulation_config.simulation.seed": 58,
+      "simulation_config.scenario.name": "17_politicas_lifecycle_ruidosas",
+      "simulation_config.scenario.description": "Lifecycle policies inestables.",
+      "simulation_config.daily_charge": {
+        "monday": "medium",
+        "tuesday": "high",
+        "wednesday": "medium",
+        "thursday": "high",
+        "friday": "medium",
+        "saturday": "medium",
+        "sunday": "low"
+      },
+      "noise_config.noise.active_profile": "medium",
+      "error_config.errors.base_error_probability": 0.026,
+      "realism_config.realism.incidents.probability_per_simulated_day": 0.08,
+      "realism_config.realism.saturation.queue_pressure_threshold": 0.77
+    }
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "config_metadata": {
+    "config_name": "02_baja_actividad_config",
+    "version": "5.0",
+    "description": "Baja actividad y bajo ruido.",
+    "generated_at": "2026-05-18T12:23:58.826022+00:00",
+    "format": "flat_override_config"
+  },
+  "scenario": {
+    "scenario_id": "02_baja_actividad",
+    "seed": 43,
+    "description": "Baja actividad y bajo ruido.",
+    "runtime_config_dir": "../../output/runtime_configs/02_baja_actividad",
+    "overrides": {
+      "simulation_config.simulation.seed": 43,
+      "simulation_config.scenario.name": "02_baja_actividad",
+      "simulation_config.scenario.description": "Baja actividad y bajo ruido.",
+      "simulation_config.daily_charge": {
+        "monday": "low",
+        "tuesday": "low",
+        "wednesday": "medium",
+        "thursday": "medium",
+        "friday": "medium",
+        "saturday": "low",
+        "sunday": "low"
+      },
+      "noise_config.noise.active_profile": "low",
+      "error_config.errors.base_error_probability": 0.008,
+      "realism_config.realism.incidents.probability_per_simulated_day": 0.02,
+      "realism_config.realism.saturation.queue_pressure_threshold": 0.88
+    }
+  }
+}

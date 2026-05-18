@@ -1,10 +1,20 @@
 {
+  "config_metadata": {
+    "config_name": "simulation_config",
+    "version": "2.1-config-driven",
+    "owner": "base_execution_and_generation",
+    "description": "Parametros base de ejecucion. No debe contener reglas causales, realismo operacional ni costos.",
+    "updated_at": "2026-05-18T12:17:50.993971+00:00",
+    "update_note": "Se agregan parametros para mover heuristicas del orquestador a configuracion."
+  },
   "simulation": {
     "max_valid_files_per_day": 10000,
     "output_dir": "./output",
-    "seed": 4
+    "seed": 4,
+    "schema_version": "2.0.0",
+    "dataset_version": "2.0.0",
+    "simulation_engine_version": "2.0.0"
   },
-
   "daily_charge": {
     "monday": "medium",
     "tuesday": "high",
@@ -14,10 +24,9 @@
     "saturday": "medium",
     "sunday": "low"
   },
-
   "base_load_profiles": {
     "low": {
-      "min": 0.10,
+      "min": 0.1,
       "max": 0.25
     },
     "medium": {
@@ -29,32 +38,129 @@
       "max": 0.99
     }
   },
-  
   "arrival_process": {
     "strategy": "poisson",
-    "hourly_noise": 0.12
+    "hourly_noise": 0.12,
+    "event_model": {
+      "enabled": true,
+      "description": "Micro-eventos horarios de carga: picos y caidas.",
+      "event_probability": 0.08,
+      "spike_probability": 0.7,
+      "spike_noise_min": 0.15,
+      "spike_noise_max": 0.35,
+      "drop_noise_min": 0.1,
+      "drop_noise_max": 0.25,
+      "volume_scale_divisor": 1000,
+      "volume_scale_max": 2.0,
+      "volume_scale_multiplier": 0.5,
+      "noise_min": -0.4,
+      "noise_max": 0.5
+    }
   },
-
   "capacity": {
     "enabled": true,
     "files_per_hour": 900,
+    "description": "Capacidad base nominal. La variacion dinamica pertenece a realism_config.dynamic_capacity.",
+    "min_capacity": 300,
+    "max_capacity": 1500,
     "duration_penalty_factor": 0.55,
-    "error_penalty_factor": 0.35
+    "error_penalty_factor": 0.35,
+    "hourly_capacity_multipliers": {
+      "enabled": true,
+      "description": "Multiplicadores por franja horaria para capacidad efectiva.",
+      "ranges": [
+        {
+          "name": "madrugada",
+          "start_hour": 0,
+          "end_hour": 5,
+          "min": 0.8,
+          "max": 0.95
+        },
+        {
+          "name": "mañana",
+          "start_hour": 6,
+          "end_hour": 11,
+          "min": 0.9,
+          "max": 1.05
+        },
+        {
+          "name": "tarde",
+          "start_hour": 12,
+          "end_hour": 17,
+          "min": 0.95,
+          "max": 1.1
+        },
+        {
+          "name": "noche",
+          "start_hour": 18,
+          "end_hour": 23,
+          "min": 0.85,
+          "max": 1.0
+        }
+      ],
+      "residual_noise": {
+        "enabled": true,
+        "min": 0.9,
+        "max": 1.1
+      }
+    },
+    "scenario_capacity_multipliers": {
+      "enabled": true,
+      "description": "Multiplicadores opcionales por escenario para capacidad efectiva.",
+      "by_scenario": {
+        "low_capacity": {
+          "min": 0.6,
+          "max": 0.85
+        },
+        "network_degraded": {
+          "min": 0.75,
+          "max": 0.95
+        },
+        "high_error": {
+          "min": 0.85,
+          "max": 1.0
+        }
+      }
+    },
+    "congestion_model": {
+      "enabled": true,
+      "description": "Modelo de congestion para convertir queue_pressure_raw en congestion_factor.",
+      "overload_exponent": 1.3,
+      "moderate_threshold": 1.5,
+      "severe_threshold": 2.0,
+      "moderate_amplification_min": 1.2,
+      "moderate_amplification_max": 1.8,
+      "severe_amplification_min": 1.5,
+      "severe_amplification_max": 2.5,
+      "residual_noise_min": 0.9,
+      "residual_noise_max": 1.2,
+      "max_congestion_factor": 5.0
+    },
+    "duration_congestion_model": {
+      "enabled": true,
+      "description": "Penalizacion no lineal de duracion por congestion.",
+      "overload_exponent": 1.5,
+      "noise_min": 0.9,
+      "noise_max": 1.3,
+      "severe_threshold": 1.5,
+      "spike_min": 1.2,
+      "spike_max": 2.5,
+      "max_duration_sec": 3600
+    }
   },
-
   "outliers": {
     "enabled": true,
     "probability": 0.02,
     "size_multiplier_min": 2,
-    "size_multiplier_max": 7
+    "size_multiplier_max": 7,
+    "max_size_mb": 1500
   },
-
   "file_types": {
     "distribution": {
       "json": 0.25,
-      "jpg": 0.30,
+      "jpg": 0.3,
       "pdf": 0.25,
-      "mp4": 0.20
+      "mp4": 0.2
     },
     "size_distribution_mb": {
       "json": {
@@ -87,7 +193,6 @@
       }
     }
   },
-
   "transfer": {
     "speed_mbps": {
       "distribution": "lognormal",
@@ -96,6 +201,129 @@
       "min": 1,
       "max": 300
     },
-    "duration_strategy": "size_divided_by_speed"
+    "duration_strategy": "size_divided_by_speed",
+    "duration_model": {
+      "enabled": true,
+      "description": "Modelo de duracion de transferencia. Complementa duration_strategy=size_divided_by_speed.",
+      "latency_sec": {
+        "min": 0.05,
+        "max": 0.3
+      },
+      "overhead_factor": {
+        "min": 1.02,
+        "max": 1.1
+      },
+      "congestion_penalty": {
+        "min": 0.4,
+        "max": 0.9
+      },
+      "duration_noise": {
+        "distribution": "lognormal",
+        "mu": 0.0,
+        "sigma": 0.25
+      },
+      "max_duration_sec": 3600,
+      "min_transfer_speed_mbps": 0.5,
+      "queue_pressure_penalty": {
+        "enabled": true,
+        "factor": 0.35,
+        "max_penalty": 0.75
+      },
+      "congestion_speed_penalty": {
+        "enabled": true,
+        "factor": 0.25,
+        "max_penalty": 0.6
+      },
+      "operational_speed_noise": {
+        "enabled": true,
+        "min": 0.95,
+        "max": 1.05
+      }
+    }
+  },
+  "scenario_effects": {
+    "enabled": true,
+    "description": "Efectos opcionales por escenario. Permite evitar if scenario_name hardcodeados en el orquestador.",
+    "default": {
+      "size_multiplier": {
+        "enabled": false,
+        "min": 1.0,
+        "max": 1.0
+      },
+      "transfer_speed_multiplier": {
+        "enabled": false,
+        "min": 1.0,
+        "max": 1.0
+      },
+      "error_probability_multiplier": {
+        "enabled": false,
+        "value": 1.0
+      }
+    },
+    "by_scenario": {
+      "large_files": {
+        "size_multiplier": {
+          "enabled": true,
+          "min": 1.1,
+          "max": 1.35
+        },
+        "transfer_speed_multiplier": {
+          "enabled": true,
+          "min": 0.9,
+          "max": 1.0
+        }
+      },
+      "high_load": {
+        "size_multiplier": {
+          "enabled": true,
+          "min": 0.95,
+          "max": 1.1
+        }
+      },
+      "network_degraded": {
+        "transfer_speed_multiplier": {
+          "enabled": true,
+          "min": 0.45,
+          "max": 0.75
+        },
+        "error_probability_multiplier": {
+          "enabled": true,
+          "value": 1.35
+        }
+      },
+      "low_capacity": {
+        "transfer_speed_multiplier": {
+          "enabled": true,
+          "min": 0.7,
+          "max": 0.95
+        },
+        "error_probability_multiplier": {
+          "enabled": true,
+          "value": 1.25
+        }
+      },
+      "high_error": {
+        "transfer_speed_multiplier": {
+          "enabled": true,
+          "min": 0.85,
+          "max": 1.0
+        },
+        "error_probability_multiplier": {
+          "enabled": true,
+          "value": 1.7
+        }
+      }
+    }
+  },
+  "distribution_controls": {
+    "enabled": true,
+    "description": "Controles globales para estabilizar distribuciones y evitar constantes quemadas.",
+    "lognormal": {
+      "soft_clamp_enabled": true,
+      "soft_clamp_excess_factor": 0.15,
+      "post_noise_enabled": true,
+      "post_noise_min": 0.98,
+      "post_noise_max": 1.02
+    }
   }
 }

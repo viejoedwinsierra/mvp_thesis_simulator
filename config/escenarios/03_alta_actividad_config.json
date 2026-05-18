@@ -1,0 +1,33 @@
+{
+  "config_metadata": {
+    "config_name": "03_alta_actividad_config",
+    "version": "5.0",
+    "description": "Alta actividad con ruido medio.",
+    "generated_at": "2026-05-18T12:23:58.826620+00:00",
+    "format": "flat_override_config"
+  },
+  "scenario": {
+    "scenario_id": "03_alta_actividad",
+    "seed": 44,
+    "description": "Alta actividad con ruido medio.",
+    "runtime_config_dir": "../../output/runtime_configs/03_alta_actividad",
+    "overrides": {
+      "simulation_config.simulation.seed": 44,
+      "simulation_config.scenario.name": "03_alta_actividad",
+      "simulation_config.scenario.description": "Alta actividad con ruido medio.",
+      "simulation_config.daily_charge": {
+        "monday": "high",
+        "tuesday": "high",
+        "wednesday": "high",
+        "thursday": "high",
+        "friday": "high",
+        "saturday": "medium",
+        "sunday": "medium"
+      },
+      "noise_config.noise.active_profile": "medium",
+      "error_config.errors.base_error_probability": 0.025,
+      "realism_config.realism.incidents.probability_per_simulated_day": 0.08,
+      "realism_config.realism.saturation.queue_pressure_threshold": 0.78
+    }
+  }
+}

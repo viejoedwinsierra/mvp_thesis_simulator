@@ -28,6 +28,38 @@ from ml_modeling.evaluation_plots import run_ml_evaluation_plots
 from ml_modeling.evaluation_reports import build_ml_evaluation_report
 
 
+# ============================================================
+# AUTO DATASET DISCOVERY PATCH
+# ============================================================
+
+def discover_dataset_dir(config):
+    """
+    Intenta descubrir automáticamente dónde quedaron los datasets finales.
+    """
+
+    dataset_dir = Path(config.dataset_dir)
+
+    standard = list(dataset_dir.glob("*/blob_inventory_*.csv"))
+
+    if standard:
+        print(f"[DATASET] Estructura estándar detectada: {dataset_dir}")
+        return dataset_dir
+
+    recursive = list(dataset_dir.rglob("blob_inventory*.csv"))
+
+    if recursive:
+        print("[WARN] No se encontró estructura estándar.")
+        print("[WARN] Se activó descubrimiento recursivo de datasets.")
+        print(f"[DATASET] CSV encontrado: {recursive[0]}")
+
+        return recursive[0].parent
+
+    raise FileNotFoundError(
+        f"No se encontraron datasets CSV dentro de: {dataset_dir}"
+    )
+
+
+
 def parse_args():
     parser = argparse.ArgumentParser(
         description="Evalúa modelos guardados estadísticos y/o ML sobre nuevos datasets."
@@ -225,7 +257,11 @@ def main():
     config = AnalysisConfig()
     config.ensure_dirs()
 
-    dataset_dir = Path(args.dataset_dir) if args.dataset_dir else config.dataset_dir
+    dataset_dir = (
+        Path(args.dataset_dir)
+        if args.dataset_dir
+        else discover_dataset_dir(config)
+    )
     output_root = Path(args.output_dir)
     output_root.mkdir(parents=True, exist_ok=True)
 

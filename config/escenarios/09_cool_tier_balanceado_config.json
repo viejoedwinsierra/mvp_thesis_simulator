@@ -1,0 +1,33 @@
+{
+  "config_metadata": {
+    "config_name": "09_cool_tier_balanceado_config",
+    "version": "5.0",
+    "description": "Balance hot/cool.",
+    "generated_at": "2026-05-18T12:23:58.829460+00:00",
+    "format": "flat_override_config"
+  },
+  "scenario": {
+    "scenario_id": "09_cool_tier_balanceado",
+    "seed": 50,
+    "description": "Balance hot/cool.",
+    "runtime_config_dir": "../../output/runtime_configs/09_cool_tier_balanceado",
+    "overrides": {
+      "simulation_config.simulation.seed": 50,
+      "simulation_config.scenario.name": "09_cool_tier_balanceado",
+      "simulation_config.scenario.description": "Balance hot/cool.",
+      "simulation_config.daily_charge": {
+        "monday": "medium",
+        "tuesday": "high",
+        "wednesday": "medium",
+        "thursday": "high",
+        "friday": "medium",
+        "saturday": "medium",
+        "sunday": "low"
+      },
+      "noise_config.noise.active_profile": "medium",
+      "error_config.errors.base_error_probability": 0.015,
+      "realism_config.realism.incidents.probability_per_simulated_day": 0.05,
+      "realism_config.realism.saturation.queue_pressure_threshold": 0.83
+    }
+  }
+}

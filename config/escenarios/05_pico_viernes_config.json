@@ -1,0 +1,33 @@
+{
+  "config_metadata": {
+    "config_name": "05_pico_viernes_config",
+    "version": "5.0",
+    "description": "Pico operacional los viernes.",
+    "generated_at": "2026-05-18T12:23:58.827803+00:00",
+    "format": "flat_override_config"
+  },
+  "scenario": {
+    "scenario_id": "05_pico_viernes",
+    "seed": 46,
+    "description": "Pico operacional los viernes.",
+    "runtime_config_dir": "../../output/runtime_configs/05_pico_viernes",
+    "overrides": {
+      "simulation_config.simulation.seed": 46,
+      "simulation_config.scenario.name": "05_pico_viernes",
+      "simulation_config.scenario.description": "Pico operacional los viernes.",
+      "simulation_config.daily_charge": {
+        "monday": "medium",
+        "tuesday": "high",
+        "wednesday": "medium",
+        "thursday": "high",
+        "friday": "medium",
+        "saturday": "medium",
+        "sunday": "low"
+      },
+      "noise_config.noise.active_profile": "medium",
+      "error_config.errors.base_error_probability": 0.02,
+      "realism_config.realism.incidents.probability_per_simulated_day": 0.07,
+      "realism_config.realism.saturation.queue_pressure_threshold": 0.79
+    }
+  }
+}

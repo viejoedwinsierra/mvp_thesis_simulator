@@ -1,0 +1,36 @@
+{
+  "config_metadata": {
+    "config_name": "11_archivos_pequenos_config",
+    "version": "5.0",
+    "description": "Mayor proporción de blobs pequeños.",
+    "generated_at": "2026-05-18T12:23:58.830125+00:00",
+    "format": "flat_override_config"
+  },
+  "scenario": {
+    "scenario_id": "11_archivos_pequenos",
+    "seed": 52,
+    "description": "Mayor proporción de blobs pequeños.",
+    "runtime_config_dir": "../../output/runtime_configs/11_archivos_pequenos",
+    "overrides": {
+      "simulation_config.simulation.seed": 52,
+      "simulation_config.scenario.name": "11_archivos_pequenos",
+      "simulation_config.scenario.description": "Mayor proporción de blobs pequeños.",
+      "simulation_config.daily_charge": {
+        "monday": "medium",
+        "tuesday": "high",
+        "wednesday": "medium",
+        "thursday": "high",
+        "friday": "medium",
+        "saturday": "medium",
+        "sunday": "low"
+      },
+      "noise_config.noise.active_profile": "low",
+      "error_config.errors.base_error_probability": 0.009,
+      "realism_config.realism.incidents.probability_per_simulated_day": 0.03,
+      "realism_config.realism.saturation.queue_pressure_threshold": 0.87,
+      "simulation_config.outliers.probability": 0.005,
+      "simulation_config.file_types.distribution.mp4": 0.08,
+      "simulation_config.file_types.distribution.json": 0.42
+    }
+  }
+}

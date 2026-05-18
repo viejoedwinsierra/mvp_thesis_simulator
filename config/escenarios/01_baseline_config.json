@@ -1,0 +1,33 @@
+{
+  "config_metadata": {
+    "config_name": "01_baseline_config",
+    "version": "5.0",
+    "description": "Escenario base nominal.",
+    "generated_at": "2026-05-18T12:23:58.825248+00:00",
+    "format": "flat_override_config"
+  },
+  "scenario": {
+    "scenario_id": "01_baseline",
+    "seed": 42,
+    "description": "Escenario base nominal.",
+    "runtime_config_dir": "../../output/runtime_configs/01_baseline",
+    "overrides": {
+      "simulation_config.simulation.seed": 42,
+      "simulation_config.scenario.name": "01_baseline",
+      "simulation_config.scenario.description": "Escenario base nominal.",
+      "simulation_config.daily_charge": {
+        "monday": "medium",
+        "tuesday": "high",
+        "wednesday": "medium",
+        "thursday": "high",
+        "friday": "medium",
+        "saturday": "medium",
+        "sunday": "low"
+      },
+      "noise_config.noise.active_profile": "low",
+      "error_config.errors.base_error_probability": 0.01,
+      "realism_config.realism.incidents.probability_per_simulated_day": 0.03,
+      "realism_config.realism.saturation.queue_pressure_threshold": 0.82
+    }
+  }
+}

@@ -1,0 +1,147 @@
+{
+  "generated_at": "2026-05-18T12:23:58.824762+00:00",
+  "format": "flat_config_overrides",
+  "total_scenarios": 20,
+  "scenarios": [
+    {
+      "scenario_id": "01_baseline",
+      "seed": 42,
+      "noise_profile": "low",
+      "base_error_probability": 0.01,
+      "incident_probability": 0.03
+    },
+    {
+      "scenario_id": "02_baja_actividad",
+      "seed": 43,
+      "noise_profile": "low",
+      "base_error_probability": 0.008,
+      "incident_probability": 0.02
+    },
+    {
+      "scenario_id": "03_alta_actividad",
+      "seed": 44,
+      "noise_profile": "medium",
+      "base_error_probability": 0.025,
+      "incident_probability": 0.08
+    },
+    {
+      "scenario_id": "04_pico_lunes",
+      "seed": 45,
+      "noise_profile": "medium",
+      "base_error_probability": 0.018,
+      "incident_probability": 0.06
+    },
+    {
+      "scenario_id": "05_pico_viernes",
+      "seed": 46,
+      "noise_profile": "medium",
+      "base_error_probability": 0.02,
+      "incident_probability": 0.07
+    },
+    {
+      "scenario_id": "06_fin_semana_alto",
+      "seed": 47,
+      "noise_profile": "medium",
+      "base_error_probability": 0.021,
+      "incident_probability": 0.07
+    },
+    {
+      "scenario_id": "07_archival_intensivo",
+      "seed": 48,
+      "noise_profile": "low",
+      "base_error_probability": 0.012,
+      "incident_probability": 0.04
+    },
+    {
+      "scenario_id": "08_hot_tier_dominante",
+      "seed": 49,
+      "noise_profile": "low",
+      "base_error_probability": 0.012,
+      "incident_probability": 0.03
+    },
+    {
+      "scenario_id": "09_cool_tier_balanceado",
+      "seed": 50,
+      "noise_profile": "medium",
+      "base_error_probability": 0.015,
+      "incident_probability": 0.05
+    },
+    {
+      "scenario_id": "10_archivos_grandes",
+      "seed": 51,
+      "noise_profile": "high",
+      "base_error_probability": 0.03,
+      "incident_probability": 0.1
+    },
+    {
+      "scenario_id": "11_archivos_pequenos",
+      "seed": 52,
+      "noise_profile": "low",
+      "base_error_probability": 0.009,
+      "incident_probability": 0.03
+    },
+    {
+      "scenario_id": "12_red_degradada",
+      "seed": 53,
+      "noise_profile": "high",
+      "base_error_probability": 0.04,
+      "incident_probability": 0.15
+    },
+    {
+      "scenario_id": "13_storage_throttling",
+      "seed": 54,
+      "noise_profile": "high",
+      "base_error_probability": 0.045,
+      "incident_probability": 0.18
+    },
+    {
+      "scenario_id": "14_metadata_latency",
+      "seed": 55,
+      "noise_profile": "medium",
+      "base_error_probability": 0.028,
+      "incident_probability": 0.09
+    },
+    {
+      "scenario_id": "15_retries_altos",
+      "seed": 56,
+      "noise_profile": "high",
+      "base_error_probability": 0.05,
+      "incident_probability": 0.16
+    },
+    {
+      "scenario_id": "16_calidad_metadata_baja",
+      "seed": 57,
+      "noise_profile": "medium",
+      "base_error_probability": 0.032,
+      "incident_probability": 0.1
+    },
+    {
+      "scenario_id": "17_politicas_lifecycle_ruidosas",
+      "seed": 58,
+      "noise_profile": "medium",
+      "base_error_probability": 0.026,
+      "incident_probability": 0.08
+    },
+    {
+      "scenario_id": "18_saturacion_controlada",
+      "seed": 59,
+      "noise_profile": "high",
+      "base_error_probability": 0.055,
+      "incident_probability": 0.2
+    },
+    {
+      "scenario_id": "19_caos_suave",
+      "seed": 60,
+      "noise_profile": "high",
+      "base_error_probability": 0.06,
+      "incident_probability": 0.22
+    },
+    {
+      "scenario_id": "20_caos_controlado",
+      "seed": 61,
+      "noise_profile": "high",
+      "base_error_probability": 0.07,
+      "incident_probability": 0.25
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "config_metadata": {
+    "config_name": "validation_contract",
+    "version": "1.0",
+    "owner": "config_validator",
+    "description": "Reglas mínimas de validación para los JSON del simulador."
+  },
+  "valid_days": [
+    "monday",
+    "tuesday",
+    "wednesday",
+    "thursday",
+    "friday",
+    "saturday",
+    "sunday"
+  ],
+  "valid_load_levels": [
+    "low",
+    "medium",
+    "high"
+  ],
+  "required_global_files": [
+    "correlation_config.json",
+    "cost_config.json",
+    "error_config.json",
+    "lifecycle_config.json",
+    "noise_config.json",
+    "realism_config.json",
+    "simulation_config.json",
+    "time_distribution_config.json"
+  ],
+  "rules": [
+    "Cada workload debe tener daily_charge con los 7 días.",
+    "Cada nivel de daily_charge debe ser low, medium o high.",
+    "Cada escenario debe tener seed.",
+    "Cada escenario debe apuntar a un workload existente.",
+    "Los porcentajes diarios de time_distribution deben sumar 1.0 por día.",
+    "base_load_profiles.*.min debe ser menor que max.",
+    "error_probability debe mantenerse entre 0.0 y 0.95.",
+    "days_since_last_access no debe superar days_stored."
+  ]
+}

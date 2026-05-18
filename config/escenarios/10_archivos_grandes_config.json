@@ -1,0 +1,37 @@
+{
+  "config_metadata": {
+    "config_name": "10_archivos_grandes_config",
+    "version": "5.0",
+    "description": "Alta presencia de blobs grandes.",
+    "generated_at": "2026-05-18T12:23:58.829800+00:00",
+    "format": "flat_override_config"
+  },
+  "scenario": {
+    "scenario_id": "10_archivos_grandes",
+    "seed": 51,
+    "description": "Alta presencia de blobs grandes.",
+    "runtime_config_dir": "../../output/runtime_configs/10_archivos_grandes",
+    "overrides": {
+      "simulation_config.simulation.seed": 51,
+      "simulation_config.scenario.name": "10_archivos_grandes",
+      "simulation_config.scenario.description": "Alta presencia de blobs grandes.",
+      "simulation_config.daily_charge": {
+        "monday": "medium",
+        "tuesday": "high",
+        "wednesday": "medium",
+        "thursday": "high",
+        "friday": "medium",
+        "saturday": "medium",
+        "sunday": "low"
+      },
+      "noise_config.noise.active_profile": "high",
+      "error_config.errors.base_error_probability": 0.03,
+      "realism_config.realism.incidents.probability_per_simulated_day": 0.1,
+      "realism_config.realism.saturation.queue_pressure_threshold": 0.74,
+      "simulation_config.outliers.probability": 0.055,
+      "simulation_config.outliers.size_multiplier_min": 2.5,
+      "simulation_config.outliers.size_multiplier_max": 8.5,
+      "simulation_config.outliers.max_size_mb": 2200
+    }
+  }
+}

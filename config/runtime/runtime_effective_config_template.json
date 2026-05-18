@@ -1,0 +1,21 @@
+{
+  "config_metadata": {
+    "config_name": "runtime_effective_config_template",
+    "version": "1.0",
+    "owner": "orchestrator",
+    "description": "Plantilla para generar effective_config.json con impacto mínimo sobre run_simulation."
+  },
+  "merge_order": [
+    "config/global/*.json",
+    "selected_workload_config",
+    "selected_scenario_overrides"
+  ],
+  "output_recommendation": {
+    "path": "output/runtime_configs/{scenario_id}/effective_config.json",
+    "rule": "El simulador debe consumir este archivo final cuando sea posible."
+  },
+  "compatibility_mode": {
+    "enabled": true,
+    "description": "Si el código actual aún lee config/global/*.json, puede mantenerse temporalmente y aplicar workload/scenario desde el orquestador."
+  }
+}
